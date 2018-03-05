@@ -516,6 +516,26 @@
 					}
 				);	
 		}
+		function deletedirect()
+		{
+			var id=$('#dircetid').val();
+			$.post("DeleteDirect",
+					{
+						id:id
+					},
+					function(data){
+						if(data=="success")
+							{
+								alert("删除成功");
+								location.reload();
+							}
+						else
+							{
+								alert(data);
+							}
+					}
+				);	
+		}
 		</script>
 	</body>
 

@@ -29,7 +29,7 @@
 		<link rel="apple-touch-icon" sizes="152x152" href="img/splash/touch-icon-ipad-retina.png">
 	</head>
 	<body class="">
-		<!-- HEADER -->
+		<!-- HEdADER -->
 		<header id="header">
 			<div id="logo-group">
 				<!-- PLACE YOUR LOGO HERE -->
@@ -133,13 +133,7 @@
 																<div class="widget-body">
 																	<form class="form-horizontal">
 																		<fieldset id='knowledge'>
-																			<div class="form-group">
-																				<label class="col-md-2 control-label">知识点1</label>
-																					<div class="col-md-8">
-																						<input class="form-control" placeholder="" type="text">
-																					</div>
-																				<a href="#" class="delete btn btn-labeled btn-danger"> <span class="btn-label"><i class="glyphicon glyphicon-trash"></i></span>删除 </a>
-																			</div>
+																			
 																			
 																		</fieldset>
 																		
@@ -147,12 +141,12 @@
 																			<div class="row">
 																				<div class="col-md-12">
 																					<button class="btn btn-default"  type="button" onclick=addOneRow();>
-																								添加新试卷
+																								添加知识点
 																					</button>
 																					<button class="btn btn-default" type="submit">
 																						取消
 																					</button>
-																					<button class="btn btn-primary" type="submit">
+																					<button class="btn btn-primary" type="button" onclick=saveknowledge();>
 																						<i class="fa fa-save"></i>
 																						保存修改
 																					</button>
@@ -197,26 +191,53 @@
 		<script src="js/bootstrap/bootstrap.min.js"></script>
 		<script src="js/app.min.js"></script>
 		<script type="text/javascript">
-		var id=0;
+		//var count=0;
+		$.get("GetKnowledge",
+				function(data){
+					for(i=0;i<data.length;i++)
+					{
+						//count++;
+						var know = document.createElement('div'); //1、创建元素
+						know.setAttribute("class", "form-group"); 
+						know.innerHTML="<label class='col-md-2 control-label'>知识点</label><div class='col-md-8'><input class='form-control' placeholder='' type='text' id='"+data[i].id+"' value='"+data[i].text+"'></div></div><a href='#' class='delete btn btn-labeled btn-danger'> <span class='btn-label'><i class='glyphicon glyphicon-trash'></i></span>删除 </a>"
+						var field = document.getElementById('knowledge'); //2、找到父级元素
+						field.appendChild(know);//插入到最左边
+						$('.delete').click(function(){
+							$(this).parent().remove();
+							//count--;
+						});
+					}
+				//$("#schoolname").val(data.schoolname);
+				//$("#schoolcode").val(data.schoolcode);
+				}
+			);
 			function addOneRow()
 			{
+				//count++;
 				var know = document.createElement('div'); //1、创建元素
 				know.setAttribute("class", "form-group"); 
-				know.innerHTML="<label class='col-md-2 control-label'>知识点2</label><div class='col-md-8'><input class='form-control' placeholder='' type='text'></div></div><a href='#' class='delete btn btn-labeled btn-danger'> <span class='btn-label'><i class='glyphicon glyphicon-trash'></i></span>删除 </a>"
+				know.innerHTML="<label class='col-md-2 control-label'>知识点</label><div class='col-md-8'><input class='form-control' placeholder='' type='text'></div></div><a href='#' class='delete btn btn-labeled btn-danger'> <span class='btn-label'><i class='glyphicon glyphicon-trash'></i></span>删除 </a>"
 				var field = document.getElementById('knowledge'); //2、找到父级元素
 				field.appendChild(know);//插入到最左边
 				$('.delete').click(function(){
-				$(this).parent().remove();
-      		})
+					$(this).parent().remove();
+					//var str=$("label.control-label:last").text();
+					//count=str.substr(str.length-1,1);
+				})
 			};
 			function delOne(x)
 			{
-				
 				row.parentNode.removeChild(row);
-				--id;
 			}
-			
-			
+			function saveknowledge()
+			{
+				var obj=$(".form-control");
+				for(i=0;i<obj.length;i++)
+				{
+					console.log(obj[i].id);
+					console.log(obj[i].value);
+				}
+			};
 		</script>
 		
 	</body>
