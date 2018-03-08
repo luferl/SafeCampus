@@ -133,70 +133,60 @@
 																<div class="widget-body">
 																	<form class="form-horizontal">
 																		<fieldset>
-																			<div class="form-group col-sm-6">
-																					<label class="control-label col-md-4">选择知识点</label>
+																			<div class="form-group col-md-3">
+																					<label class="control-label col-md-6">选择知识点</label>
 																					<div class="col-md-6">
 																						<select class="form-control">
 																							<option>全部</option>
-																							<option>Atlanta</option>
-																							<option>Baltimore</option>
-																							<option>Boston</option>
-																						    <option>Buenos Aires</option>
-																							<option>Calgary</option>
-																							<option>Chicago</option>
-																							<option>Denver</option>
-																							<option>Dubai</option>
-																							<option>Frankfurt</option>
-																							<option>Hong Kong</option>
-																							<option>Honolulu</option>
-																							<option>Houston</option>
-																							<option>Kuala Lumpur</option>
-																							<option>London</option>
-																							<option>Los Angeles</option>
-																							<option>Melbourne</option>
-																							<option>Mexico City</option>
-																							<option>Miami</option>
-																							<option>Minneapolis</option>
+																							<option>知识点1</option>
 																						</select>
 																					</div>
 																			</div>
-																			<div class="form-group col-sm-6">
-																					<label class="control-label col-md-4">选择题型</label>
+																			<div class="form-group col-md-3">
+																					<label class="control-label col-md-6">选择题型</label>
 																					<div class="col-md-6">
 																						<select class="form-control">
 																							<option>全部</option>
-																							<option>Atlanta</option>
-																							<option>Baltimore</option>
-																							<option>Boston</option>
-																						    <option>Buenos Aires</option>
-																							<option>Calgary</option>
-																							<option>Chicago</option>
-																							<option>Denver</option>
-																							<option>Dubai</option>
-																							<option>Frankfurt</option>
-																							<option>Hong Kong</option>
-																							<option>Honolulu</option>
-																							<option>Houston</option>
-																							<option>Kuala Lumpur</option>
-																							<option>London</option>
-																							<option>Los Angeles</option>
-																							<option>Melbourne</option>
-																							<option>Mexico City</option>
-																							<option>Miami</option>
-																							<option>Minneapolis</option>
+																							<option>单选</option>
+																							<option>多选</option>
+																							<option>判断</option>
 																						</select>
 																					</div>
 																			</div>
+																			<div class="form-group col-md-3">
+																					<label class="control-label col-md-6">每页数量</label>
+																					<div class="col-md-6">
+																						<select class="form-control">
+																							<option>5</option>
+																							<option>10</option>
+																							<option>20</option>
+																							<option>30</option>
+																						    <option>40</option>
+																							<option>50</option>
+																						</select>
+																					</div>
+																			</div>
+																			<div class="form-group col-md-3">
+																					<button class="btn btn-primary col-md-3 col-md-offset-3" type="submit">
+																						<i class="fa fa-save"></i>
+																						进行检索
+																					</button>
+																					
+																			</div>
+																					
 																		</fieldset>
 																		<div class="form-actions">
 																			<div class="row">
 																				<div class="col-md-12">
+																					<button class="btn btn-default"  type="button" onclick=addOneRow();>
+																							添加题型
+																					</button>
 																					<button class="btn btn-default" type="submit">
 																						取消
 																					</button>
 																					<button class="btn btn-primary" type="submit">
 																						<i class="fa fa-save"></i>
-																						进行检索
+																						保存修改
 																					</button>
 																				</div>
 																			</div>
@@ -224,40 +214,86 @@
 															<!-- widget div-->
 															<div>						
 																<!-- widget content -->
-																<fieldset>
-																<div class="widget-body">
-																		<div class="col-md-12">
-																				<table class="table table-bordered" id="fieldsTable">
-																					<thead>
-																					<tr>
-																						<th style="width:6%" name="name">所属知识点</th>
-																						<th style="width:6%"name="type">题目类型</th>
-																						<th style="width:35%"name="details">题干</th>
-																						<th style="width:39%"name="details">选项</th>
-																						<th style="width:6%"name="details">正确答案</th>
-																						<th style="width:6%">操作</th>
-																					</tr>
-																					</thead>
-																					<tbody id="fieldsTableBody">
-																					</tbody>
-																				</table>															
-																			</div>
-																</div>
-															</fieldset>
-																<div class="form-actions">
+																<form class="smart-form">
+																	<fieldset>
 																		<div class="row">
-																			<div class="col-md-12">
-																				<button class="btn btn-default"  type="button" onclick=addOneRow();>
-																							添加题型
-																				</button>
-																				<button class="btn btn-default" type="submit">
-																					取消
-																				</button>
-																				<button class="btn btn-primary" type="submit">
-																					<i class="fa fa-save"></i>
-																					保存修改
-																				</button>
+																			<section class="col col-md-2">
+																				<label class="label">知识点:</label>
+																				<div class="col-md-6">
+																					<select class="form-control">
+																						<option>全部</option>
+																						<option>知识点1</option>
+																					</select>
+																				</div>
+																			</section>
+																			<section class="col col-md-2">
+																				<label class="label">题型:</label>
+																				<div class="col-md-6">
+																					<select class="form-control">
+																						<option>全部</option>
+																						<option>单选</option>
+																						<option>多选</option>
+																						<option>判断</option>
+																					</select>
+																				</div>
+																			</section>
+																		</div>
+																		<section>
+																				<label class="label">题干</label>
+																				<label class="textarea"> <i class="icon-append fa fa-comment"></i> 										
+																					<textarea rows="4" name="comment">个人过失引起火灾，尚未造成严重损失的，将被处（ ）</textarea>
+																				</label>
+																		</section>
+																	</fieldset>
+																	<fieldset>
+																		
+																		<div class="form-group col-md-3">
+																			<label class="control-label col-md-6">选择知识点</label>
+																			<div class="col-md-6">
+																				<select class="form-control">
+																					<option>全部</option>
+																					<option>知识点1</option>
+																				</select>
 																			</div>
+																		</div>
+																		<div class="form-group col-md-3">
+																			<label class="control-label col-md-6">选择题型</label>
+																			<div class="col-md-6">
+																				<select class="form-control">
+																					<option>全部</option>
+																					<option>单选</option>
+																					<option>多选</option>
+																					<option>判断</option>
+																				</select>
+																			</div>
+																		</div>
+																	</fieldset>
+																</form>
+																<div class="form-actions">
+																		<div class="text-center">
+																			<ul class="pagination pagination-alt pagination-lg">
+																							<li >
+																								<a href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
+																							</li>
+																							<li class="active">
+																								<a href="javascript:void(0);">1</a>
+																							</li>
+																							<li>
+																								<a href="javascript:void(0);">2</a>
+																							</li>
+																							<li>
+																								<a href="javascript:void(0);">3</a>
+																							</li>
+																							<li>
+																								<a href="javascript:void(0);">4</a>
+																							</li>
+																							<li>
+																								<a href="javascript:void(0);">5</a>
+																							</li>
+																							<li>
+																								<a href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
+																							</li>
+																						</ul>
 																		</div>
 																	</div>
 																<!-- end widget content -->

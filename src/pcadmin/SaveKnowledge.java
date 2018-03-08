@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 /**
  * Servlet implementation class SaveKnowledge
  */
@@ -40,30 +43,35 @@ public class SaveKnowledge extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
-				String id=request.getParameter("id");
-				String name=request.getParameter("text");
-				String topid=request.getParameter("topid");
-				String iscourse=request.getParameter("iscourse");
-				String vurl=request.getParameter("vurl");
-				String time=request.getParameter("time");
+				String knowledge=request.getParameter("knowledge");
+				JSONArray jsonarray=JSONArray.fromObject(knowledge);
 				Connection connection = null;
 				try {
 					Class.forName("com.mysql.jdbc.Driver");
 					String url = "jdbc:mysql://127.0.0.1/safecampus";
 					connection = DriverManager.getConnection(url, "root", "123456");
 					String sql="";
-					sql="UPDATE  directories SET text='"+name+"',iscourse="+iscourse+",topid="+topid+",url='"+vurl+"',time='"+time+"' WHERE id="+id;
-					System.out.println(sql);
-					PreparedStatement preparedStatement = connection.prepareStatement(sql);
-					int re = preparedStatement.executeUpdate();
-					if(re>0)
+					if(jsonarray.size()>0)
 					{
-						response.getWriter().print("success");
+						for(int i=0;i<jsonarray.size();i++)
+						{
+							JSONObject job = jsonarray.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+							String id=job.get("id").toString();
+							String value=job.get("value").toString();
+							if(id.equals("-1"))
+							{
+								sql="INSERT INTO knowledge(text) VALUES('"+value+"')";
+							}
+							else
+							{
+								sql="UPDATE knowledge SET text='"+value+"' WHERE ID="+id;
+							}
+							System.out.println(sql);
+							PreparedStatement preparedStatement = connection.prepareStatement(sql);
+							preparedStatement.executeUpdate();
+						}
 					}
-					else
-					{
-						response.getWriter().print("error");
-					}
+					response.getWriter().print("success");
 				}
 				catch(ClassNotFoundException e) {   
 					System.out.println("Sorry,can`t find the Driver!");   

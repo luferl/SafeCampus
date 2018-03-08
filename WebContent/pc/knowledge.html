@@ -231,12 +231,30 @@
 			}
 			function saveknowledge()
 			{
+				var knowledge=[];
 				var obj=$(".form-control");
 				for(i=0;i<obj.length;i++)
 				{
-					console.log(obj[i].id);
-					console.log(obj[i].value);
+					var know=new Object();
+					if(obj[i].id=="")
+						{
+							know.id=-1;
+						}
+					else
+						know.id=obj[i].id;
+					know.value=obj[i].value;
+					knowledge.push(know);
 				}
+				var str=JSON.stringify(knowledge);
+				console.log(str);
+				$.post("SaveKnowledge",{knowledge:str},
+						function(data){
+								alert("保存成功!");
+								window.location.reload();
+							}
+						//$("#schoolname").val(data.schoolname);
+						//$("#schoolcode").val(data.schoolcode);
+					);
 			};
 		</script>
 		
