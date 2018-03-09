@@ -136,27 +136,26 @@
 																			<div class="form-group col-md-3">
 																					<label class="control-label col-md-6">选择知识点</label>
 																					<div class="col-md-6">
-																						<select class="form-control">
-																							<option>全部</option>
-																							<option>知识点1</option>
+																						<select class="form-control" id="searchknowledge">
+																							<option value='0'>全部</option>
 																						</select>
 																					</div>
 																			</div>
 																			<div class="form-group col-md-3">
 																					<label class="control-label col-md-6">选择题型</label>
 																					<div class="col-md-6">
-																						<select class="form-control">
-																							<option>全部</option>
-																							<option>单选</option>
-																							<option>多选</option>
-																							<option>判断</option>
+																						<select class="form-control" id="searchtype">
+																							<option value="all">全部</option>
+																							<option value="single">单选</option>
+																							<option value="multy">多选</option>
+																							<option value="check">判断</option>
 																						</select>
 																					</div>
 																			</div>
 																			<div class="form-group col-md-3">
 																					<label class="control-label col-md-6">每页数量</label>
 																					<div class="col-md-6">
-																						<select class="form-control">
+																						<select class="form-control" id="pagecount">
 																							<option>5</option>
 																							<option>10</option>
 																							<option>20</option>
@@ -214,60 +213,8 @@
 															<!-- widget div-->
 															<div>						
 																<!-- widget content -->
-																<form class="smart-form">
-																	<fieldset>
-																		<div class="row">
-																			<section class="col col-md-2">
-																				<label class="label">知识点:</label>
-																				<div class="col-md-6">
-																					<select class="form-control">
-																						<option>全部</option>
-																						<option>知识点1</option>
-																					</select>
-																				</div>
-																			</section>
-																			<section class="col col-md-2">
-																				<label class="label">题型:</label>
-																				<div class="col-md-6">
-																					<select class="form-control">
-																						<option>全部</option>
-																						<option>单选</option>
-																						<option>多选</option>
-																						<option>判断</option>
-																					</select>
-																				</div>
-																			</section>
-																		</div>
-																		<section>
-																				<label class="label">题干</label>
-																				<label class="textarea"> <i class="icon-append fa fa-comment"></i> 										
-																					<textarea rows="4" name="comment">个人过失引起火灾，尚未造成严重损失的，将被处（ ）</textarea>
-																				</label>
-																		</section>
-																	</fieldset>
-																	<fieldset>
-																		
-																		<div class="form-group col-md-3">
-																			<label class="control-label col-md-6">选择知识点</label>
-																			<div class="col-md-6">
-																				<select class="form-control">
-																					<option>全部</option>
-																					<option>知识点1</option>
-																				</select>
-																			</div>
-																		</div>
-																		<div class="form-group col-md-3">
-																			<label class="control-label col-md-6">选择题型</label>
-																			<div class="col-md-6">
-																				<select class="form-control">
-																					<option>全部</option>
-																					<option>单选</option>
-																					<option>多选</option>
-																					<option>判断</option>
-																				</select>
-																			</div>
-																		</div>
-																	</fieldset>
+																<form class="smart-form" id="questionlist">
+																	
 																</form>
 																<div class="form-actions">
 																		<div class="text-center">
@@ -330,40 +277,131 @@
 		<script src="js/bootstrap/bootstrap.min.js"></script>
 		<script src="js/app.min.js"></script>
 		<script type="text/javascript">
+		var knowledgelist;
+		$.get("GetKnowledge",
+				function(data){
+					knowledgelist=data;
+					for(i=0;i<data.length;i++)
+					{
+						//count++;
+						$("#searchknowledge").append("<option value='"+data[i].id+"'>"+data[i].text+"</option>");
+					}
+				//$("#schoolname").val(data.schoolname);
+				//$("#schoolcode").val(data.schoolcode);
+				}
+			);
+		var knowledgeid=$("#searchknowledge").val();
+		var questiontype=$("#searchtype").val();
+		var pagecount=$("#pagecount").val();
+		var pages=1;
+		$.post("GetQuestions",{
+				knowledgeid:knowledgeid,
+				questiontype:questiontype,
+				pagecount:pagecount,
+				pages:pages
+				},
+				function(data){
+					var question = document.createElement('fieldset'); //创建元素
+					var html="<div class='row'><section class='col col-md-2'><label class='label'>知识点:</label><div class='col-md-6'><select class='form-control'><option>全部</option></select></div></section>";
+					var opt="";
+					for(i=0;i<data.length;i++)
+					{
+						var id=data[i].id;
+						var text=data[i].text;
+						var choices=data[i].choices;
+						var type=data[i].type;
+						var knowledgeid=data[i].knowledgeid;
+						var answer=data[i].answer;
+						html=html+"<section class='col col-md-2'><label class='label'>题型:</label><div class='col-md-6'><select class='form-control typeselect'><option value='single'>单选</option><option value='multy'>多选</option><option value='check'>判断</option></select></div></section></div>";
+						/*
+						if(type=="single")
+						{
+							html=
+						}
+						else
+							if(type=="multy")
+							{
+								
+							}
+							else
+							{
+								
+							}
+						*/
+						html=html+"<section><label class='label'>题干：</label><label class='textarea'> <i class='icon-append fa fa-comment'></i><textarea rows='4' name='comment'>"+text+"</textarea></label></section>";
+						if(type=="check")
+							{
+								if(answer=="0")
+									html=html+"<section class='checkchoice'><label class='label'>答案：</label><div class='row'><div class='col col-4'><label class='toggle'><input type='checkbox' name='checkbox-toggle'><i data-swchon-text='正确' data-swchoff-text='错误'></i>正误：</label></div></div></section>";
+								else
+									html=html+"<section class='checkchoice'><label class='label'>答案：</label><div class='row'><div class='col col-4'><label class='toggle'><input type='checkbox' name='checkbox-toggle' checked='checked'><i data-swchon-text='正确' data-swchoff-text='错误'></i>正误：</label></div></div></section>";
+							}
+						else
+						{
+							html=html+"<section class='checkchoice' style='display:none'><label class='label'>答案：</label><div class='row'><div class='col col-4'><label class='toggle'><input type='checkbox' name='checkbox-toggle' checked='checked'><i data-swchon-text='正确' data-swchoff-text='错误'></i>正误：</label></div></div></section>";
+							if(type=="single")
+								html=html+"<section class='singlechoice'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
+							else
+								html=html+"<section class='singlechoice' style='display:none'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
+							var optarr=choices.split('|');
+							for(j=0;j<optarr.length;j++)
+							{
+								if(answer.indexOf(String.fromCharCode(65+j)) != -1)
+									opt=opt+"<label class='radio'><input type='radio' name='single"+id+"' checked='checked'><i></i>"+optarr[j]+"</label>"
+								else
+									opt=opt+"<label class='radio'><input type='radio' name='single"+id+"'><i></i>"+optarr[j]+"</label>"	
+							}
+							html=html+opt;
+							html=html+"</div></div></section>";
+							if(type=="multy")
+								html=html+"<section class='multychoice'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
+							else
+								html=html+"<section class='multychoice' style='display:none'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
+							opt="";
+							for(j=0;j<optarr.length;j++)
+							{
+								if(answer.indexOf(String.fromCharCode(65+j)) != -1)
+									opt=opt+"<label class='checkbox'><input type='checkbox' name='multy"+id+"' checked='checked'><i></i>"+optarr[j]+"</label>";
+								else
+									opt=opt+"<label class='checkbox'><input type='checkbox' name='multy"+id+"'><i></i>"+optarr[j]+"</label>";
+							}
+							html=html+opt;
+							html=html+"</div></div></section>";
+						}
+					}
 					var id=0;
-					function addOneRow()
-					{
-						var tableBody = document.getElementById("fieldsTableBody");
-						var row = tableBody.appendChild(document.createElement("tr"));
-						row.setAttribute("id", id++);
-						var td = new Array();
-						td[0] = row.appendChild(document.createElement("td")).appendChild(document.createElement("text"));
-						td[1] = row.appendChild(document.createElement("td")).appendChild(document.createElement("select"));
-						td[2] = row.appendChild(document.createElement("td")).appendChild(document.createElement("input"));
-						td[3] = row.appendChild(document.createElement("td")).appendChild(document.createElement("input"));
-						td[4] = row.appendChild(document.createElement("td")).appendChild(document.createElement("input"));
-						td[5] = row.appendChild(document.createElement("td")).appendChild(document.createElement("button"));
-						td[0].outerHTML = '<P>1</p>';
-						td[1].outerHTML = '<select onchange="changetype(this)"><option value="TF">判断题</option>      <option value="Single">单选题</option>      <option value="Multy">多选题</option></select>';
-						td[2].outerHTML = '<textarea rows="3" cols="80%">';
-						td[3].outerHTML = '<textarea rows="3" cols="80%" disabled="true">';
-						td[4].outerHTML = '<input type="textarea" style="width:98%;">';
-						td[5].outerHTML = '<button onclick="delOne(this)">删除</button>';
-					};
-					function delOne(x)
-					{
-						
-						row.parentNode.removeChild(row);
-						--id;
-					}
-					function changetype(x)
-					{
-						var row = x.parentNode.parentNode;
-						console.log(row.cells[1]);
-						//if(row.cell[1].innerHTML)
-						row.cells[3].innerHTML='<textarea rows="3" cols="60%">';
-						//row.cells[3].innerHTML='<textarea rows="3" cols="60%" disabled="flase">';
-					}
+					//know.setAttribute("class", "form-group"); 
+					question.innerHTML=html;
+					var field = document.getElementById('questionlist'); //2、找到父级元素
+					field.appendChild(question);//插入到最左边
+					$(".typeselect").change(function(){  
+						var choice=$(this).find('option:selected').val();
+						var fieldset=$(this).parent().parent().parent().parent();
+						var singlesection=fieldset.find(".singlechoice");
+						var multysection=fieldset.find(".multychoice");
+						var checksection=fieldset.find(".checkchoice");
+						if(choice=="check")
+						{
+							singlesection[0].style.display="none";
+							multysection[0].style.display="none";
+							checksection[0].style.display="";
+						}
+						else
+							if(choice=="single")
+							{
+								singlesection[0].style.display="";
+								multysection[0].style.display="none";
+								checksection[0].style.display="none";
+							}
+						else
+							{
+								singlesection[0].style.display="none";
+								multysection[0].style.display="";
+								checksection[0].style.display="none";
+							}
+					});
+				}
+			);
 		</script>
 	</body>
 
