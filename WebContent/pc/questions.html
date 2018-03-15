@@ -301,17 +301,19 @@
 				pages:pages
 				},
 				function(data){
-					var question = document.createElement('fieldset'); //创建元素
-					var html="<div class='row'><section class='col col-md-2'><label class='label'>知识点:</label><div class='col-md-6'><select class='form-control'><option>全部</option></select></div></section>";
+					
+					var html="";
 					var opt="";
 					for(i=0;i<data.length;i++)
 					{
+						var question = document.createElement('fieldset'); //创建元素
 						var id=data[i].id;
 						var text=data[i].text;
 						var choices=data[i].choices;
 						var type=data[i].type;
 						var knowledgeid=data[i].knowledgeid;
 						var answer=data[i].answer;
+						var html="<div class='row'><section class='col col-md-2'><label class='label'>知识点:</label><div class='col-md-6'><select class='form-control'><option>全部</option></select></div></section>";
 						html=html+"<section class='col col-md-2'><label class='label'>题型:</label><div class='col-md-6'><select class='form-control typeselect'><option value='single'>单选</option><option value='multy'>多选</option><option value='check'>判断</option></select></div></section></div>";
 						/*
 						if(type=="single")
@@ -328,6 +330,7 @@
 								
 							}
 						*/
+						console.log(type);
 						html=html+"<section><label class='label'>题干：</label><label class='textarea'> <i class='icon-append fa fa-comment'></i><textarea rows='4' name='comment'>"+text+"</textarea></label></section>";
 						if(type=="check")
 							{
@@ -339,41 +342,43 @@
 						else
 						{
 							html=html+"<section class='checkchoice' style='display:none'><label class='label'>答案：</label><div class='row'><div class='col col-4'><label class='toggle'><input type='checkbox' name='checkbox-toggle' checked='checked'><i data-swchon-text='正确' data-swchoff-text='错误'></i>正误：</label></div></div></section>";
-							if(type=="single")
-								html=html+"<section class='singlechoice'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
-							else
-								html=html+"<section class='singlechoice' style='display:none'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
-							var optarr=choices.split('|');
-							for(j=0;j<optarr.length;j++)
-							{
-								if(answer.indexOf(String.fromCharCode(65+j)) != -1)
-									opt=opt+"<label class='radio'><input type='radio' name='single"+id+"' checked='checked'><i></i>"+optarr[j]+"</label>"
-								else
-									opt=opt+"<label class='radio'><input type='radio' name='single"+id+"'><i></i>"+optarr[j]+"</label>"	
-							}
-							html=html+opt;
-							html=html+"</div></div></section>";
-							if(type=="multy")
-								html=html+"<section class='multychoice'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
-							else
-								html=html+"<section class='multychoice' style='display:none'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
-							opt="";
-							for(j=0;j<optarr.length;j++)
-							{
-								if(answer.indexOf(String.fromCharCode(65+j)) != -1)
-									opt=opt+"<label class='checkbox'><input type='checkbox' name='multy"+id+"' checked='checked'><i></i>"+optarr[j]+"</label>";
-								else
-									opt=opt+"<label class='checkbox'><input type='checkbox' name='multy"+id+"'><i></i>"+optarr[j]+"</label>";
-							}
-							html=html+opt;
-							html=html+"</div></div></section>";
 						}
+						if(type=="single")
+							html=html+"<section class='singlechoice'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
+						else
+							html=html+"<section class='singlechoice' style='display:none'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
+						var optarr=choices.split('|');
+						opt="";
+						for(j=0;j<optarr.length;j++)
+						{
+							if(answer.indexOf(String.fromCharCode(65+j)) != -1)
+								opt=opt+"<label class='radio'><input type='radio' name='single"+id+"' checked='checked'><i></i>"+optarr[j]+"</label>"
+							else
+								opt=opt+"<label class='radio'><input type='radio' name='single"+id+"'><i></i>"+optarr[j]+"</label>"	
+						}
+						html=html+opt;
+						html=html+"</div></div></section>";
+						if(type=="multy")
+							html=html+"<section class='multychoice'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
+						else
+							html=html+"<section class='multychoice' style='display:none'><label class='label'>选项：</label><div class='row'><div class='col col-4'>";
+						opt="";
+						for(j=0;j<optarr.length;j++)
+						{
+							if(answer.indexOf(String.fromCharCode(65+j)) != -1)
+								opt=opt+"<label class='checkbox'><input type='checkbox' name='multy"+id+"' checked='checked'><i></i>"+optarr[j]+"</label>";
+							else
+								opt=opt+"<label class='checkbox'><input type='checkbox' name='multy"+id+"'><i></i>"+optarr[j]+"</label>";
+						}
+						html=html+opt;
+						html=html+"</div></div></section>";
+						question.innerHTML=html;
+						var field = document.getElementById('questionlist'); //2、找到父级元素
+						field.appendChild(question);//插入到最左边
 					}
 					var id=0;
 					//know.setAttribute("class", "form-group"); 
-					question.innerHTML=html;
-					var field = document.getElementById('questionlist'); //2、找到父级元素
-					field.appendChild(question);//插入到最左边
+					
 					$(".typeselect").change(function(){  
 						var choice=$(this).find('option:selected').val();
 						var fieldset=$(this).parent().parent().parent().parent();
