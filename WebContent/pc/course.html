@@ -420,7 +420,11 @@
 				$('#directtime').removeAttr("disabled");
 				$('#directurl').val(node.url);
 				$('#directtime').val(node.time);
-				document.getElementById("videopreview").src =node.url;
+				var temp=node.url.split('/');
+				temp=temp[temp.length-1];
+				temp=temp.split('.')[0];
+				temp="http://v.qq.com/iframe/player.html?vid="+temp+"&tiny=0&auto=0";
+				document.getElementById("videopreview").src =temp;
 			}
 		}
 		$.get("GetDirectlist",

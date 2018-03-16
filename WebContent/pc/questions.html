@@ -128,21 +128,21 @@
 																<h2>题目检索</h2>
 															</header>
 															<!-- widget div-->
-															<div class="row">
+															<div>
 																<!-- widget content -->
-																<div class="widget-body">
-																	<form class="form-horizontal">
+																<form class="smart-form">
 																		<fieldset>
-																			<div class="form-group col-md-3">
-																					<label class="control-label col-md-6">选择知识点</label>
+																			<div class="row">
+																				<section class="col col-md-2">
+																					<label class="label">选择知识点:</label>
 																					<div class="col-md-6">
 																						<select class="form-control" id="searchknowledge">
 																							<option value='0'>全部</option>
 																						</select>
 																					</div>
-																			</div>
-																			<div class="form-group col-md-3">
-																					<label class="control-label col-md-6">选择题型</label>
+																				</section>
+																				<section class="col col-md-2">
+																					<label class="label">选择题型:</label>
 																					<div class="col-md-6">
 																						<select class="form-control" id="searchtype">
 																							<option value="all">全部</option>
@@ -151,9 +151,9 @@
 																							<option value="check">判断</option>
 																						</select>
 																					</div>
-																			</div>
-																			<div class="form-group col-md-3">
-																					<label class="control-label col-md-6">每页数量</label>
+																				</section>
+																				<section class="col col-md-2">
+																					<label class="label">每页数量:</label>
 																					<div class="col-md-6">
 																						<select class="form-control" id="pagecount">
 																							<option>5</option>
@@ -164,36 +164,30 @@
 																							<option>50</option>
 																						</select>
 																					</div>
+																				</section>
+																				<section class="col col-md-6">
+																					<label class="label">查找:</label>
+																						<div class="row">
+																							<a class="btn btn-primary btn-sm" href="javascript:void(0);"><i class="fa fa-search"></i>进行检索</a>
+																						</div>
+																				</section>
 																			</div>
-																			<div class="form-group col-md-3">
-																					<button class="btn btn-primary col-md-3 col-md-offset-3" type="submit">
-																						<i class="fa fa-save"></i>
-																						进行检索
-																					</button>
-																					
-																			</div>
-																					
 																		</fieldset>
-																		<div class="form-actions">
+																		<fieldset>
 																			<div class="row">
-																				<div class="col-md-12">
-																					<button class="btn btn-default"  type="button" onclick=addOneRow();>
-																							添加题型
-																					</button>
-																					<button class="btn btn-default" type="submit">
-																						取消
-																					</button>
-																					<button class="btn btn-primary" type="submit">
-																						<i class="fa fa-save"></i>
-																						保存修改
-																					</button>
-																				</div>
+																				<section class="col col-md-6">
+																					<label class="label">查询结果:</label-->
+																					<div class="row">
+																						<a class="btn btn-default disabled btn-sm" href="javascript:void(0);" id="currentpageNpages">第3/28页</a>
+																						<a class="btn btn-primary btn-sm" href="javascript:void(0);"><i class="fa fa-toggle-left"></i>上一页</a>
+																						&nbsp;跳转第<input style="width:20px;height:20px;padding-bottom:3px" type="text" placeholder="1" id="jumppages">页&nbsp;
+																						<a class="btn btn-primary btn-sm" href="javascript:void(0);"><i class="fa fa-search"></i>跳转</a>
+																						<a class="btn btn-primary btn-sm" href="javascript:void(0);"><i class="fa fa-toggle-right"></i>下一页</a>
+																					</div>
+																				</section>
 																			</div>
-																		</div>
-											
+																		</fieldset>
 																	</form>
-											
-																</div>
 																<!-- end widget content -->
 											
 															</div>
@@ -214,35 +208,7 @@
 															<div>						
 																<!-- widget content -->
 																<form class="smart-form" id="questionlist">
-																	
 																</form>
-																<div class="form-actions">
-																		<div class="text-center">
-																			<ul class="pagination pagination-alt pagination-lg">
-																							<li >
-																								<a href="javascript:void(0);"><i class="fa fa-angle-left"></i></a>
-																							</li>
-																							<li class="active">
-																								<a href="javascript:void(0);">1</a>
-																							</li>
-																							<li>
-																								<a href="javascript:void(0);">2</a>
-																							</li>
-																							<li>
-																								<a href="javascript:void(0);">3</a>
-																							</li>
-																							<li>
-																								<a href="javascript:void(0);">4</a>
-																							</li>
-																							<li>
-																								<a href="javascript:void(0);">5</a>
-																							</li>
-																							<li>
-																								<a href="javascript:void(0);"><i class="fa fa-angle-right"></i></a>
-																							</li>
-																						</ul>
-																		</div>
-																	</div>
 																<!-- end widget content -->
 															</div>
 															<!-- end widget div -->
@@ -278,18 +244,20 @@
 		<script src="js/app.min.js"></script>
 		<script type="text/javascript">
 		var knowledgelist;
-		$.get("GetKnowledge",
-				function(data){
-					knowledgelist=data;
-					for(i=0;i<data.length;i++)
-					{
-						//count++;
-						$("#searchknowledge").append("<option value='"+data[i].id+"'>"+data[i].text+"</option>");
-					}
-				//$("#schoolname").val(data.schoolname);
-				//$("#schoolcode").val(data.schoolcode);
+		$.ajax({  
+	          type:"POST", 
+	          url:"GetKnowledge", 
+	          dataType:"json", 
+	          async : false,
+   			  success:function(data){   //function1()
+   				knowledgelist=data;
+   				for(i=0;i<data.length;i++)
+				{
+					//count++;
+					$("#searchknowledge").append("<option value='"+data[i].id+"'>"+data[i].text+"</option>");
 				}
-			);
+	        }
+	  	});
 		var knowledgeid=$("#searchknowledge").val();
 		var questiontype=$("#searchtype").val();
 		var pagecount=$("#pagecount").val();
@@ -301,35 +269,30 @@
 				pages:pages
 				},
 				function(data){
-					
 					var html="";
 					var opt="";
-					for(i=0;i<data.length;i++)
+					var counts=data.counts;
+					if(counts%pagecount==0)
+						counts--;
+					$("#currentpageNpages").text("第"+pages+"/"+(parseInt(counts/pagecount)+1)+"页"); // 只支持修改文本
+					var questions=data.questions;
+					for(i=0;i<questions.length;i++)
 					{
 						var question = document.createElement('fieldset'); //创建元素
-						var id=data[i].id;
-						var text=data[i].text;
-						var choices=data[i].choices;
-						var type=data[i].type;
-						var knowledgeid=data[i].knowledgeid;
-						var answer=data[i].answer;
-						var html="<div class='row'><section class='col col-md-2'><label class='label'>知识点:</label><div class='col-md-6'><select class='form-control'><option>全部</option></select></div></section>";
-						html=html+"<section class='col col-md-2'><label class='label'>题型:</label><div class='col-md-6'><select class='form-control typeselect'><option value='single'>单选</option><option value='multy'>多选</option><option value='check'>判断</option></select></div></section></div>";
-						/*
-						if(type=="single")
+						var id=questions[i].id;
+						var text=questions[i].text;
+						var choices=questions[i].choices;
+						var type=questions[i].type;
+						var knowledgeid=questions[i].knowledgeid;
+						var knowledgetext="";
+						for(j=0;j<knowledgelist.length;j++)
 						{
-							html=
+							if(knowledgeid==knowledgelist[j].id)
+								knowledgetext=knowledgelist[j].text;
 						}
-						else
-							if(type=="multy")
-							{
-								
-							}
-							else
-							{
-								
-							}
-						*/
+						var answer=questions[i].answer;
+						var html="<div class='row'><section class='col col-md-2'><label class='label'>知识点:</label><div class='col-md-6'><select class='form-control' id='KnowSelect"+id+"'><option value='"+knowledgeid+"'>"+knowledgetext+"</option></select></div></section>";
+						html=html+"<section class='col col-md-2'><label class='label'>题型:</label><div class='col-md-6'><select class='form-control typeselect'><option value='single'>单选</option><option value='multy'>多选</option><option value='check'>判断</option></select></div></section></div>";
 						console.log(type);
 						html=html+"<section><label class='label'>题干：</label><label class='textarea'> <i class='icon-append fa fa-comment'></i><textarea rows='4' name='comment'>"+text+"</textarea></label></section>";
 						if(type=="check")
@@ -375,6 +338,13 @@
 						question.innerHTML=html;
 						var field = document.getElementById('questionlist'); //2、找到父级元素
 						field.appendChild(question);//插入到最左边
+						for(j=0;j<knowledgelist.length;j++)
+						{
+							if(knowledgelist[j].id!=knowledgeid)
+							{
+								$("#KnowSelect"+id).append("<option value='"+knowledgelist[j].id+"'>"+knowledgelist[j].text+"</option>");
+							}
+						}
 					}
 					var id=0;
 					//know.setAttribute("class", "form-group"); 

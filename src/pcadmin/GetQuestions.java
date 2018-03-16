@@ -47,20 +47,23 @@ public class GetQuestions extends HttpServlet {
 		String questionstype=request.getParameter("questiontype");
 		int pagecount=Integer.parseInt(request.getParameter("pagecount"));
 		int pages=Integer.parseInt(request.getParameter("pages"))-1;
-		String json="[";
+		String json="";
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			String url = "jdbc:mysql://127.0.0.1/safecampus";
 			connection = DriverManager.getConnection(url, "root", "123456");
 			String sql="";
+			String sqlc="";
 			if(knowledgeid.equals("0"))
 			{
 				if(questionstype.equals("all"))
 				{
+					sqlc="select count(ID) as counts from questions";
 					sql="select * from questions order by ID asc LIMIT "+pagecount*pages+","+pagecount;
 				}
 				else
 				{
+					sqlc="select count(ID) as counts from questions where type='"+questionstype+"'";
 					sql="select * from questions where type='"+questionstype+"' order by ID asc LIMIT "+pagecount*pages+","+pagecount;
 				}
 			}
@@ -68,17 +71,26 @@ public class GetQuestions extends HttpServlet {
 			{
 				if(questionstype.equals("all"))
 				{
+					sqlc="select count(ID) as counts from questions where knowledgeid="+knowledgeid;
 					sql="select * from questions where knowledgeid="+knowledgeid+" order by ID asc LIMIT "+pagecount*pages+","+pagecount;
 				}
 				else
 				{
+					sqlc="select count(ID) as counts from questions  where type='"+questionstype+"' AND knowledgeid="+knowledgeid;
 					sql="select * from questions  where type='"+questionstype+"' AND knowledgeid="+knowledgeid+" order by ID asc LIMIT "+pagecount*pages+","+pagecount;
 				}
 			}
-			System.out.println(sql);
-			PreparedStatement preparedStatement = connection.prepareStatement(sql);
+			PreparedStatement preparedStatement = connection.prepareStatement(sqlc);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			String pagenum="";
+			while(re.next()){ 
+				pagenum=re.getString("counts");
+			 }
+			json=json+"{\"counts\":"+pagenum+",\"questions\":[";
+			System.out.print(json);
+			preparedStatement = connection.prepareStatement(sql);
+			re = preparedStatement.executeQuery();
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("text");
@@ -91,7 +103,7 @@ public class GetQuestions extends HttpServlet {
 				json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"type\":\""+type+"\",\"choices\":\""+choices+"\",\"answer\":\""+answer+"\",\"knowledgeid\":"+knowid+"}";
 				count++;
 			 }
-			json=json+"]";
+			json=json+"]}";
 			System.out.print(json);
 			response.getWriter().print(json);
 		}
