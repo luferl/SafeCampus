@@ -519,20 +519,21 @@
 		{
 			var fieldlist=$("#questionlist").find("fieldset");
 			var json="[";
+			//console.log(fieldlist);
 			for(i=0;i<fieldlist.length;i++)
 				{
 					if(i>0)
 						json=json+",";
 					var field=fieldlist[i];
-					var knowledge=field.childNodes[0].childNodes[0].childNodes[1].childNodes[0].value;//知识点，题型
+					var knowledgeid=field.childNodes[0].childNodes[0].childNodes[1].childNodes[0].value;//知识点，题型
 					var type=field.childNodes[0].childNodes[1].childNodes[1].childNodes[0].value;
-					var text=field.childNodes[1].childNodes[1].textContent//题干
+					var text=field.childNodes[1].childNodes[1].childNodes[2].value; //题干
 					var choices="A、|B、|C、|D、";
 					var answer="";
 					if(type=="check")
 					{
 						ischeck=field.childNodes[2].childNodes[1].childNodes[0].childNodes[0].childNodes[0].checked;
-						if(ischeck=="true")
+						if(ischeck)
 							answer="1";
 						else
 							answer="0";
@@ -574,11 +575,22 @@
 								answer=answer+"D";
 						}
 					var id=field.id;
-					console.log(id);
-					json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"type\":\""+type+"\",\"choices\":\""+choices+"\",\"answer\":\""+knowledgeid+"\"}";
+					json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"type\":\""+type+"\",\"choices\":\""+choices+"\",\"answer\":\""+answer+"\",\"knowledgeid\":\""+knowledgeid+"\"}";
 				}
 			json=json+"]";
-			
+			//console.log(json);
+			$.post("SaveQuestions",{
+					questions:json
+				},
+				function(data){
+					if(data=="success")
+					{
+						alert("保存成功！");
+						location.reload();
+					}
+						
+				}
+			);
 		}
 		</script>
 	</body>
