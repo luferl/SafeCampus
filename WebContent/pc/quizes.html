@@ -116,7 +116,7 @@
 					<div class="jarviswidget jarviswidget-color-blue" id="wid-id-1" data-widget-editbutton="false">
 						<header>
 							<span class="widget-icon"> <i class="fa fa-sitemap"></i> </span>
-							<h2>目录列表</h2>
+							<h2>试卷列表</h2>
 						</header>
 						<!-- widget div-->
 						<div class="col-sm-6 col-lg-4">
@@ -141,10 +141,10 @@
 									<fieldset>
 										<div class="form-group">
 											<label class="control-label col-md-2">选择试卷类型</label>
-											<div class="col-md-10">
-											<select class="form-control">
+											<div class="col-md-4">
+											<select class="form-control" id="quiztype">
 												<option value='formal'>正式考试</option>
-												<option value='simulate'>Atlanta</option>
+												<option value='simulate'>模拟考试</option>
 											</select>
 											</div>
 										</div>
@@ -152,42 +152,55 @@
 									<fieldset>
 										<div class="form-group">
 											<label class="col-md-2 control-label">试卷名称</label>
-											<div class="col-md-10">
-												<input class="form-control" placeholder="" type="text">
+											<div class="col-md-4">
+												<input class="form-control" placeholder="" type="text" id="quizname">
 											</div>
 										</div>
 										<div class="form-group">
 											<label class="col-md-2 control-label">考试开始时间</label>
-											<div class="col-md-10">
-												<input class="form-control" placeholder="" type="text">
+											<div class="col-md-4">
+												<a href="form-x-editable.html#" id="starttime" data-type="combodate" data-template="YYYY MMM D   HH:mm" data-format="YYYY-MM-DD HH:mm" data-viewformat="YYYY年MMMD号,HH:mm" data-pk="1" data-original-title="选择考试开始时间">请选择时间</a></td>
 											</div>
 										</div>
+										
 										<div class="form-group">
 											<label class="col-md-2 control-label">考试结束时间</label>
-											<div class="col-md-10">
-												<input class="form-control" placeholder="" type="text">
+											<div class="col-md-4">
+												<a href="form-x-editable.html#" id="endtime" data-type="combodate" data-template="YYYY MMM D   HH:mm" data-format="YYYY-MM-DD HH:mm" data-viewformat="YYYY年MMMD号,HH:mm" data-pk="1" data-original-title="选择考试结束时间">请选择时间</a></td>
 											</div>
 										</div>
+										
 										<div class="form-group">
 											<label class="col-md-2 control-label">考试时长</label>
-											<div class="col-md-10">
-											<input class="form-control" placeholder="" type="text">
+											<div class="col-md-1">
+												<input class="form-control" placeholder="" type="text" id="timelast">
 											</div>
+											<label class="control-label">分钟</label>
+										</div>
+										<div class="form-group">
+											<label class="col-md-2 control-label">总分</label>
+											<div class="col-md-1">
+												<input class="form-control" placeholder="" type="text" disabled="disabled" id="totalscore">
+											</div>
+											<label class="control-label">分</label>
 										</div>
 										<div class="form-group">
 											<label class="col-md-2 control-label">及格分数</label>
-											<div class="col-md-10">
-												<input class="form-control" placeholder="" type="text">
+											<div class="col-md-1">
+												<input class="form-control" placeholder="" type="text" id="passscore">
 											</div>
+											<label class="control-label">分</label>
 										</div>
 										<div class="form-group">
 											<label class="col-md-2 control-label">次数限制</label>
-											<div class="col-md-10">
-												<input class="form-control" placeholder="" type="text">
+											<div class="col-md-1">
+												<input class="form-control" placeholder="" type="text" id="timelimits">
 											</div>
+											<label class="control-label">次</label>
 										</div>
+										<input type="hidden" id="quizid" value="-1" />	
 									</fieldset>
-									<fieldset>
+									<fieldset> 
 										<legend>
 											 成绩下载
 										</legend>
@@ -195,11 +208,19 @@
 											<div class="col-md-11 pull-right">
 												<button class="btn btn-default"  type="button">下载成绩</button>
 												<button class="btn btn-default" type="button">分类汇总</button>
-												<button class="btn btn-primary" type="button"><i class="fa fa-save"></i>保存修改</button>
 											</div>
 										</div>
 									</fieldset>
 								</form>
+								<div class="form-actions">
+										<div class="row">
+											<div class="col-md-12">
+												<button class="btn btn-default" type="button" onclick="savechanges();"><i class="fa fa-plus"></i>添加新试卷</button>
+												<button class="btn btn-default" type="button" onclick="">取消</button>
+												<button class="btn btn-primary" type="button" onclick="savechanges();"><i class="fa fa-save"></i>保存修改</button>
+											</div>
+										</div>
+									</div>
 							</div>
 							<!-- end widget content -->
 						</div>
@@ -212,7 +233,7 @@
 								<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false">
 									<header>
 										<span class="widget-icon"> <i class="fa fa-eye"></i> </span>
-										<h2>题目列表</h2>
+										<h2>试卷配置</h2>
 									</header>
 									<!-- widget div-->
 									<div>						
@@ -256,9 +277,62 @@
 		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
 		<script src="js/bootstrap/bootstrap.min.js"></script>
 		<script src="js/app.min.js"></script>
+		<script src="js/plugin/x-editable/moment.min.js"></script>
+		<script src="js/plugin/x-editable/jquery.mockjax.min.js"></script>
+		<script src="js/plugin/x-editable/x-editable.min.js"></script>
+		<script src="js/bootstrap-treeview.js"></script>
 		<script type="text/javascript">
 			var id=0;
-			
+			$(document).ready(function() {
+				$('#starttime').editable({
+				       placement: 'right',
+				       combodate: {
+				           firstItem: 'name'
+				       }
+				   });
+				$('#endtime').editable({
+			        placement: 'right',
+			        combodate: {
+			            firstItem: 'name'
+			        }
+			    });
+			})
+			$.get("GetQuizlist",
+				function(data){
+					$('#tree').treeview({
+						data: data,
+						onNodeSelected: function(event, node) {
+							changechoices(node);
+						}
+					});
+				}
+			);
+			function changechoices(node)
+			{
+				console.log(node.id);
+				issimulate=node.issimulate;
+				$('#quizid').val(node.id);
+				$('#quizname').val(node.text);
+				$("#starttime")[0].innerHTML=node.starttime; 
+				$("#endtime")[0].innerHTML=node.endtime; 
+				$("#timelast").val(node.time);
+				$("#totalscore").val(node.totalsc);
+				$("#passscore").val(node.passsc);
+				$("#timelimits").val(node.times);
+				if(issimulate==0)
+				{
+					$("#quiztype").val("formal");
+				}
+				else
+				{
+					$("#quiztype").val("simulate");
+				}
+			}
+			function savechanges(){
+				var starttime=$('#starttime')[0].innerHTML;
+				var endtime=$('#endtime')[0].innerHTML;
+				console.log($('#starttime'));
+			}
 		</script>
 	</body>
 
