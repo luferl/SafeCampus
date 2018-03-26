@@ -44,7 +44,7 @@ public class LoginFilter implements Filter {
 	    
 	     
 	     String a=httpRequest.getRequestURI();
-	     if(a.contains(".html"))
+	     if(a.contains(".html")&&a.contains("pc"))
 	    {
 	    	 if(session.getAttribute("Username")!=null||a.contains("login.html")){
 	    		 //System.out.println("Passed");
@@ -57,10 +57,22 @@ public class LoginFilter implements Filter {
 	    	 }
 	     }
 	     else
-	    {
-	    	// System.out.println("Passed");	
-	    	 chain.doFilter(request, response);
-	    }
+	    	 if(a.contains(".html")&&a.contains("mobile"))
+		    {
+		    	 if(session.getAttribute("Username")!=null||a.contains("login.html")){
+		    		 //System.out.println("Passed");
+			         chain.doFilter(request, response);
+			     }
+		    	 else
+		    	 {
+		    		 //System.out.println("Banned");
+		    		 httpResponse.sendRedirect(httpRequest.getContextPath()+"/weixin/login.html");
+		    	 }
+		    }
+	    	 else
+		    	 // System.out.println("Passed");	
+		    	 chain.doFilter(request, response);
+		   
 		// pass the request along the filter chain
 		//chain.doFilter(request, response);
 	}
