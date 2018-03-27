@@ -10,6 +10,6 @@
   </filter>
   <filter-mapping>
     <filter-name>loginFilter</filter-name>
-    <url-pattern>/pc/*</url-pattern>
+    <url-pattern>*</url-pattern>
   </filter-mapping>
 </web-app>

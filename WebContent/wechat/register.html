@@ -56,7 +56,12 @@
 	<body class="animated fadeInDown">
 
 		<header id="header">
+			<!--<span id="logo"></span>-->
 
+			<div id="logo-group">
+				<span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>
+				<!-- END AJAX-DROPDOWN -->
+			</div>
 		</header>
 
 		<div id="main" role="main">
@@ -65,32 +70,61 @@
 			<div id="content" class="container">
 
 				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
-						<h1 class="txt-color-red login-header-big">平安校园后台管理系统</h1>
-						<div class="hero">
-
+					<div class="col-xs-12 col-sm-12 col-md-7 col-lg-7 hidden-xs hidden-sm">
+						<h1 class="txt-color-red login-header-big">平安校园安全教育平台</h1>
+						<div class="hero">							
+							<img src="img/demo/iphoneview.png" alt="" class="pull-right display-image" style="width:210px">
 							
-							<img src="img/demo/iphoneview.png" class="pull-right display-image" alt="" style="width:210px">
-
 						</div>
 
 					</div>
-					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
 						<div class="well no-padding">
-							<form action="Loginservice" id="login-form" class="smart-form client-form" method="POST">
+
+							<form action="Registration" id="smart-form-register" class="smart-form client-form">
 								<header>
-									登录
+									请进行信息验证
 								</header>
 								<fieldset>
+									 <header>
+									 	微信昵称
+									 </header>
 									<section>
-										<label class="label">正在登陆</label>
+										<label class="input"> <i class="icon-append fa fa-user"></i>
+											<input type="text" id="nickname" placeholder="微信昵称" disabled="disabled">
+										</label>
 										<input type="hidden" id="openid" value="testopenid">
 									</section>
 								</fieldset>
-							</form>
+								<fieldset>
+									<header>
+								 		实名信息
+									 </header>
+									<section>
+										<label class="input"> <i class="icon-append fa fa-user"></i>
+											<input type="text" id="username" placeholder="姓名">
+										</label>
+									</section>
 
+									<section>
+										<label class="input"> <i class="icon-append fa fa-address-book"></i>
+											<input type="text" id="code" placeholder="学号/工号">
+										</label>
+									</section>
+
+									<section>
+										<label class="input"> <i class="icon-append fa fa-mobile-phone"></i>
+											<input type="text" id="phone" placeholder="手机号">
+										</label>
+									</section>
+								</fieldset>
+								<footer>
+									<button type="button" class="btn btn-primary" onclick="regist()">
+										注册
+									</button>
+								</footer>
+							</form>
 						</div>
-						
 					</div>
 				</div>
 			</div>
@@ -132,19 +166,24 @@
 		<script src="js/app.min.js"></script>
 
 		<script type="text/javascript">
-			$(document).ready(function(){
-			 $.post("Loginservice",
-					 {
-				 		openid:$("#openid").val()
-					 },
-					 function(data){
-						console.log(data);
-						if(data=="success")
-							window.location.href="index.html";
-						 else
-							window.location.href="register.html";
-					 });
-			  });
+			function regist(){
+				 $.post("Registration",
+						 {
+					 		openid:$("#openid").val(),
+					 		username:$("#username").val(),
+					 		code:$("#code").val(),
+					 		phone:$("#phone").val()
+						 },
+						 function(data){
+							 if(data=="regist success")
+								window.location.href="login.html";
+							 else
+								 if(data=="validation error")
+									alert("身份信息验证出错，请检查！ ");
+								 else
+									 alert("未知错误");
+						 });
+			}
 		</script>
 
 	</body>

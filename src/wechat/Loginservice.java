@@ -1,4 +1,4 @@
-package pcadmin;
+package wechat;
 
 import java.io.IOException;
 import java.sql.*;
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class Loginservice
  */
-@WebServlet("/pc/Loginservice")
+@WebServlet("/wechat/Loginservice")
 public class Loginservice extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,22 +38,22 @@ public class Loginservice extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String username=request.getParameter("username");
-		String password=request.getParameter("password");
-		//System.out.println("Login!");
+		//String openid=request.getParameter("username");
+		String openid=request.getParameter("openid");
 		Connection connection = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			String url = "jdbc:mysql://127.0.0.1/safecampus";
 			connection = DriverManager.getConnection(url, "root", "123456");
-			String sql="SELECT password FROM admin_account where username='"+username+"' and password='"+password+"'";
+			String sql="SELECT ID FROM users WHERE openid='"+openid+"'";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			if(re.next()){ 
+				String id=re.getString("ID");
 				HttpSession session=request.getSession();
 	            //…Ë÷√sessionµƒ÷µ
-	            session.setAttribute("Username", username);
-	            response.getWriter().print("success");
+	            session.setAttribute("Username", id);
+	        	response.getWriter().print("success");
 			 }
 			else
 				response.getWriter().print("error");

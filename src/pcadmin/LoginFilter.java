@@ -57,16 +57,16 @@ public class LoginFilter implements Filter {
 	    	 }
 	     }
 	     else
-	    	 if(a.contains(".html")&&a.contains("mobile"))
+	    	 if(a.contains(".html")&&a.contains("wechat"))
 		    {
-		    	 if(session.getAttribute("Username")!=null||a.contains("login.html")){
+		    	 if(session.getAttribute("Username")!=null||a.contains("login.html")||a.contains("register.html")){
 		    		 //System.out.println("Passed");
 			         chain.doFilter(request, response);
 			     }
 		    	 else
 		    	 {
 		    		 //System.out.println("Banned");
-		    		 httpResponse.sendRedirect(httpRequest.getContextPath()+"/weixin/login.html");
+		    		 httpResponse.sendRedirect(httpRequest.getContextPath()+"/wechat/register.html");
 		    	 }
 		    }
 	    	 else

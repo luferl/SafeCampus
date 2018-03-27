@@ -77,7 +77,7 @@
 					</div>
 					<div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
 						<div class="well no-padding">
-							<form action="Loginservice" id="login-form" class="smart-form client-form" method="POST">
+							<form action="" id="login-form" class="smart-form client-form" method="POST">
 								<header>
 									登录
 								</header>
@@ -99,7 +99,7 @@
 									</section>
 								</fieldset>
 								<footer>
-									<button type="submit" class="btn btn-primary">
+									<button type="button" class="btn btn-primary" onclick="login()">
 										登录
 									</button>
 								</footer>
@@ -149,7 +149,20 @@
 
 		<script type="text/javascript">
 			runAllForms();
-
+			
+			function login()
+			{
+				$.post("Loginservice",
+						{},
+						function(data){
+							if(data=="success")
+								{
+								 	window.location.href="index.html";
+								}
+							else
+								alert("用户名密码错误，请检查！")；
+						});
+			}
 			$(function() {
 				// Validation
 				$("#login-form").validate({
