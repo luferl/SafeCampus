@@ -52,7 +52,7 @@ public class SubmitCourseQuestions extends HttpServlet {
 		HttpServletRequest httpRequest=(HttpServletRequest)request;
 	    HttpServletResponse httpResponse=(HttpServletResponse)response;
 	    HttpSession session=httpRequest.getSession();
-		
+	    String userid=session.getAttribute("Username").toString();
 		Connection connection = null;
 		response.setContentType("application/text;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
@@ -77,7 +77,7 @@ public class SubmitCourseQuestions extends HttpServlet {
 					 }
 				}
 			}
-			sql="INSERT INTO study_progress(courseid,userid) VALUE("+courseid+",1)";
+			sql="INSERT INTO study_progress(courseid,userid) VALUE("+courseid+",'"+userid+"')";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re=preparedStatement.executeUpdate();
 			if(re>0) 
