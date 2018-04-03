@@ -69,15 +69,65 @@ public class GetSimulatelist extends HttpServlet {
 			    	   if(count>0)
 							json=json+",";
 			    	   int donecount=Integer.parseInt(times);
+			    	   
 			    	   String sql2="SELECT * FROM quiz_grades where quizid="+id+" AND userid="+userid;
 			    	   PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
 			    	   ResultSet re2 = preparedStatement2.executeQuery();
+			    	   String details="\"nodes\":[";
+			    	   int count2=0;
+			    	   int inprogress=0;
 			    	   while(re2.next())
 			    	   {
-			    		   donecount--;
+			    		  
+			    		   String did=re2.getString("ID");
+			    		   String dtext=re2.getString("starttime");
+			    		   String dendtime=re2.getString("endtime");
+			    		   String grades=re2.getString("grades");
+			    		   String status=re2.getString("issubmitted");
+			    		   Date dte = df.parse(endtime);
+			    		   String temp="";
+					       if((dte.getTime()<curdt.getTime()))
+					       {
+					    	   if(Integer.parseInt(status)==0)
+					    	   {
+					    		 //算分
+					    		   temp="{\"id\":"+id+",\"gid\":"+did+",\"text\":\""+dtext+"\",\"tags\":[\"待计算\"]}";
+					    	   }
+					    	   else
+					    	   {
+					    		   //已结束
+					    		   temp="{\"id\":"+id+",\"gid\":"+did+",\"text\":\""+dtext+"\",\"tags\":[\""+grades+"分\"]}";
+					    	   }
+					       }
+					       else
+					    	   if(Integer.parseInt(status)==1)
+					       {
+					    		   //已结束
+					    		   temp="{\"id\":"+id+",\"gid\":"+did+",\"text\":\""+dtext+"\",\"tags\":[\""+grades+"分\"]}";
+					       }
+					    	   else
+					    		   //继续
+					    	   {
+					    		   temp="{\"id\":"+id+",\"gid\":"+did+",\"text\":\""+dtext+"\",\"tags\":[\"进行中\"]}";
+					    		   inprogress=1;
+					    	   }
+					       if(count2>0)
+					       {
+					    	   details=details+",";
+					       }
+			    		   count2++;
+					       donecount--;
+					       details=details+temp;
 			    	   }
-			    	   
-			    	   json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"tags\":[\"剩余"+donecount+"次\"]}";
+			    	   if(donecount>0&&inprogress==0)
+			    	   {
+			    		   if(count2>0)
+			    			   details=details+",{\"id\":"+id+",\"text\":\"开始新考试\"}";
+			    		   else
+			    			 details=details+"{\"id\":"+id+",\"text\":\"开始新考试\"}";
+			    	   }
+			    	   details=details+"]";
+			    	   json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"tags\":[\"剩余"+donecount+"次\"],"+details+"}";
 			    	   count++;
 			       }
 			     } 

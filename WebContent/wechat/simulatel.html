@@ -123,14 +123,14 @@
 		
 		function choosenode(node)
 		{
-			tags=node.tags;
-			if(tags[0]=="剩余0次")
-				{
-					alert("已无剩余作答次数！");
-					window.location.reload();
-				}
+			if(node.text=="开始新考试")
+			 	window.location.href="quiz.html?quizid="+node.id+"&gid=-1";
 			else
-				 window.location.href="quiz.html?quizid="+node.id; 
+				if(node.tags[0]=="进行中")
+				{
+					window.location.href="quiz.html?quizid="+node.id+"&gid="+node.gid;
+				}
+				
 		}
 		</script>
 	</body>
