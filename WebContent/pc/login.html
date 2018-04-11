@@ -87,14 +87,14 @@
 									<section>
 										<label class="label">用户名</label>
 										<label class="input"> <i class="icon-append fa fa-user"></i>
-											<input type="text" name="username">
+											<input type="text" id="username">
 											<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> 请输入用户名</b></label>
 									</section>
 
 									<section>
 										<label class="label">密码</label>
 										<label class="input"> <i class="icon-append fa fa-lock"></i>
-											<input type="password" name="password">
+											<input type="password" id="password">
 											<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> 请输入密码</b> </label>
 									</section>
 								</fieldset>
@@ -153,14 +153,17 @@
 			function login()
 			{
 				$.post("Loginservice",
-						{},
+						{
+							username:$("#username").val(),
+							password:$("#password").val()
+						},
 						function(data){
 							if(data=="success")
 								{
 								 	window.location.href="index.html";
 								}
 							else
-								alert("用户名密码错误，请检查！")；
+								alert("用户名密码错误，请检查！");
 						});
 			}
 			$(function() {

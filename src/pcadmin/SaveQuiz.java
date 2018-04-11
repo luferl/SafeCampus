@@ -62,7 +62,7 @@ public class SaveQuiz extends HttpServlet {
 			String url = "jdbc:mysql://127.0.0.1/safecampus";
 			connection = DriverManager.getConnection(url, "root", "123456");
 			String sql="";
-			sql="UPDATE quizes SET name='"+name+"',starttime='"+starttime+"',endtime='"+endtime+"',time='"+timelast+"',totalsc='"+totalscore+"',passsc='"+passscore+"',times='"+timelimit+"',isdeleted='0',issimulate='"+type+"' where quizid="+quizid;
+			sql="UPDATE quizes SET name='"+name+"',starttime='"+starttime+"',endtime='"+endtime+"',time='"+timelast+"',totalsc='"+totalscore+"',passsc='"+passscore+"',times='"+timelimit+"',isdeleted='0',issimulate='"+type+"' where ID="+quizid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re = preparedStatement.executeUpdate();
 			if(re>0)

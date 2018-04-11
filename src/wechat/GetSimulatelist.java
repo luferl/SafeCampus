@@ -40,9 +40,7 @@ public class GetSimulatelist extends HttpServlet {
 		Connection connection = null;
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
-		HttpServletRequest httpRequest=(HttpServletRequest)request;
-	    HttpServletResponse httpResponse=(HttpServletResponse)response;
-	    HttpSession session=httpRequest.getSession();
+	    HttpSession session=request.getSession();
 	    String userid=session.getAttribute("Username").toString();
 		String json="[";
 		try {
@@ -78,14 +76,13 @@ public class GetSimulatelist extends HttpServlet {
 			    	   int inprogress=0;
 			    	   while(re2.next())
 			    	   {
-			    		  
 			    		   String did=re2.getString("ID");
 			    		   String dtext=re2.getString("starttime");
 			    		   String dendtime=re2.getString("endtime");
 			    		   String grades=re2.getString("grades");
 			    		   String status=re2.getString("issubmitted");
 			    		   Date dte = df.parse(endtime);
-			    		   String temp="";
+			    		   String temp="{}";
 					       if((dte.getTime()<curdt.getTime()))
 					       {
 					    	   if(Integer.parseInt(status)==0)
