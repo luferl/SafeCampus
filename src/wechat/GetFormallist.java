@@ -20,14 +20,14 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class GetDirectories
  */
-@WebServlet("/wechat/GetSimulatelist")
-public class GetSimulatelist extends HttpServlet {
+@WebServlet("/wechat/GetFormallist")
+public class GetFormallist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetSimulatelist() {
+    public GetFormallist() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -47,7 +47,7 @@ public class GetSimulatelist extends HttpServlet {
 			Class.forName("com.mysql.jdbc.Driver");
 			String url = "jdbc:mysql://127.0.0.1/safecampus";
 			connection = DriverManager.getConnection(url, "root", "123456");
-			String sql="SELECT * FROM quizes where isdeleted=0 AND issimulate=1";
+			String sql="SELECT * FROM quizes where isdeleted=0 AND issimulate=0";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;

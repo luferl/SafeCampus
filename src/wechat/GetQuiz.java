@@ -84,6 +84,7 @@ public class GetQuiz extends HttpServlet {
 				count++;
 			 }
 			json=json+"]";
+			json="{\"gid\":"+gid+",\"questions\":"+json+"}";
 			System.out.print(json);
 			response.getWriter().print(json);
 		}

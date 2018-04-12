@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<title> 平安校园安全教育平台 </title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<!-- Basic Styles -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
+		<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production-plugins.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
+		<!-- SmartAdmin RTL Support  -->
+		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.min.css">
+		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.min.css">
+		<!-- FAVICONS -->
+		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
+		<link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
+		<!-- GOOGLE FONT -->
+		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+		<!-- Specifying a Webpage Icon for Web Clip 
+			 Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+		<link rel="apple-touch-icon" href="img/splash/sptouch-icon-iphone.png">
+		<link rel="apple-touch-icon" sizes="76x76" href="img/splash/touch-icon-ipad.png">
+		<link rel="apple-touch-icon" sizes="120x120" href="img/splash/touch-icon-iphone-retina.png">
+		<link rel="apple-touch-icon" sizes="152x152" href="img/splash/touch-icon-ipad-retina.png">
+	</head>
+	<body class="">
+		<!-- HEADER -->
+		<header id="header">
+			<div id="logo-group">
+				<!-- PLACE YOUR LOGO HERE -->
+				<span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>		
+			</div>
+			<!-- pulled right: nav area -->
+			<div class="pull-right">
+				<!-- collapse menu button -->
+				<div id="hide-menu" class="btn-header pull-right">
+					<span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
+				</div>
+				<!-- end collapse menu -->
+			</div>
+			<!-- end pulled right: nav area -->
+		</header>
+		<!-- END HEADER -->
+		<!-- Left panel : Navigation area -->
+		<aside id="left-panel">
+			<!-- NAVIGATION : This navigation is also responsive-->
+			<nav>
+				<ul>
+					<li>
+						<a href="index.html" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">首页</span></a>
+					</li>
+					<li>
+						<a href="courselist.html"><i class="fa fa-lg fa-fw fa-video-camera"></i> <span class="menu-item-parent">视频学习</span></a>
+					</li>
+					<li>
+						<a href="simulatel.html"><i class="fa fa-lg fa-fw fa-file-text"></i> <span class="menu-item-parent">模拟考试</span></a>
+					</li>
+					<li class="active">
+						<a href="formall.html"><i class="fa fa-lg fa-fw fa-file-text-o"></i> <span class="menu-item-parent">正式考试</span></a>
+					</li>
+				</ul>
+			</nav>
+			<span class="minifyme" data-action="minifyMenu"> 
+				<i class="fa fa-arrow-circle-left hit"></i> 
+			</span>
+
+		</aside>
+		<!-- END NAVIGATION -->
+		<!-- MAIN PANEL -->
+		<div id="main" role="main">
+			<!-- MAIN CONTENT -->
+			<div id="content">
+				<!-- NEW WIDGET START -->
+				<article class="col-sm-12 col-md-12 col-lg-2">
+					<!-- Widget ID (each widget will need unique ID)-->
+					<div class="jarviswidget jarviswidget-color-blue" id="wid-id-1" data-widget-editbutton="false">
+						<header>
+							<span class="widget-icon"> <i class="fa fa-sitemap"></i> </span>
+							<h2>试卷列表</h2>
+						</header>
+						<!-- widget div-->
+						<div class="col-sm-6 col-lg-4">
+							<div id="tree"></div>
+						</div>	
+						<!-- end widget div -->
+					</div>
+					<!-- end widget -->
+				</article>	
+			</div>
+			<!-- END MAIN CONTENT -->
+		</div>
+		<!-- END MAIN PANEL -->
+		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
+	    <script src="js/libs/jquery-2.1.1.min.js"></script>
+	    <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
+		<script src="js/app.config.js"></script>
+		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
+		<script src="js/bootstrap/bootstrap.min.js"></script>
+		<script src="js/app.min.js"></script>
+		<script src="js/bootstrap-treeview.js"></script>
+		<script type="text/javascript">
+		$(document).ready(function() {
+				pageSetUp();
+				// PAGE RELATED SCRIPTS
+				$.get("GetFormallist",
+							function(data){
+								$('#tree').treeview({
+									data: data,
+									showTags:true,
+									onNodeSelected: function(event, node) {
+										choosenode(node);
+									}
+								});
+							}
+						);	
+			});
+		
+		function choosenode(node)
+		{
+			if(node.text=="开始新考试")
+			 	window.location.href="quiz.html?quizid="+node.id+"&gid=-1";
+			else
+				if(node.tags[0]=="进行中")
+				{
+					window.location.href="quiz.html?quizid="+node.id+"&gid="+node.gid;
+				}
+				
+		}
+		</script>
+	</body>
+
+</html>
