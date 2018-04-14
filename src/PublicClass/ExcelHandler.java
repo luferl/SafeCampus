@@ -35,6 +35,7 @@ public class ExcelHandler {
         try {
             readExcelToObj(filePath);
         } catch (Exception e) {
+        	 e.printStackTrace();
             System.out.println("导入失败");
         }
     }
@@ -71,87 +72,32 @@ public class ExcelHandler {
             for (Cell c : row) {
                 String returnStr = "";
                 boolean isMerge = isMergedRegion(sheet, i, c.getColumnIndex());
+                c.setCellType(Cell.CELL_TYPE_STRING);
                 //判断是否具有合并单元格
                 if (isMerge) {
                     String rs = getMergedRegionValue(sheet, row.getRowNum(), c.getColumnIndex());
                     returnStr = rs;
                 } else {
-                    returnStr = c.getRichStringCellValue().getString();
+                    returnStr = c.toString();
                 }
-                 
                 if (c.getColumnIndex() == 0) {
-                    map.put("id", returnStr);
+                    map.put("department", returnStr);
                 } else if (c.getColumnIndex() == 1) {
-                    map.put("railwayTripsIn", returnStr);
+                    map.put("code", returnStr);
                 } else if (c.getColumnIndex() == 2) {
-                    map.put("arriveTime", returnStr);
+                    map.put("name", returnStr);
                 } else if (c.getColumnIndex() == 3) {
-                    map.put("railwayNum", returnStr);
+                    map.put("year", returnStr);
                 } else if (c.getColumnIndex() == 4) {
-                    map.put("checkTrack", returnStr);
-                } else if (c.getColumnIndex() == 5) {
-                    map.put("maintenanceTask", returnStr);
-                } else if (c.getColumnIndex() == 6) {
-                    map.put("maintenanceUnitName", returnStr);
-                } else if (c.getColumnIndex() == 7) {
-                    map.put("project", returnStr);
-                } else if (c.getColumnIndex() == 8) {
-                    map.put("startTime", returnStr);
-                } else if (c.getColumnIndex() == 9) {
-                    map.put("finishTime", returnStr);
-                } else if (c.getColumnIndex() == 10) {
-                    map.put("linkTrack", returnStr);
-                } else if (c.getColumnIndex() == 11) {
-                    map.put("outboundTime", returnStr);
-                } else if (c.getColumnIndex() == 12) {
-                    map.put("railwayTripsOut", returnStr);
-                }
+                    map.put("role", returnStr);
+                } 
             }
+            System.out.println(map);
             result.add(map);
         }
         return result;
     }
  
-    public static List<TrackData> splitCenterData(ArrayList<Map<String,String>> result) throws Exception {
-        trackListData = new ArrayList<TrackData>();
-        Map<String,String> map = new HashMap<String,String>();
-        Integer lineNumDataSize = result.size() - 5;
-        for (int i = 0; i < lineNumDataSize; i++) {
-            trackData = new TrackData();
-            map = result.get(i);
-            trackData.setId(map.get("id").trim());
-            trackData.setInTimes(map.get("inTimes").trim());
-            if(map.get("inTime").toString().trim().equals("\\")) {
-                trackData.setInTime(null);
-            } else {
-                trackData.setInTime(map.get("inTime"));
-            }
-            trackData.setCarGroud(map.get("carGroud").trim());
-            trackData.setCheckTrack(map.get("checkTrack").trim());
-            trackData.setJob(map.get("job").trim());
-            trackData.setNewsSource(map.get("newsSource").trim());
-            trackData.setProject(map.get("project").trim());
-            trackData.setStartTime(map.get("startTime").trim());
-            trackData.setEndTime(map.get("endTime").trim());
-            if(map.get("linkTrack").toString().trim().equals("\\")) {
-                trackData.setLinkTrack(null);
-            } else {
-                trackData.setLinkTrack(map.get("linkTrack").trim());
-            }
-            if(map.get("outTime").toString().trim().equals("\\")) {
-                trackData.setOutTime(null);
-            } else {
-                trackData.setOutTime(map.get("outTime").trim());
-            }
-            if(map.get("outTimes").toString().trim().equals("\\")) {
-                trackData.setOutTimes(null);
-            } else {
-                trackData.setOutTimes(map.get("outTimes").trim());
-            }
-            trackListData.add(trackData);
-        }
-        return trackListData;
-    }
      
      
     /**
