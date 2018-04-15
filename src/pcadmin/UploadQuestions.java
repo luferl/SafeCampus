@@ -25,14 +25,14 @@ import PublicClass.ExcelHandler;
 /**
  * Servlet implementation class AddQuiz
  */
-@WebServlet("/pc/UploadStudents")
-public class UploadStudents extends HttpServlet {
+@WebServlet("/pc/UploadQuestions")
+public class UploadQuestions extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public UploadStudents() {
+    public UploadQuestions() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -95,9 +95,9 @@ public class UploadStudents extends HttpServlet {
                         System.out.println("文件上传成功！");
                         item.delete();
                         ExcelHandler eh=new ExcelHandler();
-                        eh.type=1;
+                        eh.type=2;
                         int count=eh.readExcelData(realPath+"/"+name);
-                        response.getWriter().print("上传成功，共导入"+count+"条学生数据");
+                        response.getWriter().print("上传成功，共导入"+count+"条题目数据");
                     }
                 }
             } catch (Exception e) {

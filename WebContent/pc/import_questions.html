@@ -117,30 +117,11 @@
 				<section id="widget-grid" class="">
 					<!-- row -->
 					<div class="row">
-						<article class="col-sm-12">
-							<!-- Widget ID (each widget will need unique ID)-->
-							<div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0" data-widget-editbutton="false">
-								<header>
-									<span class="widget-icon"> <i class="fa fa-cloud"></i> </span>
-									<h2>上传文件</h2>
-								</header>
-								<!-- widget div-->
-								<div>
-									<!-- widget content -->
-									<div class="widget-body">
-										<form action="upload.php" class="dropzone" id="mydropzone"></form>
-									</div>
-								<!-- end widget content -->
-								</div>
-								<!-- end widget div -->
-							</div>
-							<!-- end widget -->
-						</article>
 						<div class="col-sm-12 col-md-12">
 								<div class="well">
 									<h1>文件上传提示</h1>
 									<hr class="simple">
-									<h3>插件仅在最新的谷歌,火狐,Safari,欧朋 或Internet Explorer 10浏览器上可用.
+									<h3><a href="Examples/QuestionsExample.xlsx">点击下载样例</a>
 									</h3>
 									<p>
 										仅可上传Excel文件
@@ -152,6 +133,42 @@
 										院系或部门/学号或工号/姓名/身份/年级
 									</p>
 									<br>
+								</div>
+						</div>
+						<article class="col-sm-12">
+							<!-- Widget ID (each widget will need unique ID)-->
+							<div class="jarviswidget jarviswidget-color-blueLight" id="wid-id-0" data-widget-editbutton="false">
+								<header>
+									<span class="widget-icon"> <i class="fa fa-cloud"></i> </span>
+									<h2>上传文件</h2>
+								</header>
+								<!-- widget div-->
+								<div>
+									<!-- widget content -->
+									<div class="widget-body">
+									<form class="smart-form" action="UploadQuestions" method="post" enctype="multipart/form-data">
+										<fieldset>
+										<section>
+											<label class="label">上传文件</label>
+											<div class="input input-file">
+												<span class="button"><input type="file" id="file" name="file" onchange="this.parentNode.nextSibling.value = this.value">浏览</span><input type="text" placeholder="文件路径" readonly="">
+											</div>
+										</section>
+										</fieldset>
+										<footer>
+											<button type="submit" class="btn btn-primary">
+													提交
+											</button>
+										</footer>
+									</form>
+										<!--form action="UploadStudents" class="dropzone" id="mydropzone"></form-->
+									</div>
+								<!-- end widget content -->
+								</div>
+								<!-- end widget div -->
+							</div>
+							<!-- end widget -->
+						</article>
 					</div>
 					<!-- end row -->					
 				</section>
@@ -182,15 +199,28 @@
 		// DO NOT REMOVE : GLOBAL FUNCTIONS!
 		$(document).ready(function() {
 			pageSetUp();
-			Dropzone.autoDiscover = false;
-			$("#mydropzone").dropzone({
-				//url: "/file/post",
-				addRemoveLinks : true,
-				maxFilesize: 0.5,
-				dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-lg"><i class="fa fa-caret-right text-danger"></i>点击或拖拽文件至此上传</span>',
-				dictResponseError: '文件上传错误'
-			});
 		})
+		$('form').submit(function (event) {
+	      event.preventDefault();
+	      var form = $(this);
+	
+	        // mulitipart form,如文件上传类
+	        var formData = new FormData(this);
+	        $.ajax({
+	          type: form.attr('method'),
+	          url: form.attr('action'),
+	          data: formData,
+	          mimeType: "multipart/form-data",
+	          contentType: false,
+	          cache: false,
+	          processData: false
+	        }).success(function (data) {
+	        	alert(data);
+	          //成功提交
+	        }).fail(function (jqXHR, textStatus, errorThrown) {
+	          //错误信息
+	        });
+   		 });
 		</script>
 	</body>
 

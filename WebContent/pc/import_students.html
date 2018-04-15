@@ -122,7 +122,7 @@
 								<div class="well">
 									<h1>文件上传提示</h1>
 									<hr class="simple">
-									<h3>点击下载样例
+									<h3><a href="Examples/StudentExample.xlsx">点击下载样例</a>
 									</h3>
 									<p>
 										仅可上传Excel文件
@@ -215,12 +215,13 @@
 	          contentType: false,
 	          cache: false,
 	          processData: false
-	        }).success(function () {
+	        }).success(function (data) {
+	        	alert(data);
 	          //成功提交
 	        }).fail(function (jqXHR, textStatus, errorThrown) {
 	          //错误信息
 	        });
-    });
+   		 });
 		</script>
 	</body>
 
