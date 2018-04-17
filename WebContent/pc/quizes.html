@@ -206,9 +206,10 @@
 										</legend>
 										<div class="row">
 											<div class="col-md-11 pull-right">
-												<button class="btn btn-default"  type="button">下载成绩</button>
-												<button class="btn btn-default"  type="button">下载答题记录</button>
-												<button class="btn btn-default" type="button">自定义下载</button>
+												<button class="btn btn-default"  type="button" onclick="DownloadGrades()">下载成绩</button>
+												<button class="btn btn-default"  type="button" onclick="DownloadRecords()">下载答题记录</button>
+												<button class="btn btn-default" type="button" id="custom_download">自定义下载</button>
+												<button class="btn btn-default" type="button">查看统计图表</button>
 											</div>
 										</div>
 									</fieldset>
@@ -252,6 +253,49 @@
 								</div>
 								<!-- end widget -->
 				</article>
+				<div id="dialog_simple" title="选择筛选条件" class="widget-body">
+				<form class="smart-form" id="#">
+				<fieldset>
+					<div class="row">
+					<section class="col col-md-4">
+						<label style="color:black">学院：</label>
+						<div class="col-md-10">
+							<select class="form-control" id="collegelist">
+								<option value="department">全部</option>
+							</select>
+						</div>
+					</section>
+					<section class="col col-md-4">
+						<label style="color:black">身份：</label>
+						<div class="col-md-10">
+							<select class="form-control" id="rolelist">
+								<option value="role">全部</option>
+							</select>
+						</div>
+					</section>
+					<section class="col col-md-4">
+						<label style="color:black">年级：</label>
+						<div class="col-md-10">
+							<select class="form-control" id="yearlist">
+								<option value="year">全部</option>
+							</select>
+						</div>
+					</section>
+					<section class="col col-md-4">
+						<label style="color:black">成绩：</label>
+						<div class="col-md-10">
+							<select class="form-control" id="gradestype">
+								<option value="all">全部</option>
+								<option value="pass">及格</option>
+								<option value="unpass">不及格</option>
+								<option value="absent">未参加考试</option>
+							</select>
+						</div>
+					</section>
+					</div>
+				</fieldset>
+					
+				</div>
 			</div>
 			<!-- end row -->					
 		</section>
@@ -306,6 +350,24 @@
 					});
 				}
 			);
+			$.get("GetCollegelist",
+					function(data){
+						for(i=0;i<data.length;i++)
+							$("#collegelist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
+					}
+				);
+			$.get("GetRolelist",
+					function(data){
+						for(i=0;i<data.length;i++)
+							$("#rolelist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
+					}
+				);
+			$.get("GetYearlist",
+					function(data){
+						for(i=0;i<data.length;i++)
+							$("#yearlist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
+					}
+				);
 			$.ajax({  
 		          type:"POST", 
 		          url:"GetKnowledge", 
@@ -555,6 +617,43 @@
 						}
 					);
 			}
+			function DownloadGrades(){
+				var id=$('#quizid').val();
+				window.location.href="DownloadGrades?id="+id;
+			}
+			function DownloadRecords(){
+				var id=$('#quizid').val();
+				window.location.href="DownloadRecords?id="+id;
+			}		
+			$('#custom_download').click(function() {
+				$('#dialog_simple').dialog('open');
+				return false;
+			});
+			$('#dialog_simple').dialog({
+				autoOpen : false,
+				width : 600,
+				resizable : false,
+				modal : false,
+				title : "选择筛选条件",
+				buttons : [{
+					html : "&nbsp; 下载成绩表",
+					"class" : "btn btn-default",
+					click : function() {
+						var id=$('#quizid').val();
+						var department=$("#collegelist option:selected").val(); 
+						var role=$("#rolelist option:selected").val();
+						var year=$("#yearlist option:selected").val(); 
+						var gradestype=$("#gradestype option:selected").val(); 
+						window.location.href="CumstomDownload?id="+id+"&department="+department+"&role="+role+"&year="+year+"&gradestype="+gradestype;
+					}
+				}, {
+					html : "&nbsp; 下载分组统计表",
+					"class" : "btn btn-default",
+					click : function() {
+						//$(this).dialog("close");
+					}
+				}]
+			});
 		</script>
 	</body>
 

@@ -19,7 +19,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import PublicClass.ExcelHandler;
+import PublicClass.ExcelReader;
 
 
 /**
@@ -94,7 +94,7 @@ public class UploadQuestions extends HttpServlet {
                         item.write(file);
                         System.out.println("文件上传成功！");
                         item.delete();
-                        ExcelHandler eh=new ExcelHandler();
+                        ExcelReader eh=new ExcelReader();
                         eh.type=2;
                         int count=eh.readExcelData(realPath+"/"+name);
                         response.getWriter().print("上传成功，共导入"+count+"条题目数据");

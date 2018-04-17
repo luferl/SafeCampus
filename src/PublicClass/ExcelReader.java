@@ -26,7 +26,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class ExcelHandler {
+public class ExcelReader {
 	// 读取excel的结果集
     private static ArrayList<Map<String, String>> result = null;
      
