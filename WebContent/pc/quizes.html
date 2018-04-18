@@ -288,13 +288,26 @@
 								<option value="all">全部</option>
 								<option value="pass">及格</option>
 								<option value="unpass">不及格</option>
-								<option value="absent">未参加考试</option>
+								<!-->option value="absent">未参加考试</option-->
 							</select>
 						</div>
 					</section>
 					</div>
 				</fieldset>
-					
+				<fieldset>
+					<div class="row">
+					<section class="col col-md-4">
+						<label style="color:black">分组条件：</label>
+						<div class="col-md-10">
+							<select class="form-control" id="groupcondition">
+								<option value="department">学院</option>
+								<option value="year">年级</option>
+								<option value="role">身份</option>
+							</select>
+						</div>
+					</section>
+					</div>
+				</fieldset>	
 				</div>
 			</div>
 			<!-- end row -->					
@@ -640,21 +653,26 @@
 					"class" : "btn btn-default",
 					click : function() {
 						var id=$('#quizid').val();
+						if(id==-1)
+							return;
 						var department=$("#collegelist option:selected").val(); 
 						var role=$("#rolelist option:selected").val();
 						var year=$("#yearlist option:selected").val(); 
 						var gradestype=$("#gradestype option:selected").val(); 
-						window.location.href="CumstomDownload?id="+id+"&department="+department+"&role="+role+"&year="+year+"&gradestype="+gradestype;
+						window.location.href="CustomDownload?id="+id+"&department="+department+"&role="+role+"&year="+year+"&gradestype="+gradestype;
 					}
 				}, {
 					html : "&nbsp; 下载分组统计表",
 					"class" : "btn btn-default",
 					click : function() {
-						//$(this).dialog("close");
+						var id=$('#quizid').val();
+						if(id==-1)
+							return;
+						var groupcondition=$("#groupcondition option:selected").val(); 
+						window.location.href="GroupDownload?id="+id+"&condition="+groupcondition;
 					}
 				}]
 			});
 		</script>
 	</body>
-
 </html>
