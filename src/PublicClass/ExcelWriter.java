@@ -130,4 +130,89 @@ public class ExcelWriter {
             System.out.println("导入失败");
         }
     }
+    public static void writeexcelBygroup(List<GroupClass> gl,int type,String path) {
+    	try {
+    		 //第一步，创建一个workbook对应一个excel文件
+            HSSFWorkbook workbook = new HSSFWorkbook();
+            //第二部，在workbook中创建一个sheet对应excel中的sheet
+            Sheet sheet = workbook.createSheet("用户表一");
+            //第三部，在sheet表中添加表头第0行，老版本的poi对sheet的行列有限制
+            
+            if(type==1)
+            { 
+            	//第四步，创建单元格，设置表头
+            	Row row = sheet.createRow(0);
+            	row.createCell(0).setCellValue("学院");
+            	row.createCell(1).setCellValue("应考人数");
+            	row.createCell(2).setCellValue("参考人数");
+            	row.createCell(3).setCellValue("通过人数");
+	            //第五步，写入实体数据，实际应用中这些数据从数据库得到,对象封装数据，集合包对象。对象的属性值对应表的每行的值
+	           for(int i=0;i<gl.size();i++) 
+	           {
+	                row = sheet.createRow(i + 1);
+	                //创建单元格设值
+	                GroupClass gc=gl.get(i);
+	                row.createCell(0).setCellValue(gc.name);
+	                row.createCell(1).setCellValue(gc.total);
+	                row.createCell(2).setCellValue(gc.attend);
+	                row.createCell(3).setCellValue(gc.pass);
+	            }
+	            FileOutputStream fos = new FileOutputStream(path+"/Grades.xls");
+	            workbook.write(fos);
+	            System.out.println("写入成功");
+	            fos.close();
+            }
+            else
+            	if(type==2)
+                { 
+            		Row row = sheet.createRow(0);
+                	row.createCell(0).setCellValue("年级");
+                	row.createCell(1).setCellValue("应考人数");
+                	row.createCell(2).setCellValue("参考人数");
+                	row.createCell(3).setCellValue("通过人数");
+    	            //第五步，写入实体数据，实际应用中这些数据从数据库得到,对象封装数据，集合包对象。对象的属性值对应表的每行的值
+    	           for(int i=0;i<gl.size();i++) 
+    	           {
+    	                row = sheet.createRow(i + 1);
+    	                //创建单元格设值
+    	                GroupClass gc=gl.get(i);
+    	                row.createCell(0).setCellValue(gc.name);
+    	                row.createCell(1).setCellValue(gc.total);
+    	                row.createCell(2).setCellValue(gc.attend);
+    	                row.createCell(3).setCellValue(gc.pass);
+    	            }
+    	            FileOutputStream fos = new FileOutputStream(path+"/Grades.xls");
+    	            workbook.write(fos);
+    	            System.out.println("写入成功");
+    	            fos.close();
+                }
+            	else
+            		if(type==3)
+                    { 
+                		Row row = sheet.createRow(0);
+                    	row.createCell(0).setCellValue("身份");
+                    	row.createCell(1).setCellValue("应考人数");
+                    	row.createCell(2).setCellValue("参考人数");
+                    	row.createCell(3).setCellValue("通过人数");
+        	            //第五步，写入实体数据，实际应用中这些数据从数据库得到,对象封装数据，集合包对象。对象的属性值对应表的每行的值
+        	           for(int i=0;i<gl.size();i++) 
+        	           {
+        	                row = sheet.createRow(i + 1);
+        	                //创建单元格设值
+        	                GroupClass gc=gl.get(i);
+        	                row.createCell(0).setCellValue(gc.name);
+        	                row.createCell(1).setCellValue(gc.total);
+        	                row.createCell(2).setCellValue(gc.attend);
+        	                row.createCell(3).setCellValue(gc.pass);
+        	            }
+        	            FileOutputStream fos = new FileOutputStream(path+"/Grades.xls");
+        	            workbook.write(fos);
+        	            System.out.println("写入成功");
+        	            fos.close();
+                    }    		
+        } catch (Exception e) {
+        	 e.printStackTrace();
+            System.out.println("导入失败");
+        }
+    }
 }

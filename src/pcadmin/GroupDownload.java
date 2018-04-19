@@ -9,6 +9,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -22,11 +24,12 @@ import org.apache.commons.io.IOUtils;
 import com.sun.org.apache.regexp.internal.RE;
 
 import PublicClass.ExcelWriter;
+import PublicClass.GroupClass;
 
 /**
  * Servlet implementation class SaveDirect
  */
-@WebServlet("/pc/CustomDownload")
+@WebServlet("/pc/GroupDownload")
 public class GroupDownload extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -44,11 +47,11 @@ public class GroupDownload extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String id=request.getParameter("id");
-		String department=request.getParameter("department");
-		String role=request.getParameter("role");
-		String year=request.getParameter("year");
-		String gradestype=request.getParameter("gradestype");
+		String condition=request.getParameter("condition");
 		Connection connection = null;
+		List<GroupClass> gl=new ArrayList<GroupClass>();
+		String realPath = getServletContext().getRealPath("pc/Download");
+		ExcelWriter ew=new ExcelWriter();
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			String url = "jdbc:mysql://127.0.0.1/safecampus";
@@ -64,38 +67,100 @@ public class GroupDownload extends HttpServlet {
 				passsc=rs.getInt("passsc");
 				quizname=rs.getString("name");
 			}
-			if(!role.equals("role"))
-				role="'"+role+"'";
-			if(!department.equals("department"))
-				department="'"+department+"'";
-			if(gradestype.equals("all"))
+			int total=0,pass=0,unpass=0;
+			if(condition.equals("department"))
 			{
-				sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department="+department+" and role="+role+" and year="+year;
+				sql="select count(name) as count,department from students group by department";
+				preparedStatement = connection.prepareStatement(sql);
+				rs=preparedStatement.executeQuery();
+				while(rs.next())
+				{
+					String department=rs.getString("department");
+					int count=rs.getInt("count");
+					pass=0;
+					unpass=0;
+					String sql2="select count(name) as count1 from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department='"+department+"' and grades>="+passsc+" group by department;";
+					String sql3="select count(name) as count1 from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department='"+department+"' group by department;";
+					PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+					ResultSet rs2=preparedStatement2.executeQuery();
+					if(rs2.next())
+						pass=rs2.getInt("count1");
+					PreparedStatement preparedStatement3 = connection.prepareStatement(sql3);
+					ResultSet rs3=preparedStatement3.executeQuery();
+					if(rs3.next())
+						unpass=rs3.getInt("count1");
+					GroupClass gc=new GroupClass();
+					gc.name=department;
+					gc.total=count;
+					gc.pass=pass;
+					gc.attend=unpass;
+					gl.add(gc);
+				}
+				ew.writeexcelBygroup(gl,1,realPath);
 			}
 			else
-				if(gradestype.equals("pass"))
+				if(condition.equals("year"))
 				{
-					sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department="+department+" and role="+role+" and year="+year+" and grades >="+passsc;
+					sql="select count(name) as count,year from students group by year";
+					preparedStatement = connection.prepareStatement(sql);
+					rs=preparedStatement.executeQuery();
+					while(rs.next())
+					{
+						String year=rs.getString("year");
+						int count=rs.getInt("count");
+						pass=0;
+						unpass=0;
+						String sql2="select count(name) as count1 from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and year='"+year+"' and grades>="+passsc+" group by year;";
+						String sql3="select count(name) as count1 from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and year="+year+" group by year;";
+						PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+						ResultSet rs2=preparedStatement2.executeQuery();
+						if(rs2.next())
+							pass=rs2.getInt("count1");
+						PreparedStatement preparedStatement3 = connection.prepareStatement(sql3);
+						ResultSet rs3=preparedStatement3.executeQuery();
+						if(rs3.next())
+							unpass=rs3.getInt("count1");
+						GroupClass gc=new GroupClass();
+						gc.name=year;
+						gc.total=count;
+						gc.pass=pass;
+						gc.attend=unpass;
+						gl.add(gc);
+					}	
+					ew.writeexcelBygroup(gl,2,realPath);
 				}
 			else
-				if(gradestype.equals("unpass"))
+				if(condition.equals("role"))
 				{
-					sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department="+department+" and role="+role+" and year="+year+" and grades <"+passsc;
+					sql="select count(name) as count,role from students group by role";
+					preparedStatement = connection.prepareStatement(sql);
+					rs=preparedStatement.executeQuery();
+					while(rs.next())
+					{
+						String role=rs.getString("role");
+						int count=rs.getInt("count");
+						pass=0;
+						unpass=0;
+						String sql2="select count(name) as count1 from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and users.role='"+role+"' and grades>="+passsc+" group by role;";
+						String sql3="select count(name) as count1 from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and role='"+role+"' group by role;";
+						PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
+						ResultSet rs2=preparedStatement2.executeQuery();
+						if(rs2.next())
+							pass=rs2.getInt("count1");
+						PreparedStatement preparedStatement3 = connection.prepareStatement(sql3);
+						ResultSet rs3=preparedStatement3.executeQuery();
+						if(rs3.next())
+							unpass=rs3.getInt("count1");
+						GroupClass gc=new GroupClass();
+						gc.name=role;
+						gc.total=count;
+						gc.pass=pass;
+						gc.attend=unpass;
+						gl.add(gc);
+					}	
+					ew.writeexcelBygroup(gl,3,realPath);
 				}
-			/*
-				else
-				{
-					sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department='"+department+"' and role='"+role+"' and year="+year+" and grades >="+passsc;
-				}
-				*/
-			//sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID";
-			System.out.println(sql);
-			preparedStatement = connection.prepareStatement(sql);
-			rs=preparedStatement.executeQuery();
-			String realPath = getServletContext().getRealPath("pc/Download");
-			ExcelWriter ew=new ExcelWriter();
-			ew.writeexcel(rs, passsc,1,realPath);
-			String filename="自定义下载-"+quizname+".xls";
+			String filename="分组统计表-"+quizname+".xls";
 			String userAgent = request.getHeader("User-Agent");  
 			  if (userAgent.contains("MSIE") || userAgent.contains("Trident")) {  
 				  filename = java.net.URLEncoder.encode(filename, "UTF-8");  
