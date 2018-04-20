@@ -64,11 +64,11 @@ public class SaveCourseQuestions extends HttpServlet {
 					String knowledgeid=job.get("knowledgeid").toString();
 					if(Integer.parseInt(id)<0)
 					{
-						sql="INSERT INTO questions(text,type,choices,answer,knowledgeid) VALUES('"+text+"','"+type+"','"+choices+"','"+answer+"','"+knowledgeid+"')";
+						sql="INSERT INTO coursequestions(text,type,choices,answer,knowledgeid) VALUES('"+text+"','"+type+"','"+choices+"','"+answer+"','"+knowledgeid+"')";
 					}
 					else
 					{
-						sql="UPDATE questions SET text='"+text+"',type='"+type+"',choices='"+choices+"',answer='"+answer+"',knowledgeid='"+knowledgeid+"' WHERE ID="+id;
+						sql="UPDATE coursequestions SET text='"+text+"',type='"+type+"',choices='"+choices+"',answer='"+answer+"',knowledgeid='"+knowledgeid+"' WHERE ID="+id;
 					}
 					System.out.println(sql);
 					PreparedStatement preparedStatement = connection.prepareStatement(sql);

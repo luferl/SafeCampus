@@ -89,10 +89,13 @@
 								<a href="questions.html">题目设置</a>
 							</li>
 							<li>
-									<a href="import_questions.html">题目导入</a>
+								<a href="import_questions.html">题目导入</a>
+							</li>
+							<li>
+								<a href="quizes.html">试卷设置</a>
 							</li>
 							<li class="active">
-								<a href="quizes.html">试卷设置</a>
+								<a href="quizes.html">下载成绩</a>
 							</li>
 							<li>
 								<a href="quizes_d.html">试卷回收站</a>
@@ -174,19 +177,26 @@
 									</header>
 									<!-- widget div-->
 									<div>
-									<div class="widget-body">						
-									<!-- widget content -->
-									<section class="col col-md-4">
-										<label style="color:black">选择学院：</label>
-										<div class="col-md-10">
-											<select class="form-control" id="groupcondition">
-												<option value="department">学院</option>
-											</select>
+										<div class="widget-body">
+										<form class="form-horizontal">
+											<fieldset>
+												<div class="form-group">
+													<label class="control-label col-md-2">选择学院：</label>
+													<div class="col-md-4">
+													<select class="form-control" id="college">
+													</select>
+													</div>
+													<button class="btn btn-default"  type="button" onclick="ShowGraph()">确认选择</button>
+												</div>
+											</fieldset>
+											<fieldset>
+											<div id="involvedrate" style="height: 100%;width:50%;float:left"></div>
+											<div id="passrate" style="height: 100%;width:50%;float:right"></div>
+											
+											</fieldset>
+										</form>
+										
 										</div>
-										<div id="container2" style="min-width:400px;height:400px"></div>
-									</section>
-									<!-- end widget content -->
-									</div>
 									</div>
 									<!-- end widget div -->
 								</div>
@@ -318,137 +328,9 @@
 		<script src="js/plugin/x-editable/jquery.mockjax.min.js"></script>
 		<script src="js/plugin/x-editable/x-editable.min.js"></script>
 		<script src="js/bootstrap-treeview.js"></script>	
-		<script src="https://cdn.hcharts.cn/highcharts/highcharts.js">
-		$(function () {
-			    $('#container2').highcharts({
-			        chart: {
-			            plotBackgroundColor: null,
-			            plotBorderWidth: null,
-			            plotShadow: false
-			        },
-			        title: {
-			            text: '2014 某网站各浏览器浏览量占比'
-			        },
-			        tooltip: {
-			            headerFormat: '{series.name}<br>',
-			            pointFormat: '{point.name}: <b>{point.percentage:.1f}%</b>'
-			        },
-			        plotOptions: {
-			            pie: {
-			                allowPointSelect: true,
-			                cursor: 'pointer',
-			                dataLabels: {
-			                    enabled: true,
-			                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-			                    style: {
-			                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-			                    }
-			                }
-			            }
-			        },
-			        series: [{
-			            type: 'pie',
-			            name: '浏览器访问量占比',
-			            data: [
-			                ['Firefox',   45.0],
-			                ['IE',       26.8],
-			                {
-			                    name: 'Chrome',
-			                    y: 12.8,
-			                    sliced: true,
-			                    selected: true
-			                },
-			                ['Safari',    8.5],
-			                ['Opera',     6.2],
-			                ['其他',   0.7]
-			            ]
-			        }]
-			    });
-			});
-		</script>	
-		<script type="text/javascript">
-			var id=0;
-			var knowledgelist;
-			$.get("GetQuizlist",
-				function(data){
-					$('#tree').treeview({
-						data: data,
-						onNodeSelected: function(event, node) {
-							changechoices(node);
-						}
-					});
-				}
-			);
-			$.get("GetCollegelist",
-					function(data){
-						for(i=0;i<data.length;i++)
-							$("#collegelist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
-					}
-				);
-			$.get("GetRolelist",
-					function(data){
-						for(i=0;i<data.length;i++)
-							$("#rolelist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
-					}
-				);
-			$.get("GetYearlist",
-					function(data){
-						for(i=0;i<data.length;i++)
-							$("#yearlist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
-					}
-				);
-			function changechoices(node)
-			{
-				console.log(node.id);
-				issimulate=node.issimulate;
-				$('#quizid').val(node.id);
-				document.getElementById('quizname').innerText=node.text; 
-			}
-			function DownloadGrades(){
-				var id=$('#quizid').val();
-				window.location.href="DownloadGrades?id="+id;
-			}
-			function DownloadRecords(){
-				var id=$('#quizid').val();
-				window.location.href="DownloadRecords?id="+id;
-			}		
-			$('#custom_download').click(function() {
-				$('#dialog_simple').dialog('open');
-				return false;
-			});
-			$('#dialog_simple').dialog({
-				autoOpen : false,
-				width : 600,
-				resizable : false,
-				modal : false,
-				title : "选择筛选条件",
-				buttons : [{
-					html : "&nbsp; 下载成绩表",
-					"class" : "btn btn-default",
-					click : function() {
-						var id=$('#quizid').val();
-						if(id==-1)
-							return;
-						var department=$("#collegelist option:selected").val(); 
-						var role=$("#rolelist option:selected").val();
-						var year=$("#yearlist option:selected").val(); 
-						var gradestype=$("#gradestype option:selected").val(); 
-						window.location.href="CustomDownload?id="+id+"&department="+department+"&role="+role+"&year="+year+"&gradestype="+gradestype;
-					}
-				}, {
-					html : "&nbsp; 下载分组统计表",
-					"class" : "btn btn-default",
-					click : function() {
-						var id=$('#quizid').val();
-						if(id==-1)
-							return;
-						var groupcondition=$("#groupcondition option:selected").val(); 
-						window.location.href="GroupDownload?id="+id+"&condition="+groupcondition;
-					}
-				}]
-			});
-			
-
-		</script>
+		<script src="https://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+		<script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
+		<script src="http://cdn.hcharts.cn/highcharts/modules/offline-exporting.js"></script>
+		<script src="js/api/api_quizgraph.js"></script>
 	</body>
 </html>
