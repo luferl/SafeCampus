@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import PublicClass.DBConnection;
+
 /**
  * Servlet implementation class GetDirectories
  */
@@ -34,7 +36,6 @@ public class GetDirectories extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Connection connection = null;
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String json="[";
@@ -43,9 +44,8 @@ public class GetDirectories extends HttpServlet {
 	    HttpSession session=httpRequest.getSession();
 	    String userid=session.getAttribute("Username").toString();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="SELECT * FROM directories where topid=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -79,12 +79,8 @@ public class GetDirectories extends HttpServlet {
 				count++;
 			 }
 			json=json+"]";
-			System.out.print(json);
 			response.getWriter().print(json);
-		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
+			connection.close();
 		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
@@ -94,7 +90,7 @@ public class GetDirectories extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("目录成功获取！！");
+			//System.out.println("目录成功获取！！");
 		}
 	}
 

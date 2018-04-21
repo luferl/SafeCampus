@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import PublicClass.DBConnection;
+
 /**
  * Servlet implementation class DeleteDirect
  */
@@ -40,14 +42,12 @@ public class DeleteDirect extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String id=request.getParameter("id");
-		Connection connection = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="";
 			sql="Delete from  directories WHERE ID="+id;
-			System.out.println(sql);
+			//System.out.println(sql);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re = preparedStatement.executeUpdate();
 			if(re>0)
@@ -57,12 +57,10 @@ public class DeleteDirect extends HttpServlet {
 			else
 			{
 				response.getWriter().print("error");
+				System.out.println(sql);
 			}
+			connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -71,7 +69,7 @@ public class DeleteDirect extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Create Directories finished");
+			System.out.println("Operation finished:Delete Directories");
 		}
 	}
 

@@ -1,6 +1,7 @@
 package wechat;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.*;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class Loginservice
@@ -30,38 +33,24 @@ public class Loginservice extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		//String openid=request.getParameter("username");
 		String openid=request.getParameter("openid");
-		Connection connection = null;
+		String backUrl="http://"+request.getServerName()+":"+request.getServerPort()+"/wechat/callBack";
+		DBConnection dbc=new DBConnection();
+		Connection connection = dbc.getConnnection();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
-			String sql="SELECT ID FROM users WHERE openid='"+openid+"'";
+			String sql="SELECT AppID FROM wx_config WHERE ID=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			if(re.next()){ 
-				String id=re.getString("ID");
-				HttpSession session=request.getSession();
-	            //设置session的值
-	            session.setAttribute("Username", id);
-	        	response.getWriter().print("success");
+				String AppID=re.getString("AppID");
+				String reurl ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+AppID
+		                + "&redirect_uri="+URLEncoder.encode(backUrl)
+		                + "&response_type=code"
+		                + "&scope=snsapi_userinfo"
+		                + "&state=STATE#wechat_redirect";
+				response.sendRedirect(reurl);
 			 }
-			else
-				response.getWriter().print("error");
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -70,8 +59,17 @@ public class Loginservice extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("登录成功");
+			//System.out.println("登录成功");
 		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		//String openid=request.getParameter("username");
+		
 	}
 
 }

@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import PublicClass.DBConnection;
+
 /**
  * Servlet implementation class Changepssword
  */
@@ -51,11 +53,9 @@ public class Changepassword extends HttpServlet {
 		System.out.println("oldpwd:"+oldpwd);
 		System.out.println("newpwd:"+newpwd);
 		//System.out.println("Login!");
-		Connection connection = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="SELECT password FROM admin_account where username='"+username+"'";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -73,20 +73,18 @@ public class Changepassword extends HttpServlet {
 					else
 					{
 						response.getWriter().print("error");
+						System.out.println(changepwdsql);
 					}
 				}
 				else
 				{
 					response.getWriter().print("pwderror");
 				}
-					
-				System.out.println(oldpassword);
 			 }
+			else
+				System.out.println(sql);
+			connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -95,7 +93,7 @@ public class Changepassword extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("数据库数据成功获取！！");
+			System.out.println("Operation Finished:ChangePassword");
 		}
 	}
 

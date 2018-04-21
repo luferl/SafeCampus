@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import PublicClass.DBConnection;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -53,13 +54,11 @@ public class SubmitCourseQuestions extends HttpServlet {
 	    HttpServletResponse httpResponse=(HttpServletResponse)response;
 	    HttpSession session=httpRequest.getSession();
 	    String userid=session.getAttribute("Username").toString();
-		Connection connection = null;
 		response.setContentType("application/text;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="";
 			if(jsonarray.size()>0)
 			{
@@ -73,6 +72,7 @@ public class SubmitCourseQuestions extends HttpServlet {
 					ResultSet re=preparedStatement.executeQuery();
 					if(!re.next()){ 
 						response.getWriter().print("wrong");
+						connection.close();
 						return;
 					 }
 				}
@@ -84,11 +84,8 @@ public class SubmitCourseQuestions extends HttpServlet {
 				response.getWriter().print("success");
 			else
 				response.getWriter().print("unexpected error");
+			connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -97,7 +94,7 @@ public class SubmitCourseQuestions extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Save Questions Finished");
+			//System.out.println("Save Questions Finished");
 		}
 	}
 

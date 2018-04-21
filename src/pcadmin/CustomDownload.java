@@ -21,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.sun.org.apache.regexp.internal.RE;
 
+import PublicClass.DBConnection;
 import PublicClass.ExcelWriter;
 
 /**
@@ -48,11 +49,9 @@ public class CustomDownload extends HttpServlet {
 		String role=request.getParameter("role");
 		String year=request.getParameter("year");
 		String gradestype=request.getParameter("gradestype");
-		Connection connection = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="";
 			sql="select passsc,name from quizes where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -64,6 +63,8 @@ public class CustomDownload extends HttpServlet {
 				passsc=rs.getInt("passsc");
 				quizname=rs.getString("name");
 			}
+			else
+				System.out.println(sql);
 			if(!role.equals("role"))
 				role="'"+role+"'";
 			if(!department.equals("department"))
@@ -89,7 +90,7 @@ public class CustomDownload extends HttpServlet {
 				}
 				*/
 			//sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID";
-			System.out.println(sql);
+			//System.out.println(sql);
 			preparedStatement = connection.prepareStatement(sql);
 			rs=preparedStatement.executeQuery();
 			String realPath = getServletContext().getRealPath("pc/Download");
@@ -112,10 +113,7 @@ public class CustomDownload extends HttpServlet {
             ServletOutputStream out = response.getOutputStream();
             IOUtils.copy(in,out);
             in.close();
-		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
+            connection.close();
 		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
@@ -125,7 +123,7 @@ public class CustomDownload extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Create Directories finished");
+			System.out.println("Operation Finished:CustomDownload");
 		}
 	}
 

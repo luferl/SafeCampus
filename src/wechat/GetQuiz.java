@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import PublicClass.DBConnection;
 import PublicClass.Questions;
 /**
  * Servlet implementation class GetQuestions
@@ -47,7 +48,6 @@ public class GetQuiz extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Connection connection = null;
 		HttpSession session=request.getSession();
 		String userid=session.getAttribute("Username").toString();
 		response.setContentType("application/json;charset=utf-8");
@@ -57,18 +57,17 @@ public class GetQuiz extends HttpServlet {
 		String json="";
 		int count=0;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			if(gid.equals("-1"))
 			{
 				//创建新试卷
-				gid=Create(quizid,userid);
+				gid=Create(quizid,userid,connection);
 			}
 			//读取现有试卷
 			String sql="select * from questions_answer where quiz_gid="+gid;
 			json="[";
-			System.out.print(json);
+			//System.out.print(json);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			while(re.next()){ 
@@ -85,13 +84,10 @@ public class GetQuiz extends HttpServlet {
 			 }
 			json=json+"]";
 			json="{\"gid\":"+gid+",\"questions\":"+json+"}";
-			System.out.print(json);
+			//System.out.print(json);
 			response.getWriter().print(json);
+			connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -100,18 +96,14 @@ public class GetQuiz extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Get Course Questions Successfully");
+			//System.out.println("Get Course Questions Successfully");
 		}
 	}
-	public String Create(String quizid,String userid)
+	public String Create(String quizid,String userid,Connection connection)
 	{
-		Connection connection = null;
 		String json="";
 		String gid="";
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
 			String sql="select time from quizes where ID="+quizid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -130,7 +122,7 @@ public class GetQuiz extends HttpServlet {
 				String knowledgeid=re.getString("knowledgeid");
 				int count=Integer.parseInt(re.getString("count"));
 				String type=re.getString("type");
-				System.out.println(type);
+				//System.out.println(type);
 				int score=Integer.parseInt(re.getString("score"));
 				String sql2="select * from questions where knowledgeid="+knowledgeid+" AND type='"+type+"'";
 				preparedStatement = connection.prepareStatement(sql2);
@@ -168,7 +160,6 @@ public class GetQuiz extends HttpServlet {
 			sql="select last_insert_id() as lid";
 			preparedStatement = connection.prepareStatement(sql);
 			ResultSet res = preparedStatement.executeQuery();
-			
 			if(res.next())
 			{
 				gid=res.getString("lid");
@@ -181,10 +172,6 @@ public class GetQuiz extends HttpServlet {
 				rei = preparedStatement.executeUpdate();
 			}
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -193,7 +180,7 @@ public class GetQuiz extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Get Course Questions Successfully");
+			//System.out.println("Get Course Questions Successfully");
 		}
 		return gid;
 	}

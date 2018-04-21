@@ -1,4 +1,4 @@
-package pcadmin;
+package wechat;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -13,19 +13,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import PublicClass.DBConnection;
-
 /**
  * Servlet implementation class GetDirectories
  */
-@WebServlet("/pc/GetYearlist")
-public class GetYearlist extends HttpServlet {
+@WebServlet("/wechat/CallBack")
+public class CallBack extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetYearlist() {
+    public CallBack() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,28 +33,32 @@ public class GetYearlist extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		Connection connection = null;
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String id=request.getParameter("courseid");
-		String json="[";
+		String json="";
 		try {
-			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
-			String sql="select distinct year from students";
+			Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://127.0.0.1/safecampus";
+			connection = DriverManager.getConnection(url, "root", "123456");
+			String sql="SELECT text,url,time FROM directories where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
 			while(re.next()){ 
-				if(count>0)
-					json=json+",";
-				String temp=re.getString("year");
-				json=json+"\""+temp+"\"";
-				count++;
+				String text=re.getString("text");
+				String vurl=re.getString("url");
+				String time=re.getString("url");
+				json="{\"text\":\""+text+"\",\"url\":\""+vurl+"\",\"time\":\""+time+"\"}";
 			 }
-			json=json+"]";
+			System.out.print(json);
 			response.getWriter().print(json);
-			connection.close();
 		}
+		catch(ClassNotFoundException e) {   
+			System.out.println("Sorry,can`t find the Driver!");   
+			e.printStackTrace();   
+		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -65,7 +67,7 @@ public class GetYearlist extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Operation Finished:GetYearList");
+			System.out.println("目录成功获取！！");
 		}
 	}
 

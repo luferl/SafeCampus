@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import PublicClass.DBConnection;
+
 /**
  * Servlet implementation class Loginservice
  */
@@ -43,11 +45,9 @@ public class Registration extends HttpServlet {
 		String phone=request.getParameter("phone");
 		String testopenid=request.getParameter("openid");
 		//System.out.println("Login!");
-		Connection connection = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="SELECT department FROM students WHERE name='"+username+"' and code='"+code+"'";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -66,10 +66,6 @@ public class Registration extends HttpServlet {
 			else
 				response.getWriter().print("validation error");
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -78,7 +74,7 @@ public class Registration extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("登录成功");
+			//System.out.println("登录成功");
 		}
 	}
 

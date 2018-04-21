@@ -78,12 +78,10 @@ public class ExcelReader {
     private static int readExcel(final Workbook wb, final Sheet sheet, final int startReadLine, final int tailLine) {
         Row row = null;
         int count=0;
-        Connection connection = null;
         try {
-	        Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
-		    if(type==1)
+        	DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
+			if(type==1)
 		    {
 			       for (int i = startReadLine+1; i < sheet.getLastRowNum() - tailLine + 1; i++) {
 			        	String Department="",Code="",Name="",Year="",Role="";
@@ -117,7 +115,7 @@ public class ExcelReader {
 			                } 
 			            }
 			            String sql="INSERT INTO students(name,code,department,role,year) VALUE('"+Name+"','"+Code+"','"+Department+"','"+Role+"','"+Year+"')";
-			            System.out.println(sql);
+			            //System.out.println(sql);
 			            PreparedStatement preparedStatement = connection.prepareStatement(sql);
 						int re = preparedStatement.executeUpdate();
 			            if(re>0)
@@ -196,18 +194,15 @@ public class ExcelReader {
 			            	else
 			            		type="multy";
 			            sql="INSERT INTO questions(text,type,choices,answer,knowledgeid) VALUE('"+text+"','"+type+"','"+choices+"','"+answer+"','"+knowledgeid+"')";
-			            System.out.println(sql);
+			            //System.out.println(sql);
 			            preparedStatement = connection.prepareStatement(sql);
 						int re2 = preparedStatement.executeUpdate();
 			            if(re2>0)
 			            	count++;
 			        }
 		    }
+			connection.close();
         }
-        catch(ClassNotFoundException e) {   
-        	System.out.println("Sorry,can`t find the Driver!");   
-        	e.printStackTrace();   
-        } 
         catch(SQLException e) {
         	//数据库连接失败异常处理
         	e.printStackTrace();  
@@ -216,7 +211,7 @@ public class ExcelReader {
         	// TODO: handle exception
         	e.printStackTrace();
         }finally{
-        	System.out.println("Questions Upload Successfully");
+        	System.out.println("Operation Finished:ExcelReader");
         }
         return count;
    }

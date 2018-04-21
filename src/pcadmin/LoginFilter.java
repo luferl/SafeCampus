@@ -41,8 +41,6 @@ public class LoginFilter implements Filter {
 		 HttpServletRequest httpRequest=(HttpServletRequest)request;
 	     HttpServletResponse httpResponse=(HttpServletResponse)response;
 	     HttpSession session=httpRequest.getSession();
-	    
-	     
 	     String a=httpRequest.getRequestURI();
 	     if(a.contains(".html")&&a.contains("pc"))
 	    {

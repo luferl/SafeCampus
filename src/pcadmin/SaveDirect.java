@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import PublicClass.DBConnection;
+
 /**
  * Servlet implementation class SaveDirect
  */
@@ -46,11 +48,9 @@ public class SaveDirect extends HttpServlet {
 		String iscourse=request.getParameter("iscourse");
 		String vurl=request.getParameter("vurl");
 		String time=request.getParameter("time");
-		Connection connection = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="";
 			sql="UPDATE  directories SET text='"+name+"',iscourse="+iscourse+",topid="+topid+",url='"+vurl+"',time='"+time+"' WHERE id="+id;
 			System.out.println(sql);
@@ -64,11 +64,8 @@ public class SaveDirect extends HttpServlet {
 			{
 				response.getWriter().print("error");
 			}
+			connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -77,7 +74,7 @@ public class SaveDirect extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Create Directories finished");
+			System.out.println("Operation Finished:Save Directories");
 		}
 	}
 

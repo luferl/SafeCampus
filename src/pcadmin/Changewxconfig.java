@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import PublicClass.DBConnection;
+
 /**
  * Servlet implementation class Changewxconfig
  */
@@ -48,11 +50,9 @@ public class Changewxconfig extends HttpServlet {
 		String appid=request.getParameter("appid");
 		String apptoken=request.getParameter("apptoken");
 		//System.out.println("Login!");
-		Connection connection = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String savechangesql="UPDATE wx_config SET School_Name='"+schoolename+"',School_Code='"+schoolcode+"',appid='"+appid+"',appsecret='"+appsecret+"',apptoken='"+apptoken+"' where ID=1";
 			PreparedStatement preparedStatement2 = connection.prepareStatement(savechangesql);
 			int result = preparedStatement2.executeUpdate();
@@ -63,12 +63,10 @@ public class Changewxconfig extends HttpServlet {
 			else
 			{
 				response.getWriter().print("error");
+				System.out.println(savechangesql);   
 			}
+			connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -77,7 +75,7 @@ public class Changewxconfig extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("数据库数据成功获取！！");
+			System.out.println("Operation Finished:ChangeWxConfig");
 		}
 	}
 

@@ -23,6 +23,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.sun.org.apache.regexp.internal.RE;
 
+import PublicClass.DBConnection;
 import PublicClass.ExcelWriter;
 import PublicClass.GroupClass;
 
@@ -48,14 +49,12 @@ public class GroupDownload extends HttpServlet {
 		// TODO Auto-generated method stub
 		String id=request.getParameter("id");
 		String condition=request.getParameter("condition");
-		Connection connection = null;
 		List<GroupClass> gl=new ArrayList<GroupClass>();
 		String realPath = getServletContext().getRealPath("pc/Download");
 		ExcelWriter ew=new ExcelWriter();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="";
 			sql="select passsc,name from quizes where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -177,11 +176,8 @@ public class GroupDownload extends HttpServlet {
             ServletOutputStream out = response.getOutputStream();
             IOUtils.copy(in,out);
             in.close();
+            connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -190,7 +186,7 @@ public class GroupDownload extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Create Directories finished");
+			System.out.println("Operation Finished:GroupDownload");
 		}
 	}
 

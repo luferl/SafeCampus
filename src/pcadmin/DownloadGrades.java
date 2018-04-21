@@ -21,6 +21,7 @@ import org.apache.commons.io.IOUtils;
 
 import com.sun.org.apache.regexp.internal.RE;
 
+import PublicClass.DBConnection;
 import PublicClass.ExcelWriter;
 
 /**
@@ -44,11 +45,9 @@ public class DownloadGrades extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String id=request.getParameter("id");
-		Connection connection = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="";
 			sql="select passsc,name from quizes where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -60,6 +59,8 @@ public class DownloadGrades extends HttpServlet {
 				passsc=rs.getInt("passsc");
 				quizname=rs.getString("name");
 			}
+			else
+				System.out.println(sql);
 			sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID";
 			preparedStatement = connection.prepareStatement(sql);
 			rs=preparedStatement.executeQuery();
@@ -83,11 +84,8 @@ public class DownloadGrades extends HttpServlet {
             ServletOutputStream out = response.getOutputStream();
             IOUtils.copy(in,out);
             in.close();
+            connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -96,7 +94,7 @@ public class DownloadGrades extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Create Directories finished");
+			System.out.println("Operation Finished:DownloadGrades");
 		}
 	}
 

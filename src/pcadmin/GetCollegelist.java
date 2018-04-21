@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import PublicClass.DBConnection;
+
 /**
  * Servlet implementation class GetDirectories
  */
@@ -33,15 +35,13 @@ public class GetCollegelist extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Connection connection = null;
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String id=request.getParameter("courseid");
 		String json="[";
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="select distinct department from students";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -55,11 +55,8 @@ public class GetCollegelist extends HttpServlet {
 			 }
 			json=json+"]";
 			response.getWriter().print(json);
+			connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -68,7 +65,7 @@ public class GetCollegelist extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("目录成功获取！！");
+			System.out.println("Operation Finished:GetCollegeList");
 		}
 	}
 

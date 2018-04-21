@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import PublicClass.DBConnection;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -44,7 +45,6 @@ public class AddQuiz extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		Connection connection = null;
 		response.setContentType("application/text;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String name=request.getParameter("name");
@@ -57,9 +57,8 @@ public class AddQuiz extends HttpServlet {
 		String type=request.getParameter("type");
 		String timelimit=request.getParameter("timelimit");
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="";
 			sql="INSERT INTO quizes(name,starttime,endtime,time,totalsc,passsc,times,isdeleted,issimulate) VALUE('"+name+"','"+starttime+"','"+endtime+"','"+timelast+"','"+totalscore+"','"+passscore+"','"+timelimit+"',0,'"+type+"')";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -81,23 +80,23 @@ public class AddQuiz extends HttpServlet {
 							String type2=job.get("type").toString();
 							String score=job.get("score").toString();
 							sql="INSERT INTO quiz_config(knowledgeid,type,count,score,quizid) VALUES('"+knowledgeid+"','"+type2+"','"+count+"','"+score+"','"+quizid+"')";
-							System.out.println(sql);
 							preparedStatement = connection.prepareStatement(sql);
-							preparedStatement.executeUpdate();
+							int r=preparedStatement.executeUpdate();
+							if(r<=0)
+								System.out.println(sql);
 						}
 					}
 				}
 				response.getWriter().print("success");
+				System.out.println("添加试卷成功");
 			}
 			else
 			{
 				response.getWriter().print("error");
+				System.out.println(sql);
 			}
+			connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -106,7 +105,7 @@ public class AddQuiz extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("目录成功获取！！");
+			System.out.println("Operation Finished:AddQuiz");
 		}
 	}
 

@@ -9,11 +9,9 @@ import java.sql.SQLException;
 public class CalculateGrades {
 	public void Calculate(String gid)
 	{
-		Connection connection = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnnection();
 			String sql="";
 			sql="SELECT type,answer,u_answer,score FROM questions_answer WHERE quiz_gid="+gid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -42,12 +40,8 @@ public class CalculateGrades {
 			sql="UPDATE quiz_grades SET grades="+totalscore+",issubmitted=1 WHERE ID="+gid;
 			preparedStatement = connection.prepareStatement(sql);
 			int re2=preparedStatement.executeUpdate();
-			System.out.println(sql);
+			connection.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -56,7 +50,7 @@ public class CalculateGrades {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Save Questions Finished");
+			System.out.println("Operation Finished:CalculateGrades");
 		}
 	}
 }
