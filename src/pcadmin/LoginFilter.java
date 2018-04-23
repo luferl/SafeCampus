@@ -64,7 +64,7 @@ public class LoginFilter implements Filter {
 		    	 else
 		    	 {
 		    		 //System.out.println("Banned");
-		    		 httpResponse.sendRedirect(httpRequest.getContextPath()+"/wechat/login.html");
+		    		 httpResponse.sendRedirect(httpRequest.getContextPath()+"/wechat/Loginservice");
 		    	 }
 		    }
 	    	 else

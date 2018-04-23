@@ -166,17 +166,26 @@
 		<script src="js/app.min.js"></script>
 
 		<script type="text/javascript">
+			var reg = new RegExp("(^|&)openid=([^&]*)(&|$)", "i");  
+		    var r = window.location.search.substr(1).match(reg);
+		    var openid=r[2];
+		    $("#openid").val(openid);
+		    reg = new RegExp("(^|&)nickname=([^&]*)(&|$)", "i");  
+		    r = window.location.search.substr(1).match(reg);
+		    var nickname=r[2];
+		    $("#nickname").val(nickname);
 			function regist(){
 				 $.post("Registration",
 						 {
 					 		openid:$("#openid").val(),
+					 		nickname:$("#nickname").val(),
 					 		username:$("#username").val(),
 					 		code:$("#code").val(),
 					 		phone:$("#phone").val()
 						 },
 						 function(data){
 							 if(data=="regist success")
-								window.location.href="login.html";
+								window.location.href="index.html";
 							 else
 								 if(data=="validation error")
 									alert("身份信息验证出错，请检查！ ");

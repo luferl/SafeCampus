@@ -41,6 +41,7 @@ public class Registration extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		String username=request.getParameter("username");
+		String nickname=request.getParameter("nickname");
 		String code=request.getParameter("code");
 		String phone=request.getParameter("phone");
 		String testopenid=request.getParameter("openid");
@@ -53,11 +54,19 @@ public class Registration extends HttpServlet {
 			ResultSet re = preparedStatement.executeQuery();
 			if(re.next()){ 
 				String department=re.getString("department");
-				sql="INSERT INTO users(name,code,phone,openid,department) VALUE('"+username+"','"+code+"','"+phone+"','"+testopenid+"','"+department+"')";
+				sql="INSERT INTO users(name,code,phone,openid,department,nickname) VALUE('"+username+"','"+code+"','"+phone+"','"+testopenid+"','"+department+"','"+nickname+"')";
 				PreparedStatement preparedStatement2 = connection.prepareStatement(sql);
 				int re2 = preparedStatement2.executeUpdate();
 				if(re2>0)
 				{
+					sql="select LAST_INSERT_ID() as id";
+					preparedStatement = connection.prepareStatement(sql);
+					ResultSet re3 = preparedStatement.executeQuery();
+					String id="";
+					if(re3.next())
+						id=re3.getString("id");
+					HttpSession session=request.getSession();
+					session.setAttribute("Username", id);
 					response.getWriter().print("regist success");
 				}
 				else

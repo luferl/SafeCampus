@@ -79,7 +79,6 @@ public class SaveQuiz extends HttpServlet {
 						String type2=job.get("type").toString();
 						String score=job.get("score").toString();
 						sql="INSERT INTO quiz_config(knowledgeid,type,count,score,quizid) VALUES('"+knowledgeid+"','"+type2+"','"+count+"','"+score+"','"+quizid+"')";
-						System.out.println(sql);
 						preparedStatement = connection.prepareStatement(sql);
 						preparedStatement.executeUpdate();
 					}

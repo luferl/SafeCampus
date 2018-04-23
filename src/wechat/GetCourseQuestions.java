@@ -52,7 +52,7 @@ public class GetCourseQuestions extends HttpServlet {
 			Connection connection = dbc.getConnnection();
 			String sql="select * from coursequestions where courseid="+courseid;
 			json="[";
-			System.out.print(json);
+			//System.out.print(json);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			while(re.next()){ 
