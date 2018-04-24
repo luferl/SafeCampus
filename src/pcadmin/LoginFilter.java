@@ -42,35 +42,43 @@ public class LoginFilter implements Filter {
 	     HttpServletResponse httpResponse=(HttpServletResponse)response;
 	     HttpSession session=httpRequest.getSession();
 	     String a=httpRequest.getRequestURI();
-	     if(a.contains(".html")&&a.contains("pc"))
-	    {
-	    	 if(session.getAttribute("Username")!=null||a.contains("login.html")){
-	    		 //System.out.println("Passed");
-		         chain.doFilter(request, response);
-		     }
-	    	 else
-	    	 {
-	    		 //System.out.println("Banned");
-	    		 httpResponse.sendRedirect(httpRequest.getContextPath()+"/pc/login.html");
-	    	 }
+	     session.setAttribute("Username", "1");
+	     /*
+	     if(a.substring(a.length()-1).equals("/"))
+	     {
+	    	 httpResponse.sendRedirect(a+"/index.html");
 	     }
 	     else
-	    	 if(a.contains(".html")&&a.contains("wechat"))
+		     if(a.contains(".html")&&a.contains("pc"))
 		    {
-		    	 if(session.getAttribute("Username")!=null||a.contains("login.html")||a.contains("register.html")){
+		    	 if(session.getAttribute("Username")!=null||a.contains("login.html")){
 		    		 //System.out.println("Passed");
 			         chain.doFilter(request, response);
 			     }
 		    	 else
 		    	 {
 		    		 //System.out.println("Banned");
-		    		 httpResponse.sendRedirect(httpRequest.getContextPath()+"/wechat/Loginservice");
+		    		 httpResponse.sendRedirect(httpRequest.getContextPath()+"/pc/login.html");
 		    	 }
-		    }
-	    	 else
-		    	 // System.out.println("Passed");	
-		    	 chain.doFilter(request, response);
-		   
+		     }
+		     else
+		    	 if(a.contains(".html")&&a.contains("wechat"))
+			    {
+			    	 if(session.getAttribute("Username")!=null||a.contains("login.html")||a.contains("register.html")){
+			    		 //System.out.println("Passed");
+				         chain.doFilter(request, response);
+				     }
+			    	 else
+			    	 {
+			    		 //System.out.println("Banned");
+			    		 httpResponse.sendRedirect(httpRequest.getContextPath()+"/wechat/Loginservice");
+			    	 }
+			    }
+		    	 else
+			    	 // System.out.println("Passed");	
+			    	 chain.doFilter(request, response);
+	     */
+	    chain.doFilter(request, response);   
 		// pass the request along the filter chain
 		//chain.doFilter(request, response);
 	}

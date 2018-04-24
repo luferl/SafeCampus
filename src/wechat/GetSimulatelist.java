@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import PublicClass.CalculateGrades;
 import PublicClass.DBConnection;
 
 /**
@@ -87,7 +88,14 @@ public class GetSimulatelist extends HttpServlet {
 					    	   if(Integer.parseInt(status)==0)
 					    	   {
 					    		 //Ëã·Ö
-					    		   temp="{\"id\":"+id+",\"gid\":"+did+",\"text\":\""+dtext+"\",\"tags\":[\"´ý¼ÆËã\"]}";
+					    		   CalculateGrades cg=new CalculateGrades();
+					    		   cg.Calculate(did);
+					    		   sql2="SELECT grades FROM quiz_grades where ID="+did;
+						    	   preparedStatement2 = connection.prepareStatement(sql2);
+						    	   ResultSet rep = preparedStatement2.executeQuery();
+						    	   if(rep.next())
+						    		   grades=rep.getString("grades");
+					    		   temp="{\"id\":"+id+",\"gid\":"+did+",\"text\":\""+dtext+"\",\"tags\":[\""+grades+"\"]}";
 					    	   }
 					    	   else
 					    	   {

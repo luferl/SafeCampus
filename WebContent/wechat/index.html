@@ -1,361 +1,120 @@
-<!DOCTYPE html>
-<html lang="en-us">
-	<head>
-		<meta charset="utf-8">
-		<title> 平安校园安全教育平台 </title>
-		<meta name="description" content="">
-		<meta name="author" content="">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-		<!-- Basic Styles -->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/bootstrap.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/font-awesome.min.css">
-		<!-- SmartAdmin Styles : Caution! DO NOT change the order -->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production-plugins.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-production.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-skins.min.css">
-		<!-- SmartAdmin RTL Support  -->
-		<link rel="stylesheet" type="text/css" media="screen" href="css/smartadmin-rtl.min.css">
-		<link rel="stylesheet" type="text/css" media="screen" href="css/demo.min.css">
-		<!-- FAVICONS -->
-		<link rel="shortcut icon" href="img/favicon/favicon.ico" type="image/x-icon">
-		<link rel="icon" href="img/favicon/favicon.ico" type="image/x-icon">
-		<!-- GOOGLE FONT -->
-		<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
-		<!-- Specifying a Webpage Icon for Web Clip 
-			 Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
-		<link rel="apple-touch-icon" href="img/splash/sptouch-icon-iphone.png">
-		<link rel="apple-touch-icon" sizes="76x76" href="img/splash/touch-icon-ipad.png">
-		<link rel="apple-touch-icon" sizes="120x120" href="img/splash/touch-icon-iphone-retina.png">
-		<link rel="apple-touch-icon" sizes="152x152" href="img/splash/touch-icon-ipad-retina.png">
-	</head>
-	<body class="">
-		<!-- HEADER -->
-		<header id="header">
-			<div id="logo-group">
-				<!-- PLACE YOUR LOGO HERE -->
-				<span id="logo"> <img src="img/logo.png" alt="SmartAdmin"> </span>		
-			</div>
-			<!-- pulled right: nav area -->
-			<div class="pull-right">
-				<!-- collapse menu button -->
-				<div id="hide-menu" class="btn-header pull-right">
-					<span> <a href="javascript:void(0);" data-action="toggleMenu" title="Collapse Menu"><i class="fa fa-reorder"></i></a> </span>
-				</div>
-				<!-- end collapse menu -->
-			</div>
-			<!-- end pulled right: nav area -->
-		</header>
-		<!-- END HEADER -->
-		<!-- Left panel : Navigation area -->
-		<aside id="left-panel">
-			<!-- NAVIGATION : This navigation is also responsive-->
-			<nav>
-				<ul>
-					<li  class="active">
-						<a href="index.html" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">首页</span></a>
-					</li>
-					<li>
-						<a href="courselist.html"><i class="fa fa-lg fa-fw fa-video-camera"></i> <span class="menu-item-parent">视频学习</span></a>
-					</li>
-					<li>
-						<a href="simulatel.html"><i class="fa fa-lg fa-fw fa-file-text"></i> <span class="menu-item-parent">模拟考试</span></a>
-					</li>
-					<li>
-						<a href="formall.html"><i class="fa fa-lg fa-fw fa-file-text-o"></i> <span class="menu-item-parent">正式考试</span></a>
-					</li>
-				</ul>
-			</nav>
-			<span class="minifyme" data-action="minifyMenu"> 
-				<i class="fa fa-arrow-circle-left hit"></i> 
-			</span>
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta name="viewport" content="width=device-width,maximum-scale=5.0,minimum-scale=1.0,user-scalable=yes">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="华北水利水电大学安全教育学习系统" />
+<meta name="description" content="华北水利水电大学安全教育学习系统" />
+<title>华北水利水电大学安全教育学习系统</title>
+<script src="js/mobile.js"></script>
+<script src='js/jquery.js' type='text/javascript'></script>
+<style>
 
-		</aside>
-		<!-- END NAVIGATION -->
-		<!-- MAIN PANEL -->
-		<div id="main" role="main">
+*{ margin:0; padding:0;}
+body{}
+ul,li{ list-style:none;}
+a{color:#333; text-decoration:none; outline:none; cursor:pointer}
+#main{font:14px/1.5em microsoft yahei,Verdana, Tahoma;}
+p{color:#666}
 
-			<!-- MAIN CONTENT -->
-			<div id="content">
+a.bottom_menu_main .mtitle{line-height:18px!important;}
+ul.bottom_menu{position: fixed;left:0;bottom: 0px;width: 100%;z-index:99999999}
+ul.bottom_menu>li{float: left;}
+ul.bottom_menu a {display: block; cursor:pointer;font-size:14px;}
+ul.bottom_menu .float .mpic, ul.bottom_menu .float .mtitle{float:left}
 
-				<div class="row">
-					
-				</div>
-								<!-- widget grid -->
-								<section id="widget-grid" class="">
+#mainmenu{background:#fff}
+#container{}
+#bottom{width:100%;text-align:center;background-color:#fff;}
 
-										<!-- row -->
-										<div class="row">
-											<article class="col-sm-12">
-												<!-- new widget -->
-												<div class="jarviswidget" id="wid-id-0" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
-													<!-- widget options:
-													usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
-					
-													data-widget-colorbutton="false"
-													data-widget-editbutton="false"
-													data-widget-togglebutton="false"
-													data-widget-deletebutton="false"
-													data-widget-fullscreenbutton="false"
-													data-widget-custombutton="false"
-													data-widget-collapsed="true"
-													data-widget-sortable="false"
-					
-													-->
-													<header>
-														<span class="widget-icon"> <i class="glyphicon glyphicon-stats txt-color-darken"></i> </span>
-														<h2>Live Feeds </h2>
-					
-														<ul class="nav nav-tabs pull-right in" id="myTab">
-															<li class="active">
-																<a data-toggle="tab" href="#s1"><i class="fa fa-clock-o"></i> <span class="hidden-mobile hidden-tablet">Live Stats</span></a>
-															</li>
-					
-															<li>
-																<a data-toggle="tab" href="#s2"><i class="fa fa-facebook"></i> <span class="hidden-mobile hidden-tablet">Social Network</span></a>
-															</li>
-					
-															<li>
-																<a data-toggle="tab" href="#s3"><i class="fa fa-dollar"></i> <span class="hidden-mobile hidden-tablet">Revenue</span></a>
-															</li>
-														</ul>
-					
-													</header>
-					
-													<!-- widget div-->
-													<div class="no-padding">
-														<!-- widget edit box -->
-														<div class="jarviswidget-editbox">
-					
-															test
-														</div>
-														<!-- end widget edit box -->
-					
-														<div class="widget-body">
-															<!-- content -->
-															<div id="myTabContent" class="tab-content">
-																<div class="tab-pane fade active in padding-10 no-padding-bottom" id="s1">
-																	<div class="row no-space">
-																		<div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-																			<span class="demo-liveupdate-1"> <span class="onoffswitch-title">Live switch</span> <span class="onoffswitch">
-																					<input type="checkbox" name="start_interval" class="onoffswitch-checkbox" id="start_interval">
-																					<label class="onoffswitch-label" for="start_interval"> 
-																						<span class="onoffswitch-inner" data-swchon-text="ON" data-swchoff-text="OFF"></span> 
-																						<span class="onoffswitch-switch"></span> </label> </span> </span>
-																			<div id="updating-chart" class="chart-large txt-color-blue"></div>
-					
-																		</div>
-																		<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 show-stats">
-					
-																			<div class="row">
-																				<div class="col-xs-6 col-sm-6 col-md-12 col-lg-12"> <span class="text"> My Tasks <span class="pull-right">130/200</span> </span>
-																					<div class="progress">
-																						<div class="progress-bar bg-color-blueDark" style="width: 65%;"></div>
-																					</div> </div>
-																				<div class="col-xs-6 col-sm-6 col-md-12 col-lg-12"> <span class="text"> Transfered <span class="pull-right">440 GB</span> </span>
-																					<div class="progress">
-																						<div class="progress-bar bg-color-blue" style="width: 34%;"></div>
-																					</div> </div>
-																				<div class="col-xs-6 col-sm-6 col-md-12 col-lg-12"> <span class="text"> Bugs Squashed<span class="pull-right">77%</span> </span>
-																					<div class="progress">
-																						<div class="progress-bar bg-color-blue" style="width: 77%;"></div>
-																					</div> </div>
-																				<div class="col-xs-6 col-sm-6 col-md-12 col-lg-12"> <span class="text"> User Testing <span class="pull-right">7 Days</span> </span>
-																					<div class="progress">
-																						<div class="progress-bar bg-color-greenLight" style="width: 84%;"></div>
-																					</div> </div>
-					
-																				<span class="show-stat-buttons"> <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6"> <a href="javascript:void(0);" class="btn btn-default btn-block hidden-xs">Generate PDF</a> </span> <span class="col-xs-12 col-sm-6 col-md-6 col-lg-6"> <a href="javascript:void(0);" class="btn btn-default btn-block hidden-xs">Report a bug</a> </span> </span>
-					
-																			</div>
-					
-																		</div>
-																	</div>
-					
-																	<div class="show-stat-microcharts">
-																		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-					
-																			<div class="easy-pie-chart txt-color-orangeDark" data-percent="33" data-pie-size="50">
-																				<span class="percent percent-sign">35</span>
-																			</div>
-																			<span class="easy-pie-title"> Server Load <i class="fa fa-caret-up icon-color-bad"></i> </span>
-																			<ul class="smaller-stat hidden-sm pull-right">
-																				<li>
-																					<span class="label bg-color-greenLight"><i class="fa fa-caret-up"></i> 97%</span>
-																				</li>
-																				<li>
-																					<span class="label bg-color-blueLight"><i class="fa fa-caret-down"></i> 44%</span>
-																				</li>
-																			</ul>
-																			<div class="sparkline txt-color-greenLight hidden-sm hidden-md pull-right" data-sparkline-type="line" data-sparkline-height="33px" data-sparkline-width="70px" data-fill-color="transparent">
-																				130, 187, 250, 257, 200, 210, 300, 270, 363, 247, 270, 363, 247
-																			</div>
-																		</div>
-																		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-																			<div class="easy-pie-chart txt-color-greenLight" data-percent="78.9" data-pie-size="50">
-																				<span class="percent percent-sign">78.9 </span>
-																			</div>
-																			<span class="easy-pie-title"> Disk Space <i class="fa fa-caret-down icon-color-good"></i></span>
-																			<ul class="smaller-stat hidden-sm pull-right">
-																				<li>
-																					<span class="label bg-color-blueDark"><i class="fa fa-caret-up"></i> 76%</span>
-																				</li>
-																				<li>
-																					<span class="label bg-color-blue"><i class="fa fa-caret-down"></i> 3%</span>
-																				</li>
-																			</ul>
-																			<div class="sparkline txt-color-blue hidden-sm hidden-md pull-right" data-sparkline-type="line" data-sparkline-height="33px" data-sparkline-width="70px" data-fill-color="transparent">
-																				257, 200, 210, 300, 270, 363, 130, 187, 250, 247, 270, 363, 247
-																			</div>
-																		</div>
-																		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-																			<div class="easy-pie-chart txt-color-blue" data-percent="23" data-pie-size="50">
-																				<span class="percent percent-sign">23 </span>
-																			</div>
-																			<span class="easy-pie-title"> Transfered <i class="fa fa-caret-up icon-color-good"></i></span>
-																			<ul class="smaller-stat hidden-sm pull-right">
-																				<li>
-																					<span class="label bg-color-darken">10GB</span>
-																				</li>
-																				<li>
-																					<span class="label bg-color-blueDark"><i class="fa fa-caret-up"></i> 10%</span>
-																				</li>
-																			</ul>
-																			<div class="sparkline txt-color-darken hidden-sm hidden-md pull-right" data-sparkline-type="line" data-sparkline-height="33px" data-sparkline-width="70px" data-fill-color="transparent">
-																				200, 210, 363, 247, 300, 270, 130, 187, 250, 257, 363, 247, 270
-																			</div>
-																		</div>
-																		<div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-																			<div class="easy-pie-chart txt-color-darken" data-percent="36" data-pie-size="50">
-																				<span class="percent degree-sign">36 <i class="fa fa-caret-up"></i></span>
-																			</div>
-																			<span class="easy-pie-title"> Temperature <i class="fa fa-caret-down icon-color-good"></i></span>
-																			<ul class="smaller-stat hidden-sm pull-right">
-																				<li>
-																					<span class="label bg-color-red"><i class="fa fa-caret-up"></i> 124</span>
-																				</li>
-																				<li>
-																					<span class="label bg-color-blue"><i class="fa fa-caret-down"></i> 40 F</span>
-																				</li>
-																			</ul>
-																			<div class="sparkline txt-color-red hidden-sm hidden-md pull-right" data-sparkline-type="line" data-sparkline-height="33px" data-sparkline-width="70px" data-fill-color="transparent">
-																				2700, 3631, 2471, 2700, 3631, 2471, 1300, 1877, 2500, 2577, 2000, 2100, 3000
-																			</div>
-																		</div>
-																	</div>
-					
-																</div>
-																<!-- end s1 tab pane -->
-					
-																<div class="tab-pane fade" id="s2">
-																	<div class="widget-body-toolbar bg-color-white">
-					
-																		<form class="form-inline" role="form">
-					
-																			<div class="form-group">
-																				<label class="sr-only" for="s123">Show From</label>
-																				<input type="email" class="form-control input-sm" id="s123" placeholder="Show From">
-																			</div>
-																			<div class="form-group">
-																				<input type="email" class="form-control input-sm" id="s124" placeholder="To">
-																			</div>
-					
-																			<div class="btn-group hidden-phone pull-right">
-																				<a class="btn dropdown-toggle btn-xs btn-default" data-toggle="dropdown"><i class="fa fa-cog"></i> More <span class="caret"> </span> </a>
-																				<ul class="dropdown-menu pull-right">
-																					<li>
-																						<a href="javascript:void(0);"><i class="fa fa-file-text-alt"></i> Export to PDF</a>
-																					</li>
-																					<li>
-																						<a href="javascript:void(0);"><i class="fa fa-question-sign"></i> Help</a>
-																					</li>
-																				</ul>
-																			</div>
-					
-																		</form>
-					
-																	</div>
-																	<div class="padding-10">
-																		<div id="statsChart" class="chart-large has-legend-unique"></div>
-																	</div>
-					
-																</div>
-																<!-- end s2 tab pane -->
-					
-																<div class="tab-pane fade" id="s3">
-					
-																	<div class="widget-body-toolbar bg-color-white smart-form" id="rev-toggles">
-					
-																		<div class="inline-group">
-					
-																			<label for="gra-0" class="checkbox">
-																				<input type="checkbox" name="gra-0" id="gra-0" checked="checked">
-																				<i></i> Target </label>
-																			<label for="gra-1" class="checkbox">
-																				<input type="checkbox" name="gra-1" id="gra-1" checked="checked">
-																				<i></i> Actual </label>
-																			<label for="gra-2" class="checkbox">
-																				<input type="checkbox" name="gra-2" id="gra-2" checked="checked">
-																				<i></i> Signups </label>
-																		</div>
-					
-																		<div class="btn-group hidden-phone pull-right">
-																			<a class="btn dropdown-toggle btn-xs btn-default" data-toggle="dropdown"><i class="fa fa-cog"></i> More <span class="caret"> </span> </a>
-																			<ul class="dropdown-menu pull-right">
-																				<li>
-																					<a href="javascript:void(0);"><i class="fa fa-file-text-alt"></i> Export to PDF</a>
-																				</li>
-																				<li>
-																					<a href="javascript:void(0);"><i class="fa fa-question-sign"></i> Help</a>
-																				</li>
-																			</ul>
-																		</div>
-					
-																	</div>
-					
-																	<div class="padding-10">
-																		<div id="flotcontainer" class="chart-large has-legend-unique"></div>
-																	</div>
-																</div>
-																<!-- end s3 tab pane -->
-															</div>
-					
-															<!-- end content -->
-														</div>
-					
-													</div>
-													<!-- end widget div -->
-												</div>
-												<!-- end widget -->
-					
-											</article>
-										</div>
-					
-										<!-- end row -->					
-									</section>
-									<!-- end widget grid -->
-			</div>
-			<!-- END MAIN CONTENT -->
+.focus{background:none !important;}
+.focus span{background:rgba(0,0,0,.6) !important; box-sizing:border-box;}
+.focus span.current{background:none !important; border:1px solid #333}
 
-		</div>
-		<!-- END MAIN PANEL -->
 
-		<!-- PAGE FOOTER -->
-		<div class="page-footer">
-			<div class="row">
-				<div class="col-xs-12 col-sm-6">
-					<span class="txt-color-white">平安校园后台管理系统</span>
-				</div>
-			</div>
-		</div>
-		<!-- END PAGE FOOTER -->
-		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
-	    <script src="js/libs/jquery-2.1.1.min.js"></script>
-	    <script src="js/libs/jquery-ui-1.10.3.min.js"></script>
-		<script src="js/app.config.js"></script>
-		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
-		<script src="js/bootstrap/bootstrap.min.js"></script>
-		<script src="js/app.min.js"></script>
+.focus span{width:10px;height:10px;margin-right:10px;border-radius:50%;background:#666;font-size:0}
+.focus span.current{background:#fff}
+</style>
+</head>
+<body>
+<!--幻灯片开始-->
+<div id="main">
+  <div id="h_slider" class="slider">
+    <ul>
+      <li> <img src="picture/banner1.jpg" > </li>
+      <li> <img src="picture/banner2.jpg" > </li>
+      <li> <img src="picture/banner3.jpg" > </li>
+    </ul>
+  </div>
+  <script type="text/javascript" src="js/yxmobileslider.js"></script>
+  <script>
+$("#h_slider").yxMobileSlider({width:'320',height:'180',during:'3000'});
+</script>
+  <!--幻灯片结束-->
+  <table width="100%" height="30" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td>&nbsp;</td>
+    </tr>
+  </table>
+  <!--6个主按钮开始-->
+  <table style="text-align:center;width:100%;" cellpadding="0" cellspacing="0" class="ke-zeroborder" border="0" bordercolor="#000000">
+    <tbody>
+      <tr>
+        <td height="90"><p><a href="courselist.html"><img src="picture/w1.png" alt="" width="60" height="60" border="0" /></a></p>
+          <p>微课堂</p></td>
+        <td><p><a href="simulatel.html"><img src="picture/w2.png" alt="" width="60" height="60" border="0" /></a></p>
+          <p>模拟考试</p></td>
+        <td><p><a href="formall.html"><img src="picture/w3.png" alt="" width="60" height="60" border="0" /></a></p>
+          <p>我要考试</p></td>
+      </tr>
+    <td height="26"><p>&nbsp;</p></td>
+      <td><p>&nbsp;</p></td>
+      <td><p>&nbsp;</p></td>
+    </tr>
+    <tr>
+      <td><p><a href="d2.html"><img src="picture/w4.png" alt="" width="60" height="60" border="0" /></a></p>
+        <p>安全常识</p></td>
+      <td><p><a href="http://mp.weixin.qq.com/s/EXdilN2ekWH2dHUR8V-Kwg"><img src="picture/w6.png" alt="" width="60" height="60" border="0" /></a></p>
+        <p>使用说明</p></td>
+      <td><p><a href="http://mp.weixin.qq.com/s/lsY0i9zMicb4yDD9eC2mhw"><img src="picture/w5.png" alt="" width="60" height="60" border="0" /></a></p>
+        <p>联系方式</p></td>
+    </tr>
+    </tbody>
 
-	</body>
-
+  </table>
+</div>
+<!--6个主按钮结束-->
+<!--底部连接按钮开始 #号为连接地址-->
+<ul class="bottom_menu" style="background-color:#FFFFFF;opacity:1;height:60px;">
+  <li style="width:25%;">
+    <ul class="bottom_menu_sub" style="background-color:#FFFFFF;position: absolute;width:25%;;">
+    </ul>
+    <a href="d1.html" class="bottom_menu_main " style="color:#666666;padding-top:3px;">
+    <div align="center" class="mpic"> <img border="0" src="picture/icon1.png" style="width:30px"> </div>
+    <div align="center" class="mtitle">安全资讯</div>
+    </a> </li>
+  <li style="width:25%;">
+    <ul class="bottom_menu_sub" style="background-color:#FFFFFF;position: absolute;width:25%;;">
+    </ul>
+    <a href="d4.html" class="bottom_menu_main " style="color:#666666;padding-top:3px;">
+    <div align="center" class="mpic"> <img border="0" src="picture/icon2.png" style="width:30px"> </div>
+    <div align="center" class="mtitle">政策法规</div>
+    </a> </li>
+  <li style="width:25%;">
+    <ul class="bottom_menu_sub" style="background-color:#FFFFFF;position: absolute;width:25%;;">
+    </ul>
+    <a href="d3.html" class="bottom_menu_main " style="color:#666666;padding-top:3px;">
+    <div align="center" class="mpic"> <img border="0" src="picture/icon8.png" style="width:30px"> </div>
+    <div align="center" class="mtitle">安全技能</div>
+    </a> </li>
+  <li style="width:25%;">
+    <ul class="bottom_menu_sub" style="background-color:#FFFFFF;position: absolute;width:25%;;">
+    </ul>
+    <a href="http://mp.weixin.qq.com/s/_SRwv_OhSAYGRNyfGdDHrg" class="bottom_menu_main " style="color:#666666;padding-top:3px;">
+    <div align="center" class="mpic"> <img border="0" src="picture/icon7.png" style="width:30px"> </div>
+    <div align="center" class="mtitle">防诈骗</div>
+    </a> </li>
+</ul>
+<!--底部连接结束-->
+</body>
 </html>
