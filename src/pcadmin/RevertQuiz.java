@@ -42,7 +42,7 @@ public class RevertQuiz extends HttpServlet {
 		String quizid=request.getParameter("id");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="UPDATE quizes SET isdeleted=0 where ID="+quizid;
 			System.out.println(sql);
@@ -56,7 +56,8 @@ public class RevertQuiz extends HttpServlet {
 			{
 				response.getWriter().print("error");
 			}
-			connection.close();
+            preparedStatement.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

@@ -52,7 +52,7 @@ public class SaveCPage extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			if(jsonarray.size()>0)
 			{
@@ -69,7 +69,7 @@ public class SaveCPage extends HttpServlet {
 				}
 			}
 			response.getWriter().print("success");
-			connection.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

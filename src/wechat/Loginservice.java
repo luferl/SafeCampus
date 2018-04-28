@@ -36,8 +36,8 @@ public class Loginservice extends HttpServlet {
 		String openid=request.getParameter("openid");
 		String backUrl="http://"+request.getServerName()+"/SafeCampus/wechat/CallBack";
 		DBConnection dbc=new DBConnection();
-		Connection connection = dbc.getConnnection();
 		try {
+			Connection connection = dbc.getConnection();
 			String sql="SELECT AppID FROM wx_config WHERE ID=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -50,6 +50,9 @@ public class Loginservice extends HttpServlet {
 		                + "&state=STATE#wechat_redirect";
 				response.sendRedirect(reurl);
 			 }
+	        preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

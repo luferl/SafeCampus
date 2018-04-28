@@ -41,7 +41,7 @@ public class GetCourse extends HttpServlet {
 		String json="";
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="SELECT text,url,time FROM directories where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -53,7 +53,9 @@ public class GetCourse extends HttpServlet {
 				json="{\"text\":\""+text+"\",\"url\":\""+vurl+"\",\"time\":\""+time+"\"}";
 			 }
 			response.getWriter().print(json);
-			connection.close();
+            preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

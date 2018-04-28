@@ -51,7 +51,7 @@ public class GetQuestions extends HttpServlet {
 		String json="";
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			String sqlc="";
 			if(knowledgeid.equals("0"))
@@ -106,7 +106,9 @@ public class GetQuestions extends HttpServlet {
 			json=json+"]}";
 			//System.out.print(json);
 			response.getWriter().print(json);
-			connection.close();
+			preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

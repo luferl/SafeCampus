@@ -41,7 +41,7 @@ public class GetCurCount extends HttpServlet {
 		long epoch = System.currentTimeMillis()/1000;
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="select count(userid) as count from(SELECT * FROM quiz_grades where quizid="+id+" group by userid) as a";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -53,7 +53,9 @@ public class GetCurCount extends HttpServlet {
 				System.out.println(sql);
 			String json="{\"time\":"+epoch+",\"count\":"+count+"}";
 			response.getWriter().print(json);
-			connection.close();
+			preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

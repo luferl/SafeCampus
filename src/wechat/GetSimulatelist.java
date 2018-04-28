@@ -47,7 +47,7 @@ public class GetSimulatelist extends HttpServlet {
 		String json="[";
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="SELECT * FROM quizes where isdeleted=0 AND issimulate=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -89,6 +89,7 @@ public class GetSimulatelist extends HttpServlet {
 					    	   {
 					    		 //算分
 					    		   CalculateGrades cg=new CalculateGrades();
+					    		   System.out.println(did);
 					    		   cg.Calculate(did);
 					    		   sql2="SELECT grades FROM quiz_grades where ID="+did;
 						    	   preparedStatement2 = connection.prepareStatement(sql2);
@@ -141,7 +142,9 @@ public class GetSimulatelist extends HttpServlet {
 			 }
 			json=json+"]";
 			response.getWriter().print(json);
-			connection.close();
+            preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

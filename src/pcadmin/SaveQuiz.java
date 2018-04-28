@@ -59,7 +59,7 @@ public class SaveQuiz extends HttpServlet {
 		String timelimit=request.getParameter("timelimit");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="UPDATE quizes SET name='"+name+"',starttime='"+starttime+"',endtime='"+endtime+"',time='"+timelast+"',totalsc='"+totalscore+"',passsc='"+passscore+"',times='"+timelimit+"',isdeleted='0',issimulate='"+type+"' where ID="+quizid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -89,7 +89,8 @@ public class SaveQuiz extends HttpServlet {
 			{
 				response.getWriter().print("error");
 			}
-			connection.close();
+            preparedStatement.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

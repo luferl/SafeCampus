@@ -41,7 +41,7 @@ public class GetCollegelist extends HttpServlet {
 		String json="[";
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="select distinct department from students";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -55,7 +55,9 @@ public class GetCollegelist extends HttpServlet {
 			 }
 			json=json+"]";
 			response.getWriter().print(json);
-			connection.close();
+			preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

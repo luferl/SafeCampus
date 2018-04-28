@@ -54,7 +54,7 @@ public class GroupDownload extends HttpServlet {
 		ExcelWriter ew=new ExcelWriter();
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="select passsc,name from quizes where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -176,7 +176,9 @@ public class GroupDownload extends HttpServlet {
             ServletOutputStream out = response.getOutputStream();
             IOUtils.copy(in,out);
             in.close();
-            connection.close();
+            preparedStatement.close();
+			rs.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

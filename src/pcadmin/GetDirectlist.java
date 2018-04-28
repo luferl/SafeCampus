@@ -40,7 +40,7 @@ public class GetDirectlist extends HttpServlet {
 		String json="[";
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="SELECT ID,text FROM directories where id>1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -55,7 +55,9 @@ public class GetDirectlist extends HttpServlet {
 				count++;
 			 }
 			json=json+"]";
-			connection.close();
+			preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 			response.getWriter().print(json);
 		}
 		catch(SQLException e) {

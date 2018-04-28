@@ -58,7 +58,7 @@ public class GetQuiz extends HttpServlet {
 		int count=0;
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			if(gid.equals("-1"))
 			{
 				//创建新试卷
@@ -86,7 +86,9 @@ public class GetQuiz extends HttpServlet {
 			json="{\"gid\":"+gid+",\"questions\":"+json+"}";
 			//System.out.print(json);
 			response.getWriter().print(json);
-			connection.close();
+            preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

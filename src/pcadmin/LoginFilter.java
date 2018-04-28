@@ -42,11 +42,9 @@ public class LoginFilter implements Filter {
 	     HttpServletResponse httpResponse=(HttpServletResponse)response;
 	     HttpSession session=httpRequest.getSession();
 	     String a=httpRequest.getRequestURI();
-	     session.setAttribute("Username", "1");
-	     /*
 	     if(a.substring(a.length()-1).equals("/"))
 	     {
-	    	 httpResponse.sendRedirect(a+"/index.html");
+	    	 httpResponse.sendRedirect(a+"index.html");
 	     }
 	     else
 		     if(a.contains(".html")&&a.contains("pc"))
@@ -77,8 +75,7 @@ public class LoginFilter implements Filter {
 		    	 else
 			    	 // System.out.println("Passed");	
 			    	 chain.doFilter(request, response);
-	     */
-	    chain.doFilter(request, response);   
+	    //chain.doFilter(request, response);   
 		// pass the request along the filter chain
 		//chain.doFilter(request, response);
 	}

@@ -49,7 +49,7 @@ public class GetCourseQuestions extends HttpServlet {
 		int count=0;
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="select * from coursequestions where courseid="+courseid;
 			json="[";
 			System.out.print(json);
@@ -69,7 +69,9 @@ public class GetCourseQuestions extends HttpServlet {
 			json=json+"]";
 			//System.out.print(json);
 			response.getWriter().print(json);
-			connection.close();
+			preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理

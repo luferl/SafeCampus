@@ -44,7 +44,7 @@ public class DeleteDirect extends HttpServlet {
 		String id=request.getParameter("id");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="Delete from  directories WHERE ID="+id;
 			//System.out.println(sql);
@@ -59,7 +59,8 @@ public class DeleteDirect extends HttpServlet {
 				response.getWriter().print("error");
 				System.out.println(sql);
 			}
-			connection.close();
+			preparedStatement.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

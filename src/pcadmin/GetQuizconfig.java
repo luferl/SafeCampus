@@ -49,7 +49,7 @@ public class GetQuizconfig extends HttpServlet {
 		String json="[";
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="select * from quiz_config where quizid="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -68,7 +68,9 @@ public class GetQuizconfig extends HttpServlet {
 			json=json+"]";
 			//System.out.print(json);
 			response.getWriter().print(json);
-			connection.close();
+			preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

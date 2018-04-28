@@ -80,7 +80,7 @@ public class ExcelReader {
         int count=0;
         try {
         	DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			if(type==1)
 		    {
 			       for (int i = startReadLine+1; i < sheet.getLastRowNum() - tailLine + 1; i++) {
@@ -201,7 +201,7 @@ public class ExcelReader {
 			            	count++;
 			        }
 		    }
-			connection.close();
+			dbc.CloseConnection(connection);
         }
         catch(SQLException e) {
         	//数据库连接失败异常处理

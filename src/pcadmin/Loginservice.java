@@ -45,7 +45,7 @@ public class Loginservice extends HttpServlet {
 		//System.out.println("Login!");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="SELECT password FROM admin_account where username='"+username+"' and password='"+password+"'";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -61,7 +61,9 @@ public class Loginservice extends HttpServlet {
 					response.getWriter().print("error");
 					System.out.println("PC端登陆失败");
 				}
-			connection.close();
+            preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

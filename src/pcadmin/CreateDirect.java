@@ -50,7 +50,7 @@ public class CreateDirect extends HttpServlet {
 		String time=request.getParameter("time");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="INSERT INTO directories(text,iscourse,topid,url,time) VALUES('"+name+"',"+iscourse+","+topid+",'"+vurl+"','"+time+"')";
 			//System.out.print(sql);
@@ -65,7 +65,8 @@ public class CreateDirect extends HttpServlet {
 				response.getWriter().print("error");
 				System.out.println(sql);   
 			}
-			connection.close();
+			preparedStatement.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

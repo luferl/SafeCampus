@@ -45,7 +45,7 @@ public class GetDirectories extends HttpServlet {
 	    String userid=session.getAttribute("Username").toString();
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="SELECT * FROM directories where topid=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -80,7 +80,9 @@ public class GetDirectories extends HttpServlet {
 			 }
 			json=json+"]";
 			response.getWriter().print(json);
-			connection.close();
+            preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
@@ -107,7 +109,7 @@ public class GetDirectories extends HttpServlet {
 		String json="";
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="SELECT * FROM directories where topid="+topid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();

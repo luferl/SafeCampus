@@ -48,11 +48,11 @@ public class CallBack extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		String code=request.getParameter("code");
 		DBConnection dbc=new DBConnection();
-		Connection connection = dbc.getConnnection();
 		String access_token = ""; 
 		String line="";
 	    String openid = "";  
 		try {
+			Connection connection = dbc.getConnection();
 			String sql="SELECT AppID,AppSecret FROM wx_config WHERE ID=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -113,7 +113,9 @@ public class CallBack extends HttpServlet {
 					response.sendRedirect(request.getContextPath()+"/wechat/register.html?openid="+openid+"&nickname="+nickname);
 				}
 			}
-			
+            preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

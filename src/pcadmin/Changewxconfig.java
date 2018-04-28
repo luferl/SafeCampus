@@ -52,7 +52,7 @@ public class Changewxconfig extends HttpServlet {
 		//System.out.println("Login!");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String savechangesql="UPDATE wx_config SET School_Name='"+schoolename+"',School_Code='"+schoolcode+"',appid='"+appid+"',appsecret='"+appsecret+"',apptoken='"+apptoken+"' where ID=1";
 			PreparedStatement preparedStatement2 = connection.prepareStatement(savechangesql);
 			int result = preparedStatement2.executeUpdate();
@@ -65,7 +65,8 @@ public class Changewxconfig extends HttpServlet {
 				response.getWriter().print("error");
 				System.out.println(savechangesql);   
 			}
-			connection.close();
+			preparedStatement2.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

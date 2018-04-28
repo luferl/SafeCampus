@@ -58,7 +58,7 @@ public class AddQuiz extends HttpServlet {
 		String timelimit=request.getParameter("timelimit");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="INSERT INTO quizes(name,starttime,endtime,time,totalsc,passsc,times,isdeleted,issimulate) VALUE('"+name+"','"+starttime+"','"+endtime+"','"+timelast+"','"+totalscore+"','"+passscore+"','"+timelimit+"',0,'"+type+"')";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -89,13 +89,15 @@ public class AddQuiz extends HttpServlet {
 				}
 				response.getWriter().print("success");
 				System.out.println("添加试卷成功");
+				preparedStatement.close();
+				re2.close();
 			}
 			else
 			{
 				response.getWriter().print("error");
 				System.out.println(sql);
 			}
-			connection.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

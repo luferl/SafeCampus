@@ -42,7 +42,7 @@ public class DeleteQuiz_D extends HttpServlet {
 		String quizid=request.getParameter("id");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="DELETE FROM quizes where ID="+quizid;
 			//System.out.println(sql);
@@ -57,7 +57,8 @@ public class DeleteQuiz_D extends HttpServlet {
 				response.getWriter().print("error");
 				System.out.println(sql);
 			}
-			connection.close();
+			preparedStatement.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

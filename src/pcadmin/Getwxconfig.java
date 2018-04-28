@@ -39,7 +39,7 @@ public class Getwxconfig extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="SELECT * FROM wx_config where ID=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -53,7 +53,9 @@ public class Getwxconfig extends HttpServlet {
 				//System.out.println(json);
 				response.getWriter().print(json);
 			 }
-			connection.close();
+			preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

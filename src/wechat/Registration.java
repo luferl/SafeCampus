@@ -48,7 +48,7 @@ public class Registration extends HttpServlet {
 		//System.out.println("Login!");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="SELECT department FROM students WHERE name='"+username+"' and code='"+code+"'";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -71,9 +71,13 @@ public class Registration extends HttpServlet {
 				}
 				else
 					response.getWriter().print("regist error");
+				preparedStatement2.close();
 			 }
 			else
 				response.getWriter().print("validation error");
+	        preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理

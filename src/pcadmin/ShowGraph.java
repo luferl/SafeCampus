@@ -41,7 +41,7 @@ public class ShowGraph extends HttpServlet {
 		String college=request.getParameter("college");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="select passsc,name from quizes where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re=preparedStatement.executeQuery();
@@ -71,7 +71,9 @@ public class ShowGraph extends HttpServlet {
 			}
 			String json="{\"total\":"+total+",\"attend\":"+attend+",\"pass\":"+pass+"}";
 			response.getWriter().print(json);
-			connection.close();
+            preparedStatement.close();
+			re.close();
+			dbc.CloseConnection(connection);
 		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理

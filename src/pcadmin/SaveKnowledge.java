@@ -48,7 +48,7 @@ public class SaveKnowledge extends HttpServlet {
 				JSONArray jsonarray=JSONArray.fromObject(knowledge);
 				try {
 					DBConnection dbc=new DBConnection();
-					Connection connection = dbc.getConnnection();
+					Connection connection = dbc.getConnection();
 					String sql="";
 					if(jsonarray.size()>0)
 					{
@@ -70,7 +70,7 @@ public class SaveKnowledge extends HttpServlet {
 						}
 					}
 					response.getWriter().print("success");
-					connection.close();
+					dbc.CloseConnection(connection);
 				}
 				catch(SQLException e) {
 					//数据库连接失败异常处理

@@ -50,7 +50,7 @@ public class SaveDirect extends HttpServlet {
 		String time=request.getParameter("time");
 		try {
 			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnnection();
+			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="UPDATE  directories SET text='"+name+"',iscourse="+iscourse+",topid="+topid+",url='"+vurl+"',time='"+time+"' WHERE id="+id;
 			System.out.println(sql);
@@ -64,7 +64,8 @@ public class SaveDirect extends HttpServlet {
 			{
 				response.getWriter().print("error");
 			}
-			connection.close();
+            preparedStatement.close();
+			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理
