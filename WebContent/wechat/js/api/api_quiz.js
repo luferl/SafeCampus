@@ -170,14 +170,20 @@
 		}
 		function submit()
 		{
-			savecurpage();
-			$.post("SubmitQuiz",
-	    			{
-	    				gid:gid
-					},
-						function(data){
-						 alert("交卷成功！");
-						 self.location=document.referrer;
-					}
-			);
+			var msg = "提交后将不能继续作答，确认要提交吗？"; 
+			if (confirm(msg)==true){ 
+				 savecurpage();
+					$.post("SubmitQuiz",
+			    			{
+			    				gid:gid
+							},
+								function(data){
+								 alert("交卷成功！");
+								 self.location=document.referrer;
+							}
+					);
+			 }else{ 
+			  return ; 
+			 } 
+			
 		}

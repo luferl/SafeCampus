@@ -33,7 +33,7 @@ public class Loginservice extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String openid=request.getParameter("openid");
+		//String openid=request.getParameter("openid");
 		String backUrl="http://"+request.getServerName()+"/SafeCampus/wechat/CallBack";
 		DBConnection dbc=new DBConnection();
 		try {
