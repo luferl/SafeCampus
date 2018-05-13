@@ -1,4 +1,4 @@
-package wechat;
+package pcadmin;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,20 +12,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class Changepssword
  */
-@WebServlet("/wechat/GetCourse")
-public class GetCourse extends HttpServlet {
+@WebServlet("/pc/ReplyAdvise")
+public class ReplyAdvise extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetCourse() {
+    public ReplyAdvise() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,26 +36,31 @@ public class GetCourse extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.setContentType("application/json;charset=utf-8");
-		response.setCharacterEncoding("utf-8");
-		String id=request.getParameter("courseid");
-		String json="";
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		String id=request.getParameter("id");
+		String reply=request.getParameter("reply");
+		//System.out.println("Login!");
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
-			String sql="SELECT text,url,time FROM directories where ID="+id;
+			String sql="Update advises set checked=1,reply='"+reply+"' where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
-			ResultSet re = preparedStatement.executeQuery();
-			int count=0;
-			while(re.next()){ 
-				String text=re.getString("text");
-				String vurl=re.getString("url");
-				String time=re.getString("url");
-				json="{\"text\":\""+text+"\",\"url\":\""+vurl+"\",\"time\":\""+time+"\"}";
+			int re = preparedStatement.executeUpdate();
+			if(re>0){ 
+				response.getWriter().print("success");
 			 }
-			response.getWriter().print(json);
-            preparedStatement.close();
-			re.close();
+			else
+			{
+				response.getWriter().print("error");
+			}
+			preparedStatement.close();
 			dbc.CloseConnection(connection);
 		}
 		catch(SQLException e) {
@@ -65,18 +71,8 @@ public class GetCourse extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			//System.out.println("Operation Finished:GetCourse");
+			System.out.println("Operation Finished:Reply Advise");
 		}
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-	
-	
 
 }

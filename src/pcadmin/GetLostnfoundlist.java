@@ -1,4 +1,4 @@
-package wechat;
+package pcadmin;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -12,20 +12,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class GetDirectories
  */
-@WebServlet("/wechat/GetCourse")
-public class GetCourse extends HttpServlet {
+@WebServlet("/pc/GetLostnfoundlist")
+public class GetLostnfoundlist extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetCourse() {
+    public GetLostnfoundlist() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -37,21 +38,43 @@ public class GetCourse extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
-		String id=request.getParameter("courseid");
-		String json="";
+		String type=request.getParameter("type");
+		String status=request.getParameter("status");
+		String json="[";
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
-			String sql="SELECT text,url,time FROM directories where ID="+id;
+			HttpSession session=request.getSession();
+			String userid=session.getAttribute("Username").toString();
+			String sql="SELECT * from lostnfound WHERE ";
+			if(type.equals("-1"))
+				sql=sql+"type=type";
+			else
+				sql=sql+"type="+type;
+			sql=sql+" AND ";
+			if(status.equals("-1"))
+				sql=sql+"checked=checked";
+			else
+				sql=sql+"checked="+status;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
 			while(re.next()){ 
-				String text=re.getString("text");
-				String vurl=re.getString("url");
-				String time=re.getString("url");
-				json="{\"text\":\""+text+"\",\"url\":\""+vurl+"\",\"time\":\""+time+"\"}";
+				if(count>0)
+					json=json+",";
+				count++;
+		        String date=re.getString("time");
+		        String contact=re.getString("contact");
+		        String details=re.getString("details");
+		        String imgpath=re.getString("pic");
+		        String position=re.getString("position");
+		        String title=re.getString("title");
+		        String checked=re.getString("checked");
+		        String id=re.getString("ID");
+		        String type2=re.getString("type");
+				json=json+"{\"id\":"+id+",\"date\":\""+date+"\",\"title\":\""+title+"\",\"position\":\""+position+"\",\"contact\":\""+contact+"\",\"details\":\""+details+"\",\"path\":\""+imgpath+"\",\"type\":\""+type2+"\",\"checked\":\""+checked+"\"}";
 			 }
+			json=json+"]";
 			response.getWriter().print(json);
             preparedStatement.close();
 			re.close();
@@ -76,7 +99,4 @@ public class GetCourse extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	
-	
-
 }

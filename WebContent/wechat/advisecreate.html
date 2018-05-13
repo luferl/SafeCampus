@@ -69,7 +69,7 @@
 					<li>
 						<a href="bugs.html"><i class="fa fa-lg fa-fw fa-bug"></i> <span class="menu-item-parent">隐患上报</span></a>
 					</li>
-					<li>
+					<li class="active">
 						<a href="advise.html"><i class="fa fa-lg fa-fw fa-cloud-upload"></i> <span class="menu-item-parent">投诉建议</span></a>
 					</li>
 				</ul>
@@ -91,21 +91,8 @@
 
 				<!-- breadcrumb -->
 				<ol class="breadcrumb">
-					<li>主页</li><li>视频学习</li>
+					<li>主页</li><li>提交诉求</li>
 				</ol>
-				<!-- end breadcrumb -->
-
-				<!-- You can also add more buttons to the
-				ribbon for further usability
-
-				Example below:
-
-				<span class="ribbon-button-alignment pull-right">
-				<span id="search" class="btn btn-ribbon hidden-xs" data-title="search"><i class="fa-grid"></i> Change Grid</span>
-				<span id="add" class="btn btn-ribbon hidden-xs" data-title="add"><i class="fa-plus"></i> Add</span>
-				<span id="search" class="btn btn-ribbon" data-title="search"><i class="fa-search"></i> <span class="hidden-mobile">Search</span></span>
-				</span> -->
-
 			</div>
 			<!-- MAIN CONTENT -->
 			<div id="content">
@@ -115,54 +102,72 @@
 								<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false">
 									<header>
 										<span class="widget-icon"> <i class="fa fa-eye"></i> </span>
-										<h2 id="coursename"></h2>
+										<h2>提交诉求</h2>
 									</header>
 									<!-- widget div-->
 									<div>						
-										<!-- widget content -->
-										<div class="widget-body">
-											<form class="form-horizontal">
-												<fieldset>
-													<iframe style=" z-index:1; " src="" allowfullscreen="" frameborder="0" height="400" width="100%" id="videopreview"></iframe>
-												
-												</fieldset>
-											
-											</form>
-										</div>
-										<!-- end widget content -->
-									</div>
-									<!-- end widget div -->
-								</div>
-								<!-- end widget -->
-							</article>
-							<article class="col-sm-12 col-md-12 col-lg-10">
-								<!-- Widget ID (each widget will need unique ID)-->
-								<div class="jarviswidget" id="wid-id-0" data-widget-colorbutton="false" data-widget-editbutton="false">
-									<header>
-										<span class="widget-icon"> <i class="fa fa-eye"></i> </span>
-										<h2>课后题</h2>
-									</header>
-									<!-- widget div-->
-									<div class="widget-body">						
 									<!-- widget content -->
-									<form class="smart-form" id="questionlist">									
-									</form>
-									<div class="form-actions">
-										<div class="row">
-											<div class="col-md-12">
-												<button class="btn btn-default"  type="button" onclick=submit();>提交</button>
+									<div class="widget-body no-padding">						
+									<!-- widget content -->
+										<form id="order-form" class="smart-form" novalidate="novalidate" action="Createadvise" method="post">
+										<fieldset>
+											<div class="row">
+												<section class="col col-6">
+												<label class="input">
+													<input type="text" name="title" placeholder="描述">
+												</label>
+												</section>
 											</div>
-										</div>
+											<div class="row">
+												<section class="col col-6">
+													<label class="input"> <i class="icon-append fa fa-calendar"></i>
+														<input type="text" name="date" id="date" placeholder="时间">
+													</label>
+												</section>
+											</div>
+											<div class="row">
+												<section class="col col-6">
+												<label class="input">
+													<input type="text" name="position" placeholder="位置">
+												</label>
+												</section>
+											</div>
+											<div class="row">
+												<section class="col col-6">
+												<label class="input">
+													<input type="text" name="contact" placeholder="联系方式">
+												</label>
+												</section>
+											</div>
+											<section>
+												<div class="input input-file">
+													<span class="button"><input id="file" type="file" name="file" onchange="this.parentNode.nextSibling.value = this.value">选择图片</span><input type="text" placeholder="上传照片" readonly="">
+												</div>
+											</section>
+											<section>
+												<label class="textarea"> <i class="icon-append fa fa-comment"></i> 										
+													<textarea rows="5" name="details" placeholder="详情"></textarea> 
+												</label>
+											</section>
+										</fieldset>
+							<footer>
+								<button type="submit" class="btn btn-primary">
+									提交
+								</button>
+							</footer>
+						</form>
+									<!-- end widget content -->
 									</div>
 									<!-- end widget content -->
 									</div>
 									<!-- end widget div -->
 								</div>
 								<!-- end widget -->
-							</article>
+					</article>
 			</div>
 			<!-- END MAIN CONTENT -->
 		</div>
+		<!-- END PAGE FOOTER -->
 		<!-- END MAIN PANEL -->
 		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
 	    <script src="js/libs/jquery-2.1.1.min.js"></script>
@@ -171,7 +176,51 @@
 		<script src="js/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> 
 		<script src="js/bootstrap/bootstrap.min.js"></script>
 		<script src="js/app.min.js"></script>
-		<script src="js/api/api_study.js"></script>
+		<script src="js/plugin/jquery-form/jquery-form.min.js"></script>
+		<script src="js/app.config.js"></script>
+		<!-- JARVIS WIDGETS -->
+		<script src="js/smartwidgets/jarvis.widget.min.js"></script>
+		<!-- JQUERY VALIDATE -->
+		<script src="js/plugin/jquery-validate/jquery.validate.min.js"></script>
+		<!-- JQUERY SELECT2 INPUT -->
+		<script src="js/plugin/select2/select2.min.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function() {
+				$('#date').datepicker({
+					dateFormat : 'yy-mm-dd',
+					monthNames: ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'],
+					dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'], 
+					dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],  
+		            dayNamesMin: ['日','一','二','三','四','五','六'],  
+					prevText : '<i class="fa fa-chevron-left"></i>',
+					nextText : '<i class="fa fa-chevron-right"></i>'
+				});
+			});
+			$('form').submit(function (event) {
+			      event.preventDefault();
+			      var form = $(this);
+			        // mulitipart form,如文件上传类
+			        var formData = new FormData(this);
+			        $.ajax({
+			          type: form.attr('method'),
+			          url: form.attr('action'),
+			          data: formData,
+			          mimeType: "multipart/form-data",
+			          contentType: false,
+			          cache: false,
+			          processData: false
+			        }).success(function (data) {
+			        	if(data=="success")
+			        		{
+			        			alert("提交成功");
+			        			 window.location.href="bugs.html";
+			        		}
+			          //成功提交
+			        }).fail(function (jqXHR, textStatus, errorThrown) {
+			          //错误信息
+			        });
+		   		 });
+		</script>
 	</body>
 
 </html>
