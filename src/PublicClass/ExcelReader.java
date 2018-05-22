@@ -171,13 +171,17 @@ public class ExcelReader {
 			            }
 			            else
 			            {
-			            	sql="INSERT INTO knowledge(text) VALUE('"+knowledge+"');SELECT last_insert_id() as id";
+			            	sql="INSERT INTO knowledge(text) VALUE('"+knowledge+"')";
+			            	preparedStatement = connection.prepareStatement(sql);
+			            	preparedStatement.executeUpdate();
+			            	sql="SELECT last_insert_id() as id";
 			            	preparedStatement = connection.prepareStatement(sql);
 							re=preparedStatement.executeQuery();
 							if(re.next())
 							{
 								knowledgeid=re.getString("id");
 							}
+				        	knowledges.put(knowledge,knowledgeid);
 			            }
 			            if(type.equals("еп╤о"))
 			            	{

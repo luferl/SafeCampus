@@ -277,52 +277,104 @@ var knowledgelist;
 					var text=field.childNodes[1].childNodes[1].childNodes[2].value; //题干
 					var choices="A、|B、|C、|D、";
 					var answer="";
-					if(type=="check")
-					{
-						ischeck=field.childNodes[2].childNodes[1].childNodes[0].childNodes[0].childNodes[0].checked;
-						if(ischeck)
-							answer="1";
-						else
-							answer="0";
-					}
-					else
-						if(type=="single")
+					var id=field.id;
+					
+					if(id<0)
+						{
+							if(type=="check")
 							{
-								var choiceA=field.childNodes[3].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value;
-								var choiceB=field.childNodes[3].childNodes[1].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].value;
-								var choiceC=field.childNodes[3].childNodes[1].childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[0].value;
-								var choiceD=field.childNodes[3].childNodes[1].childNodes[0].childNodes[3].childNodes[1].childNodes[0].childNodes[0].value;
-								choices=choiceA+"|"+choiceB+"|"+choiceC+"|"+choiceD;
-								//var answer=field.childNodes[3].find('option:selected').val();
-								if(field.childNodes[3].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].checked)
-									answer="A";
+								ischeck=field.childNodes[2].childNodes[1].childNodes[0].childNodes[0].childNodes[0].checked;
+								if(ischeck)
+									answer="1";
 								else
-									if(field.childNodes[3].childNodes[1].childNodes[0].childNodes[1].childNodes[0].childNodes[0].checked)
-										answer="B";
-									else
-										if(field.childNodes[3].childNodes[1].childNodes[0].childNodes[2].childNodes[0].childNodes[0].checked)
-											answer="C";
-										else
-											answer="D";
+									answer="0";
 							}
+							else
+								if(type=="single")
+									{
+										var choiceA=field.childNodes[3].childNodes[1].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value;
+										var choiceB=field.childNodes[3].childNodes[1].childNodes[1].childNodes[1].childNodes[0].childNodes[0].value;
+										var choiceC=field.childNodes[3].childNodes[1].childNodes[2].childNodes[1].childNodes[0].childNodes[0].value;
+										var choiceD=field.childNodes[3].childNodes[1].childNodes[3].childNodes[1].childNodes[0].childNodes[0].value;
+										choices=choiceA+"|"+choiceB+"|"+choiceC+"|"+choiceD;
+										//var answer=field.childNodes[3].find('option:selected').val();
+										if(field.childNodes[3].childNodes[1].childNodes[0].childNodes[0].childNodes[0].checked)
+											answer="A";
+										else
+											if(field.childNodes[3].childNodes[1].childNodes[1].childNodes[0].childNodes[0].checked)
+												answer="B";
+											else
+												if(field.childNodes[3].childNodes[1].childNodes[2].childNodes[0].childNodes[0].checked)
+													answer="C";
+												else
+													answer="D";
+									}
+							else
+								{
+									var choiceA=field.childNodes[4].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value;
+									var choiceB=field.childNodes[4].childNodes[1].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].value;
+									var choiceC=field.childNodes[4].childNodes[1].childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[0].value;
+									var choiceD=field.childNodes[4].childNodes[1].childNodes[0].childNodes[3].childNodes[1].childNodes[0].childNodes[0].value;
+									choices=choiceA+"|"+choiceB+"|"+choiceC+"|"+choiceD;
+									if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].checked)
+										answer=answer+"A";
+									if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[1].childNodes[0].childNodes[0].checked)
+										answer=answer+"B";
+									if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[2].childNodes[0].childNodes[0].checked)
+										answer=answer+"C";
+									if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[3].childNodes[0].childNodes[0].checked)
+										answer=answer+"D";
+								}
+							json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"type\":\""+type+"\",\"choices\":\""+choices+"\",\"answer\":\""+answer+"\",\"knowledgeid\":\""+knowledgeid+"\"}";
+						}
 					else
 						{
-							var choiceA=field.childNodes[4].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value;
-							var choiceB=field.childNodes[4].childNodes[1].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].value;
-							var choiceC=field.childNodes[4].childNodes[1].childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[0].value;
-							var choiceD=field.childNodes[4].childNodes[1].childNodes[0].childNodes[3].childNodes[1].childNodes[0].childNodes[0].value;
-							choices=choiceA+"|"+choiceB+"|"+choiceC+"|"+choiceD;
-							if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].checked)
-								answer=answer+"A";
-							if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[1].childNodes[0].childNodes[0].checked)
-								answer=answer+"B";
-							if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[2].childNodes[0].childNodes[0].checked)
-								answer=answer+"C";
-							if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[3].childNodes[0].childNodes[0].checked)
-								answer=answer+"D";
+							if(type=="check")
+							{
+								ischeck=field.childNodes[2].childNodes[1].childNodes[0].childNodes[0].childNodes[0].checked;
+								if(ischeck)
+									answer="1";
+								else
+									answer="0";
+							}
+							else
+								if(type=="single")
+									{
+										var choiceA=field.childNodes[3].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value;
+										var choiceB=field.childNodes[3].childNodes[1].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].value;
+										var choiceC=field.childNodes[3].childNodes[1].childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[0].value;
+										var choiceD=field.childNodes[3].childNodes[1].childNodes[0].childNodes[3].childNodes[1].childNodes[0].childNodes[0].value;
+										choices=choiceA+"|"+choiceB+"|"+choiceC+"|"+choiceD;
+										//var answer=field.childNodes[3].find('option:selected').val();
+										if(field.childNodes[3].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].checked)
+											answer="A";
+										else
+											if(field.childNodes[3].childNodes[1].childNodes[0].childNodes[1].childNodes[0].childNodes[0].checked)
+												answer="B";
+											else
+												if(field.childNodes[3].childNodes[1].childNodes[0].childNodes[2].childNodes[0].childNodes[0].checked)
+													answer="C";
+												else
+													answer="D";
+									}
+							else
+								{
+									var choiceA=field.childNodes[4].childNodes[1].childNodes[0].childNodes[0].childNodes[1].childNodes[0].childNodes[0].value;
+									var choiceB=field.childNodes[4].childNodes[1].childNodes[0].childNodes[1].childNodes[1].childNodes[0].childNodes[0].value;
+									var choiceC=field.childNodes[4].childNodes[1].childNodes[0].childNodes[2].childNodes[1].childNodes[0].childNodes[0].value;
+									var choiceD=field.childNodes[4].childNodes[1].childNodes[0].childNodes[3].childNodes[1].childNodes[0].childNodes[0].value;
+									choices=choiceA+"|"+choiceB+"|"+choiceC+"|"+choiceD;
+									if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[0].childNodes[0].childNodes[0].checked)
+										answer=answer+"A";
+									if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[1].childNodes[0].childNodes[0].checked)
+										answer=answer+"B";
+									if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[2].childNodes[0].childNodes[0].checked)
+										answer=answer+"C";
+									if(field.childNodes[4].childNodes[1].childNodes[0].childNodes[3].childNodes[0].childNodes[0].checked)
+										answer=answer+"D";
+								}
+							json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"type\":\""+type+"\",\"choices\":\""+choices+"\",\"answer\":\""+answer+"\",\"knowledgeid\":\""+knowledgeid+"\"}";
 						}
-					var id=field.id;
-					json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"type\":\""+type+"\",\"choices\":\""+choices+"\",\"answer\":\""+answer+"\",\"knowledgeid\":\""+knowledgeid+"\"}";
 				}
 			json=json+"]";
 			//console.log(json);

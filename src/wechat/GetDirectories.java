@@ -59,17 +59,17 @@ public class GetDirectories extends HttpServlet {
 					json=json+",";
 				if(iscourse.equals("1"))
 				{
-					String sql2="SELECT FROM study_progress WHERE courseid="+id+" AND userid="+userid;
-					PreparedStatement preparedStatement2 = connection.prepareStatement(sql);
+					String sql2="SELECT * FROM study_progress WHERE courseid="+id+" AND userid="+userid;
+					PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
 					ResultSet re2 = preparedStatement2.executeQuery();
 					if(re2.next())
-						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"tags\":[\"已完成\"]";
+						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"iscourse\":"+iscourse+",\"tags\":[\"已完成\"]";
 					else
-						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"tags\":[\"未完成\"]";
+						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"iscourse\":"+iscourse+",\"tags\":[\"未完成\"]";
 				}
 				else
-					json=json+"{\"id\":"+id+",\"text\":\""+text+"\"";
-				String res=getsubinfo(id,userid);
+					json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"iscourse\":"+iscourse;
+				String res=getsubinfo(id,userid,connection);
 				if(res=="null")
 				{
 					json=json+"}";
@@ -104,12 +104,10 @@ public class GetDirectories extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	private String getsubinfo(String topid,String userid)
+	private String getsubinfo(String topid,String userid,Connection connection)
 	{
 		String json="";
 		try {
-			DBConnection dbc=new DBConnection();
-			Connection connection = dbc.getConnection();
 			String sql="SELECT * FROM directories where topid="+topid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -122,18 +120,18 @@ public class GetDirectories extends HttpServlet {
 					json=json+",";
 				if(iscourse.equals("1"))
 				{
-					String sql2="SELECT FROM study_progress WHERE courseid="+id+" AND userid="+userid;
-					PreparedStatement preparedStatement2 = connection.prepareStatement(sql);
+					String sql2="SELECT * FROM study_progress WHERE courseid="+id+" AND userid="+userid;
+					PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
 					ResultSet re2 = preparedStatement2.executeQuery();
 					if(re2.next())
-						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"tags\":[\"已完成\"]";
+						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"iscourse\":"+iscourse+",\"tags\":[\"已完成\"]";
 					else
-						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"tags\":[\"未完成\"]";
+						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"iscourse\":"+iscourse+",\"tags\":[\"未完成\"]";
 				}
 				//json="[{id:1,text:\"test\",nodes:[{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}],topid:1,url:\"fadf\",time:200},{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}]";
 				else
-					json=json+"{\"id\":"+id+",\"text\":\""+text+"\"";
-				String res=getsubinfo(id,userid);
+					json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"iscourse\":"+iscourse;
+				String res=getsubinfo(id,userid,connection);
 				if(res=="null")
 				{
 					json=json+"}";
@@ -144,6 +142,8 @@ public class GetDirectories extends HttpServlet {
 			 }
 			if(count==0)
 				json="null";
+            preparedStatement.close();
+			re.close();
 		}
 		catch(SQLException e) {
 			//数据库连接失败异常处理
@@ -153,7 +153,7 @@ public class GetDirectories extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("目录成功获取！！");
+			//System.out.println("目录成功获取！！");
 		}
 		return json;
 	}

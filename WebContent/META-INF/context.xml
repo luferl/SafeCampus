@@ -6,7 +6,7 @@
             username="root"
             password="123456"
             driverClassName="com.mysql.jdbc.Driver"
-            url="jdbc:mysql://127.0.0.1:3306/safecampus"
+            url="jdbc:mysql://127.0.0.1:3306/safecampus?useUnicode=true&amp;characterEncoding=utf8"
             maxActive="100"
             maxIdle="30"
             maxWait="10000"/>

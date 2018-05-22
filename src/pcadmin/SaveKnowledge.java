@@ -44,44 +44,44 @@ public class SaveKnowledge extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// TODO Auto-generated method stub
-				String knowledge=request.getParameter("knowledge");
-				JSONArray jsonarray=JSONArray.fromObject(knowledge);
-				try {
-					DBConnection dbc=new DBConnection();
-					Connection connection = dbc.getConnection();
-					String sql="";
-					if(jsonarray.size()>0)
+		String knowledge=request.getParameter("knowledge");
+		JSONArray jsonarray=JSONArray.fromObject(knowledge);
+		try {
+			DBConnection dbc=new DBConnection();
+			Connection connection = dbc.getConnection();
+			String sql="";
+			if(jsonarray.size()>0)
+			{
+				for(int i=0;i<jsonarray.size();i++)
+				{
+					JSONObject job = jsonarray.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+					String id=job.get("id").toString();
+					String value=job.get("value").toString();
+					if(id.equals("-1"))
 					{
-						for(int i=0;i<jsonarray.size();i++)
-						{
-							JSONObject job = jsonarray.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
-							String id=job.get("id").toString();
-							String value=job.get("value").toString();
-							if(id.equals("-1"))
-							{
-								sql="INSERT INTO knowledge(text) VALUES('"+value+"')";
-							}
-							else
-							{
-								sql="UPDATE knowledge SET text='"+value+"' WHERE ID="+id;
-							}
-							PreparedStatement preparedStatement = connection.prepareStatement(sql);
-							preparedStatement.executeUpdate();
-						}
+						sql="INSERT INTO knowledge(text) VALUES('"+value+"')";
 					}
-					response.getWriter().print("success");
-					dbc.CloseConnection(connection);
+					else
+					{
+						sql="UPDATE knowledge SET text='"+value+"' WHERE ID="+id;
+					}
+					PreparedStatement preparedStatement = connection.prepareStatement(sql);
+					preparedStatement.executeUpdate();
 				}
-				catch(SQLException e) {
-					//数据库连接失败异常处理
-					e.printStackTrace();  
-				}
-				catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}finally{
-					System.out.println("Operation Finished:SaveKnowledges");
-				}
+			}
+			response.getWriter().print("success");
+			dbc.CloseConnection(connection);
+		}
+		catch(SQLException e) {
+			//数据库连接失败异常处理
+			e.printStackTrace();  
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}finally{
+			System.out.println("Operation Finished:SaveKnowledges");
+		}
 	}
 
 }

@@ -94,8 +94,10 @@ public class GetQuestions extends HttpServlet {
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("text");
+				text = text.replaceAll("\"", "\\\\\"");
 				String type=re.getString("type");
 				String choices=re.getString("choices");
+				choices = choices.replaceAll("\"", "\\\\\"");
 				String answer=re.getString("answer");
 				String knowid=re.getString("knowledgeid");
 				if(count>0)

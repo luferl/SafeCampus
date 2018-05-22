@@ -50,11 +50,12 @@ public class GetDirectories extends HttpServlet {
 				String text=re.getString("text");
 				String iscourse=re.getString("iscourse");
 				String vurl=re.getString("url");
+				String time=re.getString("time");
 				if(count>0)
 					json=json+",";
 				//json="[{id:1,text:\"test\",nodes:[{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}],topid:1,url:\"fadf\",time:200},{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}]";
-				json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"topid\":1,\"iscourse\":"+iscourse+",\"url\":\""+vurl+"\"";
-				String res=getsubinfo(id);
+				json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"topid\":1,\"iscourse\":"+iscourse+",\"url\":\""+vurl+"\",\"time\":\""+time+"\"";
+				String res=getsubinfo(id,connection);
 				if(res=="null")
 				{
 					json=json+"}";
@@ -90,15 +91,12 @@ public class GetDirectories extends HttpServlet {
 		doGet(request, response);
 	}
 	
-	private String getsubinfo(String topid)
+	private String getsubinfo(String topid,Connection connection)
 	{
 		String json="";
-		Connection connection = null;
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			String url = "jdbc:mysql://127.0.0.1/safecampus";
-			connection = DriverManager.getConnection(url, "root", "123456");
 			String sql="SELECT * FROM directories where topid="+topid;
+			System.out.println(sql);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
@@ -107,11 +105,12 @@ public class GetDirectories extends HttpServlet {
 				String text=re.getString("text");
 				String iscourse=re.getString("iscourse");
 				String vurl=re.getString("url");
+				String time=re.getString("time");
 				if(count>0)
 					json=json+",";
 				//json="[{id:1,text:\"test\",nodes:[{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}],topid:1,url:\"fadf\",time:200},{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}]";
-				json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"topid\":"+topid+",\"iscourse\":"+iscourse+",\"url\":\""+vurl+"\"";
-				String res=getsubinfo(id);
+				json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"topid\":"+topid+",\"iscourse\":"+iscourse+",\"url\":\""+vurl+"\",\"time\":\""+time+"\"";
+				String res=getsubinfo(id,connection);
 				if(res=="null")
 				{
 					json=json+"}";
@@ -122,11 +121,9 @@ public class GetDirectories extends HttpServlet {
 			 }
 			if(count==0)
 				json="null";
+			preparedStatement.close();
+			re.close();
 		}
-		catch(ClassNotFoundException e) {   
-			System.out.println("Sorry,can`t find the Driver!");   
-			e.printStackTrace();   
-		} 
 		catch(SQLException e) {
 			//数据库连接失败异常处理
 			e.printStackTrace();  
@@ -135,7 +132,7 @@ public class GetDirectories extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("目录成功获取！！");
+			//System.out.println("目录成功获取！！");
 		}
 		return json;
 	}

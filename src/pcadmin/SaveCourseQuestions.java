@@ -19,7 +19,7 @@ import net.sf.json.JSONObject;
 /**
  * Servlet implementation class SaveQuestions
  */
-@WebServlet("/pc/SaveQuestions")
+@WebServlet("/pc/SaveCourseQuestions")
 public class SaveCourseQuestions extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -44,6 +44,7 @@ public class SaveCourseQuestions extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		String courseid=request.getParameter("courseid");
 		String questions=request.getParameter("questions");
 		JSONArray jsonarray=JSONArray.fromObject(questions);
 		try {
@@ -60,14 +61,13 @@ public class SaveCourseQuestions extends HttpServlet {
 					String type=job.get("type").toString();
 					String choices=job.get("choices").toString();
 					String answer=job.get("answer").toString();
-					String knowledgeid=job.get("knowledgeid").toString();
 					if(Integer.parseInt(id)<0)
 					{
-						sql="INSERT INTO coursequestions(text,type,choices,answer,knowledgeid) VALUES('"+text+"','"+type+"','"+choices+"','"+answer+"','"+knowledgeid+"')";
+						sql="INSERT INTO coursequestions(text,type,choices,answer,courseid) VALUES('"+text+"','"+type+"','"+choices+"','"+answer+"','"+courseid+"')";
 					}
 					else
 					{
-						sql="UPDATE coursequestions SET text='"+text+"',type='"+type+"',choices='"+choices+"',answer='"+answer+"',knowledgeid='"+knowledgeid+"' WHERE ID="+id;
+						sql="UPDATE coursequestions SET text='"+text+"',type='"+type+"',choices='"+choices+"',answer='"+answer+"' WHERE ID="+id;
 					}
 					PreparedStatement preparedStatement = connection.prepareStatement(sql);
 					preparedStatement.executeUpdate();
@@ -84,7 +84,7 @@ public class SaveCourseQuestions extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("Operation Finished:Save Questions");
+			System.out.println("Operation Finished:Save Course Questions");
 		}
 	}
 
