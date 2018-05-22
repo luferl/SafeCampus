@@ -203,6 +203,18 @@
 				</div>
 			</div>
 		</div>
+				<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+									&times;
+								</button>
+								<h4 class="modal-title" id="myModalLabel">正在上传，请稍候。。。。</h4>
+							</div>
+						</div><!-- /.modal-content -->
+					</div><!-- /.modal-dialog -->
+		</div><!-- /.modal -->
 		<!-- END PAGE FOOTER -->
 		<script data-pace-options='{ "restartOnRequestAfter": true }' src="js/plugin/pace/pace.min.js"></script>
 	    <script src="js/libs/jquery-2.1.1.min.js"></script>
@@ -231,8 +243,12 @@
 	          mimeType: "multipart/form-data",
 	          contentType: false,
 	          cache: false,
-	          processData: false
+	          processData: false，
+	          beforeSend: function(){
+	        	  $('#myModal').modal('show');
+	        	  }
 	        }).success(function (data) {
+	        	$('#myModal').modal('hide');
 	        	alert(data);
 	          //成功提交
 	        }).fail(function (jqXHR, textStatus, errorThrown) {

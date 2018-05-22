@@ -5,6 +5,9 @@
 	    reg = new RegExp("(^|&)gid=([^&]*)(&|$)", "i"); 
 	    r = window.location.search.substr(1).match(reg);
 	    var gid=r[2];
+	    reg = new RegExp("(^|&)type=([^&]*)(&|$)", "i"); 
+	    r = window.location.search.substr(1).match(reg);
+	    var etype=r[2];
 	    var questions;
 	    var curpages=0;
 	    $.post("GetQuiz",
@@ -83,7 +86,7 @@
 			savecurpage();			
 			if(curpages==0)
 				{
-					return;
+					alert("已是第一页");
 				}
 			else
 				{
@@ -105,7 +108,7 @@
 					loadquestions()
 				}
 			else
-				return;
+				alert("已是最后一页");
 		}
 		function savecurpage()
 		{
@@ -179,7 +182,11 @@
 							},
 								function(data){
 								 alert("交卷成功！");
-								 self.location=document.referrer;
+								 if(etype=="f")
+									 window.location.href="formall.html";
+								 else
+									 window.location.href="simulatel.html";
+								 
 							}
 					);
 			 }else{ 
