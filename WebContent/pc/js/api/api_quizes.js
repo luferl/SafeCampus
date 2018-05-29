@@ -1,4 +1,5 @@
-var id=0;
+			var id=0;
+			var node_g=null;
 			var knowledgelist;
 			$(document).ready(function() {
 				$('#starttime').editable({
@@ -51,9 +52,15 @@ var id=0;
 	   				knowledgelist=data;
 		        }
 		  	});
+			function reload()
+			{
+				if(node_g!=null)
+					changechoices(node_g);
+			}
 			function changechoices(node)
 			{
-				console.log(node.id);
+				//console.log(node.id);
+				node_g=node;
 				issimulate=node.issimulate;
 				$('#quizid').val(node.id);
 				$('#quizname').val(node.text);
@@ -162,7 +169,7 @@ var id=0;
 									}
 								else
 									{
-										alert("删除失败");
+										alert("删除失败，可能是还未选择试卷");
 										window.location.reload();
 									}
 						}
@@ -279,12 +286,12 @@ var id=0;
 							console.log(data);
 							if(data=="success")
 								{
-									alert("添加成功");
+									alert("修改成功");
 									window.location.reload();
 								}
 							else
 							{
-								alert("添加失败");
+								alert("修改失败");
 								window.location.reload();
 							}
 							

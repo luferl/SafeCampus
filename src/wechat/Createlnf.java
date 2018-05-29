@@ -113,22 +113,20 @@ public class Createlnf extends HttpServlet {
                     }else {
                         //文件上传表单
                         String name = item.getName(); //上传的文件名称
-                        /**
-                         * 【四、文件重名】
-                         * 对于不同的用户的test.txt文件，不希望覆盖，
-                         * 后台处理：给用户添加一个唯一标记！
-                         */
-                        //a.随机生成一个唯一标记
-                        String id = UUID.randomUUID().toString();
-                        //与文件名拼接
-                        name = id + name;
-                        //【三、上传到指定目录：获取上传目录路径】
-                        String realPath = getServletContext().getRealPath("wechat/Upload");
-                        //创建文件对象
-                        File file = new File(realPath, name);
-                        item.write(file);
-                        System.out.println("文件上传成功！");
-                        imgpath=name;
+                        if(name.equals(""))
+                        	imgpath="nopic.jpg";
+                        else
+                        	{
+                        		String id = UUID.randomUUID().toString();
+                        		name = id + name;
+                        		 String realPath = getServletContext().getRealPath("wechat/Upload");
+                                 //创建文件对象
+                                 File file = new File(realPath, name);
+                                 item.write(file);
+                                 System.out.println("文件上传成功！");
+                                 imgpath=name;
+                        	}
+                       
                     }
                 }
                 HttpSession session=request.getSession();

@@ -217,26 +217,13 @@
 										</div>
 										<input type="hidden" id="quizid" value="-1" />	
 									</fieldset>
-									<fieldset> 
-										<legend>
-											 成绩下载
-										</legend>
-										<div class="row">
-											<div class="col-md-11 pull-right">
-												<button class="btn btn-default"  type="button" onclick="DownloadGrades()">下载成绩</button>
-												<button class="btn btn-default"  type="button" onclick="DownloadRecords()">下载答题记录</button>
-												<button class="btn btn-default" type="button" id="custom_download">自定义下载</button>
-												<button class="btn btn-default" type="button">查看统计图表</button>
-											</div>
-										</div>
-									</fieldset>
 								</form>
 								<div class="form-actions">
 										<div class="row">
 											<div class="col-md-12">
 												<button class="btn btn-default" type="button" onclick="addquiz();"><i class="fa fa-plus"></i>添加新试卷</button>
 												<button class="btn btn-default"  type="button" onclick="addconfig();"><i class="fa fa-plus"></i>添加配置项</button>
-												<button class="btn btn-default" type="button" onclick="">取消</button>
+												<button class="btn btn-default" type="button" onclick="reload();">取消</button>
 												<button class="btn btn-primary" type="button" onclick="deletequiz();"><i class="fa fa-save"></i>删除试卷</button>
 												<button class="btn btn-primary" type="button" onclick="savequiz();"><i class="fa fa-save"></i>保存修改</button>
 											</div>

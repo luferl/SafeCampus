@@ -57,7 +57,7 @@ var id=0;
 									}
 								else
 									{
-										alert("还原失败");
+										alert("还原失败，可能是还未选择试卷");
 										window.location.reload();
 									}
 						}
@@ -69,12 +69,12 @@ var id=0;
 						function(data){
 								if(data=="success")
 									{
-										alert("删除成功，如有需要可在回收站恢复");
+										alert("彻底删除试卷成功");
 										window.location.reload();
 									}
 								else
 									{
-										alert("删除失败");
+										alert("删除失败，可能是还未选择试卷");
 										window.location.reload();
 									}
 						}

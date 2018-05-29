@@ -68,10 +68,10 @@
 						<a href="lostnfound.html"><i class="fa fa-lg fa-fw fa-search"></i> <span class="menu-item-parent">失物招领</span></a>
 					</li>
 					<li>
-						<a href="bugs.html"><i class="fa fa-lg fa-fw fa-file-bug"></i> <span class="menu-item-parent">隐患上报</span></a>
+						<a href="bugs.html"><i class="fa fa-lg fa-fw fa-bug"></i> <span class="menu-item-parent">隐患上报</span></a>
 					</li>
 					<li>
-						<a href="advise.html"><i class="fa fa-lg fa-fw fa-file-cloud-upload"></i> <span class="menu-item-parent">投诉建议</span></a>
+						<a href="advise.html"><i class="fa fa-lg fa-fw fa-cloud-upload"></i> <span class="menu-item-parent">投诉建议</span></a>
 					</li>
 				</ul>
 			</nav>
@@ -133,7 +133,7 @@
 		function choosenode(node)
 		{
 			if(node.text=="开始新考试")
-			 	window.location.href="quiz.html?quizid="+node.id+"&gid=-1";
+			 	window.location.href="quiz.html?quizid="+node.id+"&gid=-1&type=f";
 			else
 				if(node.tags[0]=="进行中")
 				{
