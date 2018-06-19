@@ -73,8 +73,10 @@ public class GetQuiz extends HttpServlet {
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("text");
+				text=text.replaceAll("\"", "\\\\\"");
 				String type=re.getString("type");
 				String choices=re.getString("choices");
+				choices = choices.replaceAll("\"", "\\\\\"");
 				String uanswer=re.getString("u_answer");
 				String score=re.getString("score");
 				if(count>0)

@@ -109,8 +109,10 @@ public class CallBack extends HttpServlet {
 			        result = buffer.toString();  
 			        resultObject = JSONObject.fromObject(result);//将服务器返回的字符串转换成json格式  
 			        String nickname = resultObject.getString("nickname");  //获取得到
+			        //nickname=new String(nickname.getBytes("GB2312"),"8859_1"); 
+			        //System.out.println(nickname);
 			        urlConnection.disconnect();
-					response.sendRedirect(request.getContextPath()+"/wechat/register.html?openid="+openid+"&nickname="+nickname);
+					response.sendRedirect(request.getContextPath()+"/wechat/register.html?openid="+openid+"&nickname="+URLEncoder.encode(nickname, "UTF-8"));
 				}
 			}
             preparedStatement.close();
@@ -125,7 +127,7 @@ public class CallBack extends HttpServlet {
 			// TODO: handle exception
 			e.printStackTrace();
 		}finally{
-			System.out.println("目录成功获取！！");
+			System.out.println("获取用户信息成功！！");
 		}
 	}
 

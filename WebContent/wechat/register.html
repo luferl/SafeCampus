@@ -173,7 +173,9 @@
 		    reg = new RegExp("(^|&)nickname=([^&]*)(&|$)", "i");  
 		    r = window.location.search.substr(1).match(reg);
 		    var nickname=r[2];
+		    nickname=decodeURI(nickname);
 		    $("#nickname").val(nickname);
+		    
 			function regist(){
 				 $.post("Registration",
 						 {

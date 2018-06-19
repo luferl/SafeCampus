@@ -181,6 +181,11 @@
 				var endtime=$("#endtime")[0].innerHTML; 
 				var timelast=$("#timelast").val();
 				var totalscore=$("#totalscore").val();
+				if(totalscore='');
+				{
+					alert("总分不能为空，请检查配置项是否添加");
+					return;
+				}
 				var passscore=$("#passscore").val();
 				var timelimits=$("#timelimits").val();
 				var type=$("#quiztype").val();
@@ -242,6 +247,11 @@
 				var endtime=$("#endtime")[0].innerHTML; 
 				var timelast=$("#timelast").val();
 				var totalscore=$("#totalscore").val();
+				if(totalscore='');
+				{
+					alert("总分不能为空，请检查配置项是否添加");
+					return;
+				}
 				var passscore=$("#passscore").val();
 				var timelimits=$("#timelimits").val();
 				var type=$("#quiztype").val();
