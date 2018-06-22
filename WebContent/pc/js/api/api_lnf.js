@@ -1,3 +1,4 @@
+//审核通过
 function pass(id)
 		{
 			$.post("PassLostnfound",
@@ -13,6 +14,7 @@ function pass(id)
 						
 					 });
 		}
+//审核不通过
 		function unpass(id)
 		{
 			$.post("UnpassLostnfound",
@@ -28,6 +30,7 @@ function pass(id)
 						
 					 });
 		}
+		//进行删除
 		function del(id)
 		{
 			$.post("DeleteLostnfound",
@@ -43,6 +46,7 @@ function pass(id)
 						
 					 });
 		}
+		//重新加载
 		function load()
 		{
 			var type2=$("#type option:selected").val();

@@ -21,7 +21,8 @@ import PublicClass.CalculateGrades;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetSimulatelist
+ *  用于响应微信端获取模拟考试目录的请求
  */
 @WebServlet("/wechat/GetSimulatelist")
 public class GetSimulatelist extends HttpServlet {
@@ -42,12 +43,14 @@ public class GetSimulatelist extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
+		//从session中获取用户ID
 	    HttpSession session=request.getSession();
 	    String userid=session.getAttribute("Username").toString();
 		String json="[";
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//获取所有未删除且为模拟考试(isssimulate=1)的试卷
 			String sql="SELECT * FROM quizes where isdeleted=0 AND issimulate=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -60,6 +63,7 @@ public class GetSimulatelist extends HttpServlet {
 				String times=re.getString("times");
 				DateFormat df = new SimpleDateFormat("yyyy年MM月dd号,HH:mm");
 			     try {
+			    //比较试卷的开始时间，结束时间，当前时间，确保当前时间在时间范围内
 			       Date dt1 = df.parse(starttime);
 			       Date dt2 = df.parse(endtime);
 			       Date curdt=new Date();
@@ -67,6 +71,7 @@ public class GetSimulatelist extends HttpServlet {
 			       {
 			    	   if(count>0)
 							json=json+",";
+			    	   //获取最大答题次数
 			    	   int donecount=Integer.parseInt(times);
 			    	   String sql2="SELECT * FROM quiz_grades where quizid="+id+" AND userid="+userid;
 			    	   PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
@@ -74,6 +79,7 @@ public class GetSimulatelist extends HttpServlet {
 			    	   String details="\"nodes\":[";
 			    	   int count2=0;
 			    	   int inprogress=0;
+			    	   //获取用户历史成绩
 			    	   while(re2.next())
 			    	   {
 			    		   String did=re2.getString("ID");

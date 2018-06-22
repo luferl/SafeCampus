@@ -23,7 +23,8 @@ import PublicClass.ExcelReader;
 
 
 /**
- * Servlet implementation class AddQuiz
+ * Servlet implementation class UploadQuestions
+ * 用于响应管理员后台中导入题库的请求
  */
 @WebServlet("/pc/UploadQuestions")
 public class UploadQuestions extends HttpServlet {
@@ -52,7 +53,6 @@ public class UploadQuestions extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
-		
 		DiskFileItemFactory fac = new DiskFileItemFactory();
         //2.创建文件上传核心类对象
         ServletFileUpload upload = new ServletFileUpload(fac);
@@ -60,10 +60,7 @@ public class UploadQuestions extends HttpServlet {
         upload.setFileSizeMax(30*1024*1024);//30M
         //【二、设置总文件大小：50M】
         upload.setSizeMax(50*1024*1024); //50M
-
         //判断，当前表单是否为文件上传表单
-       // if (upload.isMultipartContent(request)){
-
             try {
                 //3.把请求数据转换为FileItem对象的集合
                 List<FileItem> list = upload.parseRequest(request);
@@ -71,10 +68,11 @@ public class UploadQuestions extends HttpServlet {
                 for (FileItem item : list){
                     //判断：是普通表单项，还是文件上传表单项
                     if (item.isFormField()){
-                        //普通表单x
-                        String fieldName = item.getFieldName();//获取元素名称
-                        String value = item.getString("UTF-8"); //获取元素值
-                        System.out.println(fieldName+" : "+value);
+                        //普通表单项，获取参数名
+                        String fieldName = item.getFieldName();
+                        //获取参数值
+                        String value = item.getString("UTF-8");
+                        //System.out.println(fieldName+" : "+value);
                     }else {
                         //文件上传表单
                         String name = item.getName(); //上传的文件名称
@@ -95,7 +93,9 @@ public class UploadQuestions extends HttpServlet {
                         System.out.println("文件上传成功！");
                         item.delete();
                         ExcelReader eh=new ExcelReader();
+                        //type设置为2，代表是导入题库
                         eh.type=2;
+                        //把文件路径传入excelhandler进行处理，返回处理成功的条数，返回。
                         int count=eh.readExcelData(realPath+"/"+name);
                         response.getWriter().print("上传成功，共导入"+count+"条题目数据");
                     }
@@ -103,10 +103,6 @@ public class UploadQuestions extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-       // }else {
-       //     System.out.println("不处理！");
-       // }
-
 	}
 
 }

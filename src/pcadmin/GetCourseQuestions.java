@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetQuestions
+ * Servlet implementation class GetCourseQuestions
+ * 用于响应管理员后台中获取课后题的请求
  */
 @WebServlet("/pc/GetCourseQuestions")
 public class GetCourseQuestions extends HttpServlet {
@@ -41,13 +42,14 @@ public class GetCourseQuestions extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取课程ID
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String courseid=request.getParameter("courseid");
 		String json="";
 		int count=0;
 		try {
+			//根据课程ID获取课后题
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="select * from coursequestions where courseid="+courseid;
@@ -55,6 +57,7 @@ public class GetCourseQuestions extends HttpServlet {
 			System.out.print(json);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
+			//拼装Json串
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("text");

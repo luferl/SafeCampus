@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetCourse
+ * 用于响应微信端获取具体课程信息的请求
  */
 @WebServlet("/wechat/GetCourse")
 public class GetCourse extends HttpServlet {
@@ -34,18 +35,20 @@ public class GetCourse extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
+		//获取课程ID
 		String id=request.getParameter("courseid");
 		String json="";
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//根据课程ID获取相关信息
 			String sql="SELECT text,url,time FROM directories where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼接json串
 			while(re.next()){ 
 				String text=re.getString("text");
 				String vurl=re.getString("url");

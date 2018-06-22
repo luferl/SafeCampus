@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetQuestions
+ * Servlet implementation class GetCourseQuestions
+ * 用于响应微信端获取课后题的请求
  */
 @WebServlet("/wechat/GetCourseQuestions")
 public class GetCourseQuestions extends HttpServlet {
@@ -44,17 +45,20 @@ public class GetCourseQuestions extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
+		//获取课程ID
 		String courseid=request.getParameter("courseid");
 		String json="";
 		int count=0;
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//根据课程ID获取课后题
 			String sql="select * from coursequestions where courseid="+courseid;
 			json="[";
 			//System.out.print(json);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
+			//拼接json串
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("text");

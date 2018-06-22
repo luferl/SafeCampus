@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class Changepssword
+ * Servlet implementation class UnpassLostnfound
+ * 用于响应管理员后台中不通过失物招领的请求
  */
 @WebServlet("/pc/UnpassLostnfound")
 public class UnpassLostnfound extends HttpServlet {
@@ -43,10 +44,10 @@ public class UnpassLostnfound extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取失物招领ID
 		String id=request.getParameter("id");
-		//System.out.println("Login!");
 		try {
+			//设置状态为不通过(status=2)
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="Update lostnfound set checked=2 where ID="+id;

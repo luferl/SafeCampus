@@ -1,3 +1,4 @@
+//设置饼图菜单项
 Highcharts.setOptions({
 		    lang:{
 		       contextButtonTitle:"图表导出菜单",
@@ -9,6 +10,7 @@ Highcharts.setOptions({
 		       printChart:"打印图表"
 		    }
 		}); 
+//获取饼图
 		function ShowGraph()
 		{
 			if($('#quizid').val()==-1)
@@ -100,6 +102,7 @@ Highcharts.setOptions({
 				}
 		}
 		$(function () {
+			//考试参与人数图初始化
 			$('#container').highcharts({
 				chart: {
 					type: 'spline',
@@ -202,6 +205,7 @@ Highcharts.setOptions({
 					});
 				}
 			);
+			//获取学院列表
 			$.get("GetCollegelist",
 					function(data){
 						for(i=0;i<data.length;i++)
@@ -212,18 +216,21 @@ Highcharts.setOptions({
 							
 					}
 				);
+			//获取部门列表
 			$.get("GetRolelist",
 					function(data){
 						for(i=0;i<data.length;i++)
 							$("#rolelist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
 					}
 				);
+			//获取年级列表
 			$.get("GetYearlist",
 					function(data){
 						for(i=0;i<data.length;i++)
 							$("#yearlist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
 					}
 				);
+			//更改试卷时触发
 			function changechoices(node)
 			{
 				console.log(node.id);
@@ -231,14 +238,17 @@ Highcharts.setOptions({
 				$('#quizid').val(node.id);
 				document.getElementById('quizname').innerText=node.text; 
 			}
+			//下载成绩
 			function DownloadGrades(){
 				var id=$('#quizid').val();
 				window.location.href="DownloadGrades?id="+id;
 			}
+			//下载答题记录
 			function DownloadRecords(){
 				var id=$('#quizid').val();
 				window.location.href="DownloadRecords?id="+id;
 			}		
+			//自定义下载
 			$('#custom_download').click(function() {
 				$('#dialog_simple').dialog('open');
 				return false;

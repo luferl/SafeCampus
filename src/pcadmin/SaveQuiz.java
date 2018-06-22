@@ -18,7 +18,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * Servlet implementation class AddQuiz
+ * Servlet implementation class SaveQuiz
+ * 用于响应管理员后台中保存试卷的请求
  */
 @WebServlet("/pc/SaveQuiz")
 public class SaveQuiz extends HttpServlet {
@@ -44,7 +45,7 @@ public class SaveQuiz extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取试卷信息和试卷配置项
 		response.setContentType("application/text;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String quizid=request.getParameter("id");
@@ -61,19 +62,23 @@ public class SaveQuiz extends HttpServlet {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
+			//更新试卷
 			sql="UPDATE quizes SET name='"+name+"',starttime='"+starttime+"',endtime='"+endtime+"',time='"+timelast+"',totalsc='"+totalscore+"',passsc='"+passscore+"',times='"+timelimit+"',isdeleted='0',issimulate='"+type+"' where ID="+quizid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re = preparedStatement.executeUpdate();
 			if(re>0)
 			{
+				//删除试卷的旧配置项
 				preparedStatement = connection.prepareStatement("delete from quiz_config where quizid="+quizid);
 				preparedStatement.executeUpdate();
 				JSONArray jsonarray=JSONArray.fromObject(config);
+				//遍历配置项
 				if(jsonarray.size()>0)
 				{
 					for(int i=0;i<jsonarray.size();i++)
 					{
-						JSONObject job = jsonarray.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+						//写入配置项
+						JSONObject job = jsonarray.getJSONObject(i);
 						String knowledgeid=job.get("knowledgeid").toString();
 						String count=job.get("count").toString();
 						String type2=job.get("type").toString();

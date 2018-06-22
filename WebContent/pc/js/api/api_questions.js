@@ -1,3 +1,4 @@
+//获取知识点列表
 var knowledgelist;
 		$.ajax({  
 	          type:"POST", 
@@ -19,6 +20,7 @@ var knowledgelist;
 		var pages=1;
 		var allpages=0;
 		var addid=-1;
+		//加载题目列表
 		function loadquestions()
 		{
 			$("#questionlist").empty();
@@ -122,6 +124,7 @@ var knowledgelist;
 			);
 		}
 		loadquestions();
+		//上一页
 		function prepage()
 		{
 			if(pages>1)
@@ -131,6 +134,7 @@ var knowledgelist;
 				}
 				
 		}
+		//下一页
 		function nextpage()
 		{
 			if(pages<allpages)
@@ -139,6 +143,7 @@ var knowledgelist;
 					loadquestions();
 				}
 		}
+		//跳转页面
 		function jumppage()
 		{
 			var jp=$("#jumppages").val();
@@ -148,6 +153,7 @@ var knowledgelist;
 					loadquestions();
 				}
 		}
+		//按条件检索
 		function searchquestions()
 		{
 			knowledgeid=$("#searchknowledge").val();
@@ -157,6 +163,7 @@ var knowledgelist;
 			allpages=0;
 			loadquestions();
 		}
+		//添加题目
 		function addquestion()
 		{
 			var question = document.createElement('fieldset'); //创建元素
@@ -233,6 +240,7 @@ var knowledgelist;
 			field.prepend(question);//插入到最前边
 			addtrigger();
 		}
+		//为提醒选择添加触发器
 		function addtrigger()
 		{
 			$(".typeselect").change(function(){  
@@ -262,6 +270,7 @@ var knowledgelist;
 					}
 			});
 		}
+		//保存当前页面题目
 		function save()
 		{
 			var fieldlist=$("#questionlist").find("fieldset");

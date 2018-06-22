@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetQuizlist
+ * Servlet implementation class ShowGraph
+ * 用于响应管理员后台中获取试卷参与情况饼图的请求
  */
 @WebServlet("/pc/ShowGraph")
 public class ShowGraph extends HttpServlet {
@@ -34,7 +35,7 @@ public class ShowGraph extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取试卷ID和学院名
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String id=request.getParameter("id");
@@ -42,6 +43,7 @@ public class ShowGraph extends HttpServlet {
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//获取试卷的名称与及格分数
 			String sql="select passsc,name from quizes where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re=preparedStatement.executeQuery();
@@ -50,6 +52,7 @@ public class ShowGraph extends HttpServlet {
 			{
 				passsc=re.getInt("passsc");
 			}
+			//根据学院名获取所有人数
 			sql="select count(ID) as count from students where department='"+college+"'";
 			preparedStatement = connection.prepareStatement(sql);
 			re = preparedStatement.executeQuery();
@@ -57,12 +60,14 @@ public class ShowGraph extends HttpServlet {
 			if(re.next()){ 
 				total=re.getInt("count");
 			 }
+			//根据学院名获取所有参与人数
 			sql="select count(uid) as count from (SELECT quiz_grades.ID as qid,users.id as uid FROM safecampus.quiz_grades,users where quiz_grades.userid=users.id and quizid="+id+" and department='"+college+"' group by uid) as a";
 			preparedStatement = connection.prepareStatement(sql);
 			re = preparedStatement.executeQuery();
 			if(re.next()){ 
 				attend=re.getInt("count");
 			 }
+			//根据学院名获取所有几个人数
 			sql="select count(userid) as count from (select * from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID) as a where department='"+college+"' and grades>="+passsc;
 			preparedStatement = connection.prepareStatement(sql);
 			re = preparedStatement.executeQuery();

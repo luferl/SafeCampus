@@ -19,7 +19,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * Servlet implementation class SaveQuestions
+ * Servlet implementation class SaveCPage
+ * 用于微信用户在答题过程中翻页时保存用户作答记录
  */
 @WebServlet("/wechat/SaveCPage")
 public class SaveCPage extends HttpServlet {
@@ -45,8 +46,9 @@ public class SaveCPage extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取当前页面用户答案
 		String question_answer=request.getParameter("qa");
+		//转换为json对象
 		JSONArray jsonarray=JSONArray.fromObject(question_answer);
 		response.setContentType("application/text;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
@@ -59,8 +61,11 @@ public class SaveCPage extends HttpServlet {
 				for(int i=0;i<jsonarray.size();i++)
 				{
 					JSONObject job = jsonarray.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+					//获取答题记录中的对应id
 					String id=job.get("id").toString();
+					//获取用户答案
 					String answer=job.get("answer").toString();
+					//跟新数据库
 					sql="UPDATE questions_answer SET u_answer='"+answer+"' WHERE ID="+id;
 					PreparedStatement preparedStatement = connection.prepareStatement(sql);
 					int re=preparedStatement.executeUpdate();

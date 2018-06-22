@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class Changepssword
+ * Servlet implementation class PassLostnfound
+ * 用于响应管理员后台中审核通过某条失物招领的请求
  */
 @WebServlet("/pc/PassLostnfound")
 public class PassLostnfound extends HttpServlet {
@@ -43,12 +44,12 @@ public class PassLostnfound extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取失物招领id
 		String id=request.getParameter("id");
-		//System.out.println("Login!");
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//设置checked状态为1，表示审核通过
 			String sql="Update lostnfound set checked=1 where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re = preparedStatement.executeUpdate();

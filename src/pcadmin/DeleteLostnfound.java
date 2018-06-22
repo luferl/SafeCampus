@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class Changepssword
+ * Servlet implementation class DeleteLostnfound
+ * 用于响应管理员后台中删除寻物招领的请求
  */
 @WebServlet("/pc/DeleteLostnfound")
 public class DeleteLostnfound extends HttpServlet {
@@ -43,10 +44,10 @@ public class DeleteLostnfound extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取参数
 		String id=request.getParameter("id");
-		//System.out.println("Login!");
 		try {
+			//执行删除
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="Delete from lostnfound where ID="+id;

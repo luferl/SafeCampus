@@ -17,6 +17,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class Getwxconfig
+ * 用于响应管理员后台中获取微信配置项的请求
  */
 @WebServlet("/pc/Getwxconfig")
 public class Getwxconfig extends HttpServlet {
@@ -40,9 +41,11 @@ public class Getwxconfig extends HttpServlet {
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//获取微信配置项
 			String sql="SELECT * FROM wx_config where ID=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
+			//拼装json
 			if(re.next()){ 
 				String schoolname=re.getString("School_Name");
 				String schoolcode=re.getString("School_Code");

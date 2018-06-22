@@ -17,7 +17,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * Servlet implementation class SaveQuestions
+ * Servlet implementation class SaveCourseQuestions
+ * 用于响应管理员后台中保存课后题的请求
  */
 @WebServlet("/pc/SaveCourseQuestions")
 public class SaveCourseQuestions extends HttpServlet {
@@ -43,7 +44,7 @@ public class SaveCourseQuestions extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取课程ID和课后题目
 		String courseid=request.getParameter("courseid");
 		String questions=request.getParameter("questions");
 		JSONArray jsonarray=JSONArray.fromObject(questions);
@@ -51,20 +52,24 @@ public class SaveCourseQuestions extends HttpServlet {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
+			//把问题转为json对象
 			if(jsonarray.size()>0)
 			{
 				for(int i=0;i<jsonarray.size();i++)
 				{
-					JSONObject job = jsonarray.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+					//获取每个问题
+					JSONObject job = jsonarray.getJSONObject(i);  
 					String id=job.get("id").toString();
 					String text=job.get("text").toString();
 					String type=job.get("type").toString();
 					String choices=job.get("choices").toString();
 					String answer=job.get("answer").toString();
+					//没有ID，执行插入
 					if(Integer.parseInt(id)<0)
 					{
 						sql="INSERT INTO coursequestions(text,type,choices,answer,courseid) VALUES('"+text+"','"+type+"','"+choices+"','"+answer+"','"+courseid+"')";
 					}
+					//有ID进行更新
 					else
 					{
 						sql="UPDATE coursequestions SET text='"+text+"',type='"+type+"',choices='"+choices+"',answer='"+answer+"' WHERE ID="+id;

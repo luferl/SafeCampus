@@ -17,6 +17,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class GetQuestions
+ * 用于响应管理员后台中获取题目的请求
  */
 @WebServlet("/pc/GetQuestions")
 public class GetQuestions extends HttpServlet {
@@ -41,7 +42,7 @@ public class GetQuestions extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取知识点ID，题目种类，总页数和当前页码
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String knowledgeid=request.getParameter("knowledgeid");
@@ -54,8 +55,10 @@ public class GetQuestions extends HttpServlet {
 			Connection connection = dbc.getConnection();
 			String sql="";
 			String sqlc="";
+			//所有知识点
 			if(knowledgeid.equals("0"))
 			{
+				//所有种类
 				if(questionstype.equals("all"))
 				{
 					sqlc="select count(ID) as counts from questions";
@@ -91,6 +94,7 @@ public class GetQuestions extends HttpServlet {
 			//System.out.print(json);
 			preparedStatement = connection.prepareStatement(sql);
 			re = preparedStatement.executeQuery();
+			//拼接json
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("text");

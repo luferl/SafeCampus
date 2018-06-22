@@ -15,6 +15,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class Loginservice
+ * 用于相应微信端的登陆请求
  */
 @WebServlet("/wechat/Loginservice")
 public class Loginservice extends HttpServlet {
@@ -43,11 +44,13 @@ public class Loginservice extends HttpServlet {
 		String backUrl="http://"+request.getServerName()+"/SafeCampus/wechat/CallBack";
 		DBConnection dbc=new DBConnection();
 		try {
+			//获取appid
 			Connection connection = dbc.getConnection();
 			String sql="SELECT AppID FROM wx_config WHERE ID=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			if(re.next()){ 
+				//调用腾讯api，并跳转回调函数
 				String AppID=re.getString("AppID");
 				String reurl ="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+AppID
 		                + "&redirect_uri="+URLEncoder.encode(backUrl)

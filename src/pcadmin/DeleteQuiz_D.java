@@ -18,7 +18,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * Servlet implementation class AddQuiz
+ * Servlet implementation class DeleteQuiz_D
+ * 用于响应管理员后台中删除回收站中的试卷的请求
  */
 @WebServlet("/pc/DeleteQuiz_D")
 public class DeleteQuiz_D extends HttpServlet {
@@ -36,16 +37,16 @@ public class DeleteQuiz_D extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取参数
 		response.setContentType("application/text;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String quizid=request.getParameter("id");
 		try {
+			//执行删除
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
 			sql="DELETE FROM quizes where ID="+quizid;
-			//System.out.println(sql);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re = preparedStatement.executeUpdate();
 			if(re>0)

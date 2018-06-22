@@ -12,6 +12,12 @@ import PublicClass.Questions;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+/*
+ * 用于把老版本题库转换为新版本
+ * 老版本题库题目各个选项之间用回车分隔，新版本用|分隔
+ * 有main函数，可以直接运行
+ * 需要先把旧题库导入数据库，数据表名为questions，然后运行本类，会自动转换
+ */
 public class Questions2Turn {
 
 	public void main(String[] args)
@@ -21,8 +27,10 @@ public class Questions2Turn {
 		int totalcount=0;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
+			//设置数据库连接参数
 			String url = "jdbc:mysql://127.0.0.1/safecampus";
 			connection = DriverManager.getConnection(url, "root", "123456");
+			//读取选择题，判断题无需转换
 			String sql="select * from questions where type='single' or type='multy'";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -37,6 +45,7 @@ public class Questions2Turn {
 				{
 					temp="";
 					answer="";
+					//重新拼接答案
 					for(int i=0;i<jsonarray.size();i++)
 					{
 						if(i>0)

@@ -2,6 +2,7 @@
 			var node_g=null;
 			var knowledgelist;
 			$(document).ready(function() {
+				//初始化时间选择空间
 				$('#starttime').editable({
 				       placement: 'right',
 				       combodate: {
@@ -15,6 +16,7 @@
 			        }
 			    });
 			})
+			//获取试卷列表
 			$.get("GetQuizlist",
 				function(data){
 					$('#tree').treeview({
@@ -25,24 +27,28 @@
 					});
 				}
 			);
+			//获取学院列表
 			$.get("GetCollegelist",
 					function(data){
 						for(i=0;i<data.length;i++)
 							$("#collegelist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
 					}
 				);
+			//获取部门列表
 			$.get("GetRolelist",
 					function(data){
 						for(i=0;i<data.length;i++)
 							$("#rolelist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
 					}
 				);
+			//获取年级列表
 			$.get("GetYearlist",
 					function(data){
 						for(i=0;i<data.length;i++)
 							$("#yearlist").append("<option value='"+data[i]+"'>"+data[i]+"</option>"); 
 					}
 				);
+			//获取知识点列表
 			$.ajax({  
 		          type:"POST", 
 		          url:"GetKnowledge", 
@@ -52,11 +58,13 @@
 	   				knowledgelist=data;
 		        }
 		  	});
+			//重新加载
 			function reload()
 			{
 				if(node_g!=null)
 					changechoices(node_g);
 			}
+			//选择不同试卷时触发
 			function changechoices(node)
 			{
 				//console.log(node.id);
@@ -80,6 +88,7 @@
 				}
 				loadconfig(node.id);
 			}
+			//重新计算总分
 			function recalculate(){
 				var fieldlist=$("#quizconfiglist").find("fieldset");
 				var totalscore=0;
@@ -101,6 +110,7 @@
 				}
 				$("#totalscore").val(totalscore);
 			}
+			//添加配置项
 			function addconfig(){
 				var config = document.createElement('fieldset');
 				var html="<div class='row'><section class='col col-md-2'><label class='label'>知识点:</label><div class='col-md-6'><select class='form-control'>";
@@ -115,6 +125,7 @@
 					recalculate();
 				})
 			}
+			//重新加载配置项
 			function loadconfig(id){
 				$("#quizconfiglist").empty();
 				$.post("GetQuizconfig",
@@ -158,6 +169,7 @@
 						}
 					);
 			}
+			//删除试卷
 			function deletequiz(){
 				$.get("DeleteQuiz",
 						{id: $('#quizid').val()},
@@ -175,14 +187,16 @@
 						}
 					);
 			}
+			//添加试卷
 			function addquiz(){
 				var name=$('#quizname').val();
 				var starttime=$("#starttime")[0].innerHTML; 
 				var endtime=$("#endtime")[0].innerHTML; 
 				var timelast=$("#timelast").val();
 				var totalscore=$("#totalscore").val();
-				if(totalscore='');
+				if(totalscore=='')
 				{
+					console.log(totalscore);
 					alert("总分不能为空，请检查配置项是否添加");
 					return;
 				}
@@ -241,6 +255,7 @@
 						}
 					);
 			}
+			//保存试卷
 			function savequiz(){
 				var name=$('#quizname').val();
 				var starttime=$("#starttime")[0].innerHTML; 
@@ -308,18 +323,22 @@
 						}
 					);
 			}
+			//下载成绩
 			function DownloadGrades(){
 				var id=$('#quizid').val();
 				window.location.href="DownloadGrades?id="+id;
 			}
+			//下载答题记录
 			function DownloadRecords(){
 				var id=$('#quizid').val();
 				window.location.href="DownloadRecords?id="+id;
 			}		
+			//自顶一下再
 			$('#custom_download').click(function() {
 				$('#dialog_simple').dialog('open');
 				return false;
 			});
+			//设置自定义下载控件参数
 			$('#dialog_simple').dialog({
 				autoOpen : false,
 				width : 600,

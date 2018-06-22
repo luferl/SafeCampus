@@ -18,6 +18,7 @@ import net.sf.json.JSONObject;
 
 /**
  * Servlet implementation class SaveKnowledge
+ * 用于响应管理员后台中保存知识点的请求
  */
 @WebServlet("/pc/SaveKnowledge")
 public class SaveKnowledge extends HttpServlet {
@@ -42,9 +43,9 @@ public class SaveKnowledge extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		// TODO Auto-generated method stub
+		// 获取知识点列表
 		String knowledge=request.getParameter("knowledge");
+		//转成json对象
 		JSONArray jsonarray=JSONArray.fromObject(knowledge);
 		try {
 			DBConnection dbc=new DBConnection();
@@ -54,13 +55,16 @@ public class SaveKnowledge extends HttpServlet {
 			{
 				for(int i=0;i<jsonarray.size();i++)
 				{
-					JSONObject job = jsonarray.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+					//获取课后题的ID和内容
+					JSONObject job = jsonarray.getJSONObject(i);  
 					String id=job.get("id").toString();
 					String value=job.get("value").toString();
+					//ID为-1，代表是新知识点，执行insert
 					if(id.equals("-1"))
 					{
 						sql="INSERT INTO knowledge(text) VALUES('"+value+"')";
 					}
+					//根据ID执行update
 					else
 					{
 						sql="UPDATE knowledge SET text='"+value+"' WHERE ID="+id;

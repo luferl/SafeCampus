@@ -17,6 +17,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class GetQuizconfig
+ * 用于响应管理员后台中获取试卷配置的请求
  */
 @WebServlet("/pc/GetQuizconfig")
 public class GetQuizconfig extends HttpServlet {
@@ -42,7 +43,7 @@ public class GetQuizconfig extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取试卷ID
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String id=request.getParameter("id");
@@ -50,11 +51,13 @@ public class GetQuizconfig extends HttpServlet {
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//根据试卷ID获取试卷配置列表
 			String sql="";
 			sql="select * from quiz_config where quizid="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼接json
 			while(re.next()){ 
 				String knowledgeid=re.getString("knowledgeid");
 				String type=re.getString("type");

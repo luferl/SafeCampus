@@ -23,7 +23,8 @@ import PublicClass.ExcelReader;
 
 
 /**
- * Servlet implementation class AddQuiz
+ * Servlet implementation class UploadStudents
+ * 用于响应管理员后台中导入学生数据的请求
  */
 @WebServlet("/pc/UploadStudents")
 public class UploadStudents extends HttpServlet {
@@ -52,7 +53,6 @@ public class UploadStudents extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
-		
 		DiskFileItemFactory fac = new DiskFileItemFactory();
         //2.创建文件上传核心类对象
         ServletFileUpload upload = new ServletFileUpload(fac);
@@ -60,10 +60,6 @@ public class UploadStudents extends HttpServlet {
         upload.setFileSizeMax(30*1024*1024);//30M
         //【二、设置总文件大小：50M】
         upload.setSizeMax(50*1024*1024); //50M
-
-        //判断，当前表单是否为文件上传表单
-       // if (upload.isMultipartContent(request)){
-
             try {
                 //3.把请求数据转换为FileItem对象的集合
                 List<FileItem> list = upload.parseRequest(request);
@@ -95,7 +91,9 @@ public class UploadStudents extends HttpServlet {
                         System.out.println("文件上传成功！");
                         item.delete();
                         ExcelReader eh=new ExcelReader();
+                        //type设置为1，代表是导入学生数据
                         eh.type=1;
+                        //把文件路径传入excelhandler进行处理，返回处理成功的条数，返回。
                         int count=eh.readExcelData(realPath+"/"+name);
                         response.getWriter().print("上传成功，共导入"+count+"条学生数据");
                     }
@@ -103,10 +101,5 @@ public class UploadStudents extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-       // }else {
-       //     System.out.println("不处理！");
-       // }
-
 	}
-
 }

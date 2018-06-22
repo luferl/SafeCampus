@@ -25,7 +25,8 @@ import PublicClass.DBConnection;
 import PublicClass.ExcelWriter;
 
 /**
- * Servlet implementation class SaveDirect
+ * Servlet implementation class CustomDownload
+ * 用于响应管理员后台中自定义下载成绩的请求
  */
 @WebServlet("/pc/CustomDownload")
 public class CustomDownload extends HttpServlet {
@@ -43,16 +44,18 @@ public class CustomDownload extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取参数
 		String id=request.getParameter("id");
 		String department=request.getParameter("department");
 		String role=request.getParameter("role");
 		String year=request.getParameter("year");
 		String gradestype=request.getParameter("gradestype");
 		try {
+			//获取连接
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
+			//获取及格分和试卷名
 			sql="select passsc,name from quizes where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet rs=preparedStatement.executeQuery();
@@ -65,37 +68,37 @@ public class CustomDownload extends HttpServlet {
 			}
 			else
 				System.out.println(sql);
+			//未选择全部角色
 			if(!role.equals("role"))
 				role="'"+role+"'";
+			//未选择全部部门
 			if(!department.equals("department"))
 				department="'"+department+"'";
+			//选择全部成绩
 			if(gradestype.equals("all"))
 			{
 				sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department="+department+" and role="+role+" and year="+year;
 			}
 			else
+				//选择及格
 				if(gradestype.equals("pass"))
 				{
 					sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department="+department+" and role="+role+" and year="+year+" and grades >="+passsc;
 				}
 			else
+				//选择不及格
 				if(gradestype.equals("unpass"))
 				{
 					sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department="+department+" and role="+role+" and year="+year+" and grades <"+passsc;
 				}
-			/*
-				else
-				{
-					sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department='"+department+"' and role='"+role+"' and year="+year+" and grades >="+passsc;
-				}
-				*/
-			//sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID";
-			//System.out.println(sql);
 			preparedStatement = connection.prepareStatement(sql);
 			rs=preparedStatement.executeQuery();
+			//设定目录
 			String realPath = getServletContext().getRealPath("pc/Download");
 			ExcelWriter ew=new ExcelWriter();
+			//组装Excel文件
 			ew.writeexcel(rs, passsc,1,realPath);
+			//制作响应头
 			String filename="自定义下载-"+quizname+".xls";
 			String userAgent = request.getHeader("User-Agent");  
 			  if (userAgent.contains("MSIE") || userAgent.contains("Trident")) {  

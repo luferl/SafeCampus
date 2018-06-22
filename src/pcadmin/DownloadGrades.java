@@ -25,7 +25,8 @@ import PublicClass.DBConnection;
 import PublicClass.ExcelWriter;
 
 /**
- * Servlet implementation class SaveDirect
+ * Servlet implementation class DownloadGrades
+ * 用于响应管理员后台中下载成绩的请求
  */
 @WebServlet("/pc/DownloadGrades")
 public class DownloadGrades extends HttpServlet {
@@ -43,9 +44,10 @@ public class DownloadGrades extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取试卷ID
 		String id=request.getParameter("id");
 		try {
+			//获取试卷名和及格分
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
@@ -61,11 +63,13 @@ public class DownloadGrades extends HttpServlet {
 			}
 			else
 				System.out.println(sql);
+			//获取成绩并只取最高分
 			sql="select department,year,role,name,code,grades from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID";
 			preparedStatement = connection.prepareStatement(sql);
 			rs=preparedStatement.executeQuery();
 			String realPath = getServletContext().getRealPath("pc/Download");
 			ExcelWriter ew=new ExcelWriter();
+			//传给excelhandler组装Excel
 			ew.writeexcel(rs, passsc,1,realPath);
 			String filename="成绩表-"+quizname+".xls";
 			String userAgent = request.getHeader("User-Agent");  
@@ -75,6 +79,7 @@ public class DownloadGrades extends HttpServlet {
 	                // 非IE浏览器的处理：  
 	            	filename = new String(filename.getBytes("UTF-8"), "ISO-8859-1");  
 	            }   
+			//拼装响应头
 			String contentType = this.getServletContext().getMimeType("Grades.xls");
 			response.setHeader("Content-Type",contentType);
 			response.setHeader("content-disposition","attachment;filename="+filename);

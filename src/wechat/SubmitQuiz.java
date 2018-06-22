@@ -19,7 +19,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * Servlet implementation class SaveQuestions
+ * Servlet implementation class SubmitQuiz
+ * 用于响应微信端用户提交试卷的请求
  */
 @WebServlet("/wechat/SubmitQuiz")
 public class SubmitQuiz extends HttpServlet {
@@ -45,8 +46,9 @@ public class SubmitQuiz extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取答题记录id
 		String gid=request.getParameter("gid");
+		//调用成绩计算类，进行成绩计算
 		CalculateGrades cg=new CalculateGrades();
 		cg.Calculate(gid);
 		response.setContentType("application/text;charset=utf-8");

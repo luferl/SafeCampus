@@ -17,6 +17,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class GetDirectlist
+ * 用于响应管理员后台中获取课程目录列表的请求
  */
 @WebServlet("/pc/GetDirectlist")
 public class GetDirectlist extends HttpServlet {
@@ -39,6 +40,7 @@ public class GetDirectlist extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		String json="[";
 		try {
+			//获取课程列表，去除根目录（id=1)
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="SELECT ID,text FROM directories where id>1";
@@ -50,7 +52,6 @@ public class GetDirectlist extends HttpServlet {
 				String text=re.getString("text");
 				if(count>0)
 					json=json+",";
-				//json="[{id:1,text:\"test\",nodes:[{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}],topid:1,url:\"fadf\",time:200},{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}]";
 				json=json+"{\"id\":"+id+",\"text\":\""+text+"\"}";
 				count++;
 			 }

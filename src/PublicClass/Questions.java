@@ -1,5 +1,8 @@
 package PublicClass;
 
+/*
+ * Œ Ã‚¿‡
+ */
 public class Questions {
 	public int id;
 	public String text;

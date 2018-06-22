@@ -28,7 +28,8 @@ import PublicClass.ExcelWriter;
 import PublicClass.GroupClass;
 
 /**
- * Servlet implementation class SaveDirect
+ * Servlet implementation class GroupDownload
+ * 用于响应管理员后台中分组统计下载的请求
  */
 @WebServlet("/pc/GroupDownload")
 public class GroupDownload extends HttpServlet {
@@ -46,7 +47,7 @@ public class GroupDownload extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取试卷ID，分组条件
 		String id=request.getParameter("id");
 		String condition=request.getParameter("condition");
 		List<GroupClass> gl=new ArrayList<GroupClass>();
@@ -56,6 +57,7 @@ public class GroupDownload extends HttpServlet {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
+			//根据试卷ID获取所有记录
 			sql="select passsc,name from quizes where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet rs=preparedStatement.executeQuery();
@@ -67,18 +69,23 @@ public class GroupDownload extends HttpServlet {
 				quizname=rs.getString("name");
 			}
 			int total=0,pass=0,unpass=0;
+			//按部分分组
 			if(condition.equals("department"))
 			{
+				//按部门统计所有人数
 				sql="select count(name) as count,department from students group by department";
 				preparedStatement = connection.prepareStatement(sql);
 				rs=preparedStatement.executeQuery();
+				//遍历部门
 				while(rs.next())
 				{
 					String department=rs.getString("department");
 					int count=rs.getInt("count");
 					pass=0;
 					unpass=0;
+					//通过人数
 					String sql2="select count(name) as count1 from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department='"+department+"' and grades>="+passsc+" group by department;";
+					//未通过人数
 					String sql3="select count(name) as count1 from(SELECT quizid,userid,max(grades) as grades FROM quiz_grades where quizid="+id+" group by userid ) as aa,users where aa.userid=users.ID and department='"+department+"' group by department;";
 					PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
 					ResultSet rs2=preparedStatement2.executeQuery();
@@ -98,6 +105,7 @@ public class GroupDownload extends HttpServlet {
 				ew.writeexcelBygroup(gl,1,realPath);
 			}
 			else
+				//按年份分组，内部逻辑与按部门分组类似
 				if(condition.equals("year"))
 				{
 					sql="select count(name) as count,year from students group by year";
@@ -129,6 +137,7 @@ public class GroupDownload extends HttpServlet {
 					ew.writeexcelBygroup(gl,2,realPath);
 				}
 			else
+				//按职位分组，内部逻辑与按部门分组类似
 				if(condition.equals("role"))
 				{
 					sql="select count(name) as count,role from students group by role";

@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetLostnfoundlist
+ * 用于响应管理员后台中获取失物招领列表的请求
  */
 @WebServlet("/pc/GetLostnfoundlist")
 public class GetLostnfoundlist extends HttpServlet {
@@ -35,7 +36,7 @@ public class GetLostnfoundlist extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取种类（失物/招领）  状态(审核/未审核）
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String type=request.getParameter("type");
@@ -47,11 +48,13 @@ public class GetLostnfoundlist extends HttpServlet {
 			HttpSession session=request.getSession();
 			String userid=session.getAttribute("Username").toString();
 			String sql="SELECT * from lostnfound WHERE ";
+			//未指定种类
 			if(type.equals("-1"))
 				sql=sql+"type=type";
 			else
 				sql=sql+"type="+type;
 			sql=sql+" AND ";
+			//未指定状态
 			if(status.equals("-1"))
 				sql=sql+"checked=checked";
 			else
@@ -59,6 +62,7 @@ public class GetLostnfoundlist extends HttpServlet {
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼接json
 			while(re.next()){ 
 				if(count>0)
 					json=json+",";

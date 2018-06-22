@@ -16,6 +16,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class DeleteDirect
+ * 用于响应管理员后台中删除目录的请求
  */
 @WebServlet("/pc/DeleteDirect")
 public class DeleteDirect extends HttpServlet {
@@ -40,14 +41,14 @@ public class DeleteDirect extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取参数
 		String id=request.getParameter("id");
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
+			//执行删除
 			sql="Delete from  directories WHERE ID="+id;
-			//System.out.println(sql);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re = preparedStatement.executeUpdate();
 			if(re>0)

@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetLostnfoundlist
+ * 用于响应微信端获取失物招领目录的请求
  */
 @WebServlet("/wechat/GetLostnfoundlist")
 public class GetLostnfoundlist extends HttpServlet {
@@ -35,20 +36,23 @@ public class GetLostnfoundlist extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取种类，是寻物还是招领
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String type=request.getParameter("type");
 		String json="[";
 		try {
 			DBConnection dbc=new DBConnection();
+			//从session中获取用户ID
 			Connection connection = dbc.getConnection();
 			HttpSession session=request.getSession();
 			String userid=session.getAttribute("Username").toString();
+			//获取所有符合查询条件且已审核的记录，或是由当前用户提交的记录
 			String sql="SELECT * from lostnfound WHERE type="+type+" AND (checked=1 OR userid="+userid+")";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼接json串
 			while(re.next()){ 
 				if(count>0)
 					json=json+",";

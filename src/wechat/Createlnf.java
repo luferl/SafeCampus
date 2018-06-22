@@ -28,7 +28,8 @@ import PublicClass.ExcelReader;
 
 
 /**
- * Servlet implementation class AddQuiz
+ * Servlet implementation class Createlnf
+ * 用于响应微信端新建寻物招领的请求
  */
 @WebServlet("/wechat/Createlnf")
 public class Createlnf extends HttpServlet {
@@ -57,7 +58,6 @@ public class Createlnf extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
-		
 		DiskFileItemFactory fac = new DiskFileItemFactory();
         //2.创建文件上传核心类对象
         ServletFileUpload upload = new ServletFileUpload(fac);
@@ -65,8 +65,6 @@ public class Createlnf extends HttpServlet {
         upload.setFileSizeMax(30*1024*1024);//30M
         //【二、设置总文件大小：50M】
         upload.setSizeMax(50*1024*1024); //50M
-        
-        
         String type="0";
         String date="";
         String contact="";
@@ -74,9 +72,6 @@ public class Createlnf extends HttpServlet {
         String imgpath="";
         String position="";
         String title="";
-        //判断，当前表单是否为文件上传表单
-       // if (upload.isMultipartContent(request)){
-
             try {
                 //3.把请求数据转换为FileItem对象的集合
                 List<FileItem> list = upload.parseRequest(request);
@@ -84,7 +79,7 @@ public class Createlnf extends HttpServlet {
                 for (FileItem item : list){
                     //判断：是普通表单项，还是文件上传表单项
                     if (item.isFormField()){
-                        //普通表单x
+                        //普通表单。按照参数名保存到不同变量
                         String fieldName = item.getFieldName();//获取元素名称
                         if(fieldName.equals("type"))
                         {
@@ -111,10 +106,12 @@ public class Createlnf extends HttpServlet {
                         	details=item.getString("UTF-8");
 	                    }
                     }else {
-                        //文件上传表单
+                        //文件上传表单，获取图片
                         String name = item.getName(); //上传的文件名称
+                        //无图选用默认图片
                         if(name.equals(""))
                         	imgpath="nopic.jpg";
+                        //有图，转储+改名，返回存储路径
                         else
                         	{
                         		String id = UUID.randomUUID().toString();
@@ -129,28 +126,23 @@ public class Createlnf extends HttpServlet {
                        
                     }
                 }
+                //从session中获取用户ID
                 HttpSession session=request.getSession();
                 String userid=session.getAttribute("Username").toString();
                 DBConnection dbc=new DBConnection();
     			Connection connection = dbc.getConnection();
+    			//写入数据库
     			String sql="Insert into lostnfound(title,time,position,contact,details,checked,pic,type,userid) VALUE('"+title+"','"+date+"','"+position+"','"+contact+"','"+details+"',0,'"+imgpath+"',"+type+",'"+userid+"')";
-    			System.out.println(sql);
+    			//System.out.println(sql);
     			PreparedStatement preparedStatement = connection.prepareStatement(sql);
     			int re = preparedStatement.executeUpdate();
     			if(re>0)
     				response.getWriter().print("success");
                 preparedStatement.close();
     			dbc.CloseConnection(connection);
-                
-                
-                
             } catch (Exception e) {
                 e.printStackTrace();
             }
-       // }else {
-       //     System.out.println("不处理！");
-       // }
-
 	}
 
 }

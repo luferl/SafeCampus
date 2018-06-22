@@ -14,6 +14,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class Loginservice
+ * PC端登录服务
  */
 @WebServlet("/pc/Loginservice")
 public class Loginservice extends HttpServlet {
@@ -39,16 +40,18 @@ public class Loginservice extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取用户名密码
 		String username=request.getParameter("username");
 		String password=request.getParameter("password");
 		//System.out.println("Login!");
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//校验
 			String sql="SELECT password FROM admin_account where username='"+username+"' and password='"+password+"'";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
+			//校验通过，写入session
 			if(re.next()){ 
 				HttpSession session=request.getSession();
 	            //设置session的值
@@ -56,6 +59,7 @@ public class Loginservice extends HttpServlet {
 	            response.getWriter().print("success");
 	            System.out.println("PC端登陆成功");
 			 }
+			//校验失败，返回异常
 			else
 				{
 					response.getWriter().print("error");

@@ -26,23 +26,26 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/*
+ * Excel处理函数，用于Excel的读取
+ * 主要逻辑位于readExcel函数，其余函数用于辅助读取excel
+ */
 public class ExcelReader {
-	// 读取excel的结果集
+	// 用于读取excel的结果集
     private static ArrayList<Map<String, String>> result = null;
-     
     // 记录表格中空行的行数
     private static int num = 0;
-    
     public static int type=0;
-     
     private static List<String> numList = new ArrayList<String>();
  
     /**
-     * 获取需要传入数据库的数据
+     * 读取Excel表格，传入参数为Excel的物理地址
      */
     public static int readExcelData(final String filePath) {
+    	//统计受影响的行数
     	int count=0;
         try {
+        	//调用读取函数
            count=readExcelToObj(filePath);
         } catch (Exception e) {
         	 e.printStackTrace();
@@ -81,17 +84,20 @@ public class ExcelReader {
         try {
         	DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//type=1，导入学生数据
 			if(type==1)
 		    {
+				   //遍历excel表格的行
 			       for (int i = startReadLine+1; i < sheet.getLastRowNum() - tailLine + 1; i++) {
 			        	String Department="",Code="",Name="",Year="",Role="";
 			            row = sheet.getRow(i);
 			            Map<String, String> map = new HashMap<String, String>();
+			            //遍历每个单元格
 			            for (Cell c : row) {
 			                String returnStr = "";
 			                NumberFormat nf = NumberFormat.getInstance();
 			                boolean isMerge = isMergedRegion(sheet, i, c.getColumnIndex());
-			                //强制为数值型
+			                //强制为数值型，否则会自动加小数点
 			                c.setCellType(1); 
 			                //判断是否具有合并单元格
 			                if (isMerge) {
@@ -102,6 +108,8 @@ public class ExcelReader {
 			                {
 			                    returnStr = c.toString();
 			                }
+			                //根据单元格位置，写入不同的变量
+			                //第一格为部门，第二格为学号，第三格为姓名，第四格为年份，第五格为身份
 			                if (c.getColumnIndex() == 0) {
 			                   Department=returnStr;
 			                } else if (c.getColumnIndex() == 1) {
@@ -114,21 +122,25 @@ public class ExcelReader {
 			                    Role=returnStr;
 			                } 
 			            }
+			            //把该行写入数据库
 			            String sql="INSERT INTO students(name,code,department,role,year) VALUE('"+Name+"','"+Code+"','"+Department+"','"+Role+"','"+Year+"')";
-			            //System.out.println(sql);
 			            PreparedStatement preparedStatement = connection.prepareStatement(sql);
 						int re = preparedStatement.executeUpdate();
+						//受影响的记录+1
 			            if(re>0)
 			            	count++;
 			        }
 		    }
 		    else
+		    	//type=2，导入题库数据
 		    	if(type==2)
 		    {
-			        String sql="Select * from knowledge";
+			        //获取所有的知识点
+		    		String sql="Select * from knowledge";
 		            PreparedStatement preparedStatement = connection.prepareStatement(sql);
 					ResultSet re = preparedStatement.executeQuery();
 					Map<String,String> knowledges=new HashMap<String,String>();
+					//把知识点写入knowledge类Map，便于查找
 			        while(re.next())
 			        {
 			        	String id=re.getString("ID");
@@ -153,6 +165,7 @@ public class ExcelReader {
 			                {
 			                    returnStr = c.toString();
 			                }
+			                //根据单元格位置获取对应的信息
 			                if (c.getColumnIndex() == 0) {
 			                   knowledge=returnStr;
 			                } else if (c.getColumnIndex() == 1) {
@@ -165,12 +178,15 @@ public class ExcelReader {
 			                    answer=returnStr;
 			                } 
 			            }
+			            //判断是否已存在同名知识点
 			            if(knowledges.containsKey(knowledge))
 			            {
+			            	//存在则获取知识点id
 			            	knowledgeid=knowledges.get(knowledge);
 			            }
 			            else
 			            {
+			            	//不存在则新写入知识点，并获取插入后该指示点的id
 			            	sql="INSERT INTO knowledge(text) VALUE('"+knowledge+"')";
 			            	preparedStatement = connection.prepareStatement(sql);
 			            	preparedStatement.executeUpdate();
@@ -183,24 +199,29 @@ public class ExcelReader {
 							}
 				        	knowledges.put(knowledge,knowledgeid);
 			            }
+			            //改写题型，如果题型为判断，设置type为check
 			            if(type.equals("判断"))
 			            	{
 			            		type="check";
 			            		choices="A、|B、|C、|D、";
+			            		//改写答案，正确改为1，错误改为0
 			            		if(answer.equals("正确"))
 			            			answer="1";
 			            		else
 			            			answer="0";
 			            	}
 			            else
+			            	//如果题型为单选，设置type为single
 			            	if(type.equals("单选"))
 			            		type="single";
 			            	else
+			            		//如果题型为单选，设置type为multy
 			            		type="multy";
+			            //写入数据库
 			            sql="INSERT INTO questions(text,type,choices,answer,knowledgeid) VALUE('"+text+"','"+type+"','"+choices+"','"+answer+"','"+knowledgeid+"')";
-			            //System.out.println(sql);
 			            preparedStatement = connection.prepareStatement(sql);
 						int re2 = preparedStatement.executeUpdate();
+						//写入成功，受影响的记录+1
 			            if(re2>0)
 			            	count++;
 			        }

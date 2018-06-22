@@ -19,6 +19,7 @@ import net.sf.json.JSONObject;
 
 /**
  * Servlet implementation class AddQuiz
+ * 用于响应管理员后台中添加试卷的请求
  */
 @WebServlet("/pc/AddQuiz")
 public class AddQuiz extends HttpServlet {
@@ -45,8 +46,10 @@ public class AddQuiz extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		//设置响应头
 		response.setContentType("application/text;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
+		//获取参数
 		String name=request.getParameter("name");
 		String starttime=request.getParameter("starttime");
 		String endtime=request.getParameter("endtime");
@@ -57,21 +60,26 @@ public class AddQuiz extends HttpServlet {
 		String type=request.getParameter("type");
 		String timelimit=request.getParameter("timelimit");
 		try {
+			//从连接池获取连接
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
+			//写入试卷记录到数据库
 			sql="INSERT INTO quizes(name,starttime,endtime,time,totalsc,passsc,times,isdeleted,issimulate) VALUE('"+name+"','"+starttime+"','"+endtime+"','"+timelast+"','"+totalscore+"','"+passscore+"','"+timelimit+"',0,'"+type+"')";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re = preparedStatement.executeUpdate();
 			if(re>0)
 			{
+				//获取新增的试卷ID
 				preparedStatement = connection.prepareStatement("SELECT LAST_INSERT_ID()");
 				ResultSet re2 = preparedStatement.executeQuery();
 				while(re2.next()){ 
 					String quizid=re2.getString("LAST_INSERT_ID()");
+					//获得试卷配置项
 					JSONArray jsonarray=JSONArray.fromObject(config);
 					if(jsonarray.size()>0)
 					{
+						//写入试卷配置项到数据库
 						for(int i=0;i<jsonarray.size();i++)
 						{
 							JSONObject job = jsonarray.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象

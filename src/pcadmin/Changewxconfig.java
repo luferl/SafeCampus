@@ -18,6 +18,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class Changewxconfig
+ * 用于响应管理员后台中更改微信相关配置的请求
  */
 @WebServlet("/pc/Changewxconfig")
 public class Changewxconfig extends HttpServlet {
@@ -44,15 +45,17 @@ public class Changewxconfig extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		//获取参数
 		String schoolename=request.getParameter("schoolename");
 		String schoolcode=request.getParameter("schoolcode");
 		String appsecret=request.getParameter("appsecret");
 		String appid=request.getParameter("appid");
 		String apptoken=request.getParameter("apptoken");
-		//System.out.println("Login!");
 		try {
+			//获取连接
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//写入数据库
 			String savechangesql="UPDATE wx_config SET School_Name='"+schoolename+"',School_Code='"+schoolcode+"',appid='"+appid+"',appsecret='"+appsecret+"',apptoken='"+apptoken+"' where ID=1";
 			PreparedStatement preparedStatement2 = connection.prepareStatement(savechangesql);
 			int result = preparedStatement2.executeUpdate();

@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetQuizlist
+ * Servlet implementation class GetQuizlist_D
+ * 用于响应管理员后台中获取已删除试卷列表的请求
  */
 @WebServlet("/pc/GetQuizlist_D")
 public class GetQuizlist_D extends HttpServlet {
@@ -39,12 +40,14 @@ public class GetQuizlist_D extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		String json="[";
 		try {
+			//获取所有isdeleted为1的试卷
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="SELECT * FROM quizes where isdeleted=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼接json
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("name");

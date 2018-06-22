@@ -18,6 +18,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class CreateDirect
+ * 用于响应管理员后台中创建目录的请求
  */
 @WebServlet("/pc/CreateDirect")
 public class CreateDirect extends HttpServlet {
@@ -42,15 +43,17 @@ public class CreateDirect extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取参数
 		String name=request.getParameter("text");
 		String topid=request.getParameter("topid");
 		String iscourse=request.getParameter("iscourse");
 		String vurl=request.getParameter("vurl");
 		String time=request.getParameter("time");
 		try {
+			//获取连接
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//写入数据库
 			String sql="";
 			sql="INSERT INTO directories(text,iscourse,topid,url,time) VALUES('"+name+"',"+iscourse+","+topid+",'"+vurl+"','"+time+"')";
 			//System.out.print(sql);

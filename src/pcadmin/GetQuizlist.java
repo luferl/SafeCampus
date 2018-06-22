@@ -17,6 +17,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class GetQuizlist
+ * 用于响应管理员后台中获取试卷列表的请求
  */
 @WebServlet("/pc/GetQuizlist")
 public class GetQuizlist extends HttpServlet {
@@ -41,10 +42,12 @@ public class GetQuizlist extends HttpServlet {
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//获取所有isdeleted为0的试卷
 			String sql="SELECT * FROM quizes where isdeleted=0";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼接字符串
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("name");

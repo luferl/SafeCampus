@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetCollegelist
+ * 用于响应管理员后台中获取学院列表的请求
  */
 @WebServlet("/pc/GetCollegelist")
 public class GetCollegelist extends HttpServlet {
@@ -40,12 +41,14 @@ public class GetCollegelist extends HttpServlet {
 		String id=request.getParameter("courseid");
 		String json="[";
 		try {
+			//获取所有学院列表
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="select distinct department from students";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼装Json数据
 			while(re.next()){ 
 				if(count>0)
 					json=json+",";

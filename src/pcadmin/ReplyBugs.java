@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class Changepssword
+ * Servlet implementation class ReplyBugs
+ * 用于响应管理员后台中处理隐患的请求
  */
 @WebServlet("/pc/ReplyBugs")
 public class ReplyBugs extends HttpServlet {
@@ -43,13 +44,14 @@ public class ReplyBugs extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// 获取隐患ID和处理意见
 		String id=request.getParameter("id");
 		String reply=request.getParameter("reply");
 		//System.out.println("Login!");
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//更新数据库，写入处理意见并把状态设置为已处理
 			String sql="Update bugs set checked=1,reply='"+reply+"' where ID="+id;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re = preparedStatement.executeUpdate();

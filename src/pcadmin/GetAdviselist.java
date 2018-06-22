@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetAdviselist
+ * 用于响应管理员后台中获取投诉建议的请求
  */
 @WebServlet("/pc/GetAdviselist")
 public class GetAdviselist extends HttpServlet {
@@ -41,18 +42,22 @@ public class GetAdviselist extends HttpServlet {
 		String status=request.getParameter("status");
 		String json="[";
 		try {
+			
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			HttpSession session=request.getSession();
 			String userid=session.getAttribute("Username").toString();
 			String sql="SELECT * from advises WHERE ";
+			//未指定状态
 			if(status.equals("-1"))
 				sql=sql+"checked=checked";
+			//指定状态 审核或未审核
 			else
 				sql=sql+"checked="+status;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼装结果Json
 			while(re.next()){ 
 				if(count>0)
 					json=json+",";

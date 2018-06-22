@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetBuglist
+ * 用于响应管理员后台中获取隐患的请求
  */
 @WebServlet("/pc/GetBuglist")
 public class GetBuglist extends HttpServlet {
@@ -46,13 +47,16 @@ public class GetBuglist extends HttpServlet {
 			HttpSession session=request.getSession();
 			String userid=session.getAttribute("Username").toString();
 			String sql="SELECT * from bugs WHERE ";
+			//未指定状态
 			if(status.equals("-1"))
 				sql=sql+"checked=checked";
+			//指定状态 审核或未审核
 			else
 				sql=sql+"checked="+status;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼装Json串
 			while(re.next()){ 
 				if(count>0)
 					json=json+",";

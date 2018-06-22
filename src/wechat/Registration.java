@@ -13,7 +13,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class Loginservice
+ * Servlet implementation class Registration
+ * 用于相应微信端的注册请求
  */
 @WebServlet("/wechat/Registration")
 public class Registration extends HttpServlet {
@@ -39,21 +40,28 @@ public class Registration extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取用户的相关参数
+		//用户姓名
 		String username=request.getParameter("username");
+		//用户微信昵称
 		String nickname=request.getParameter("nickname");
+		//用户学号
 		String code=request.getParameter("code");
+		//用户手机号
 		String phone=request.getParameter("phone");
+		//用户openid
 		String testopenid=request.getParameter("openid");
-		//System.out.println("Login!");
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//查询学生表，进行姓名学号校验
 			String sql="SELECT department FROM students WHERE name='"+username+"' and code='"+code+"'";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
+			//校验通过
 			if(re.next()){ 
 				String department=re.getString("department");
+				//保存用户信息，完成注册
 				sql="INSERT INTO users(name,code,phone,openid,department,nickname) VALUE('"+username+"','"+code+"','"+phone+"','"+testopenid+"','"+department+"','"+nickname+"')";
 				PreparedStatement preparedStatement2 = connection.prepareStatement(sql);
 				int re2 = preparedStatement2.executeUpdate();
@@ -73,6 +81,7 @@ public class Registration extends HttpServlet {
 					response.getWriter().print("regist error");
 				preparedStatement2.close();
 			 }
+			//校验失败
 			else
 				response.getWriter().print("validation error");
 	        preparedStatement.close();

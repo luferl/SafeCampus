@@ -17,6 +17,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class GetDirectories
+ * 用于响应管理员后台中获取课程目录的请求
  */
 @WebServlet("/pc/GetDirectories")
 public class GetDirectories extends HttpServlet {
@@ -41,10 +42,12 @@ public class GetDirectories extends HttpServlet {
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//获取一级目录（上级目录为根目录）的目录列表
 			String sql="SELECT * FROM directories where topid=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//遍历目录列表，拼接字符串
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("text");
@@ -55,6 +58,7 @@ public class GetDirectories extends HttpServlet {
 					json=json+",";
 				//json="[{id:1,text:\"test\",nodes:[{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}],topid:1,url:\"fadf\",time:200},{id:1,text:\\\"test\\\",nodes:[],topid:1,url:\\\"fadf\\\",time:200}]";
 				json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"topid\":1,\"iscourse\":"+iscourse+",\"url\":\""+vurl+"\",\"time\":\""+time+"\"";
+				//向下遍历，获取所有以当前目录为上级目录的目录列表
 				String res=getsubinfo(id,connection);
 				if(res=="null")
 				{
@@ -91,6 +95,8 @@ public class GetDirectories extends HttpServlet {
 		doGet(request, response);
 	}
 	
+	
+	//传入课程ID，遍历所有以该ID为上级目录的目录或课程信息
 	private String getsubinfo(String topid,Connection connection)
 	{
 		String json="";

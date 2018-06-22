@@ -17,6 +17,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class GetKnowledge
+ * 用于响应管理员后台中获取知识点列表的请求
  */
 @WebServlet("/pc/GetKnowledge")
 public class GetKnowledge extends HttpServlet {
@@ -39,6 +40,7 @@ public class GetKnowledge extends HttpServlet {
 		response.setCharacterEncoding("utf-8");
 		String json="[";
 		try {
+			//获取所有知识点
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="SELECT * FROM knowledge";

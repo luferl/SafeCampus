@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetRolelist
+ * 用于响应管理员后台中获取角色列表的请求
  */
 @WebServlet("/pc/GetRolelist")
 public class GetRolelist extends HttpServlet {
@@ -42,10 +43,12 @@ public class GetRolelist extends HttpServlet {
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//获取所有角色并去重
 			String sql="select distinct role from students";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼装json
 			while(re.next()){ 
 				if(count>0)
 					json=json+",";

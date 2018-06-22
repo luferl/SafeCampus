@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetBugslist
+ * 用于响应微信端获取隐患列表的请求
  */
 @WebServlet("/wechat/GetBugslist")
 public class GetBugslist extends HttpServlet {
@@ -35,7 +36,6 @@ public class GetBugslist extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String type=request.getParameter("type");
@@ -43,12 +43,15 @@ public class GetBugslist extends HttpServlet {
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//从session中获取用户的id
 			HttpSession session=request.getSession();
 			String userid=session.getAttribute("Username").toString();
+			//从数据库中查询所有已审核的或者是该用户提交的记录
 			String sql="SELECT * from bugs WHERE checked=1 OR userid="+userid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼接json串
 			while(re.next()){ 
 				if(count>0)
 					json=json+",";

@@ -18,6 +18,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class GetDirectories
+ * 用于响应微信端获取课程目录的请求
  */
 @WebServlet("/wechat/GetDirectories")
 public class GetDirectories extends HttpServlet {
@@ -39,6 +40,7 @@ public class GetDirectories extends HttpServlet {
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String json="[";
+		//从session中获取用户ID
 		HttpServletRequest httpRequest=(HttpServletRequest)request;
 	    HttpServletResponse httpResponse=(HttpServletResponse)response;
 	    HttpSession session=httpRequest.getSession();
@@ -46,10 +48,12 @@ public class GetDirectories extends HttpServlet {
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//获取所有上级目录为根目录的目录
 			String sql="SELECT * FROM directories where topid=1";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//遍历，拼接json串
 			while(re.next()){ 
 				String id=re.getString("ID");
 				String text=re.getString("text");
@@ -57,13 +61,17 @@ public class GetDirectories extends HttpServlet {
 				String tag="[]";
 				if(count>0)
 					json=json+",";
+				//判断类型，如果是课程
 				if(iscourse.equals("1"))
 				{
-					String sql2="SELECT * FROM study_progress WHERE courseid="+id+" AND userid="+userid;
+					//从学习进度表中查询学习进度
+					String sql2="SELECT * FROM study_progress WHERE courseid="+id+" AND userid='"+userid+"'";
 					PreparedStatement preparedStatement2 = connection.prepareStatement(sql2);
 					ResultSet re2 = preparedStatement2.executeQuery();
+					//有进度，标记已完成
 					if(re2.next())
 						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"iscourse\":"+iscourse+",\"tags\":[\"已完成\"]";
+					//没进度，标记未完成
 					else
 						json=json+"{\"id\":"+id+",\"text\":\""+text+"\",\"iscourse\":"+iscourse+",\"tags\":[\"未完成\"]";
 				}
@@ -103,7 +111,7 @@ public class GetDirectories extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
-	
+	//子目录遍历函数，用于遍历以传入ID为上级目录的目录，内容同doGet函数类似
 	private String getsubinfo(String topid,String userid,Connection connection)
 	{
 		String json="";

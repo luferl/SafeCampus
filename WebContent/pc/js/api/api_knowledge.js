@@ -1,4 +1,5 @@
-		$.get("GetKnowledge",
+//获取知识点列表		
+$.get("GetKnowledge",
 				function(data){
 					for(i=0;i<data.length;i++)
 					{
@@ -17,6 +18,7 @@
 				//$("#schoolcode").val(data.schoolcode);
 				}
 			);
+//添加新知识点
 			function addOneRow()
 			{
 				//count++;
@@ -31,10 +33,12 @@
 					//count=str.substr(str.length-1,1);
 				})
 			};
+			//删除知识点
 			function delOne(x)
 			{
 				row.parentNode.removeChild(row);
 			}
+			//保存知识点
 			function saveknowledge()
 			{
 				var knowledge=[];
@@ -58,7 +62,5 @@
 								alert("保存成功!");
 								window.location.reload();
 							}
-						//$("#schoolname").val(data.schoolname);
-						//$("#schoolcode").val(data.schoolcode);
 					);
 			};

@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetYearlist
+ * 用于响应管理员后台中获取入学年份列表的请求
  */
 @WebServlet("/pc/GetYearlist")
 public class GetYearlist extends HttpServlet {
@@ -37,15 +38,16 @@ public class GetYearlist extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
-		String id=request.getParameter("courseid");
 		String json="[";
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//获取所有的入学年份并去重
 			String sql="select distinct year from students";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼装json
 			while(re.next()){ 
 				if(count>0)
 					json=json+",";

@@ -27,6 +27,10 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+/*
+ * Excel处理函数，用于Excel的写入
+ * 主要逻辑位于writeExcel函数，其余函数用于辅助写入excel
+ */
 public class ExcelWriter {
 	// 读取excel的结果集
     private static ArrayList<Map<String, String>> result = null;
@@ -39,7 +43,7 @@ public class ExcelWriter {
     private static List<String> numList = new ArrayList<String>();
  
     /**
-     * 获取需要传入数据库的数据
+     * 获取需要写入excel的数据集
      */
     public static void writeexcel(final ResultSet re,int passsc,int type,String path) {
     	try {
@@ -48,7 +52,7 @@ public class ExcelWriter {
             //第二部，在workbook中创建一个sheet对应excel中的sheet
             Sheet sheet = workbook.createSheet("用户表一");
             //第三部，在sheet表中添加表头第0行，老版本的poi对sheet的行列有限制
-            
+            //type=1，代表生成成绩表
             if(type==1)
             { 
             	//第四步，创建单元格，设置表头
@@ -65,7 +69,7 @@ public class ExcelWriter {
 	            while(re.next()) {
 	                row = sheet.createRow(i + 1);
 	                i++;
-	                //创建单元格设值
+	                //创建单元格并设定值
 	                row.createCell(0).setCellValue(re.getString("department"));
 	                row.createCell(1).setCellValue(re.getString("year"));
 	                row.createCell(2).setCellValue(re.getString("role"));
@@ -78,12 +82,14 @@ public class ExcelWriter {
 	                else
 	                	row.createCell(6).setCellValue("通过");
 	            }
+	            //写入excel文件
 	            FileOutputStream fos = new FileOutputStream(path+"/Grades.xls");
 	            workbook.write(fos);
 	            System.out.println("写入成功");
 	            fos.close();
             }
             else
+            	//type=2，代表生成答题记录表
             	if(type==2)
                 { 
                 	//第四步，创建单元格，设置表头
@@ -113,23 +119,18 @@ public class ExcelWriter {
     	                else
     	                	row.createCell(6).setCellValue("通过");
     	            }
+    	            //写入excel文件
     	            FileOutputStream fos = new FileOutputStream(path+"/Records.xls");
     	            workbook.write(fos);
     	            System.out.println("写入成功");
     	            fos.close();
                 }
-            
-           // department,year,role,name,code,grades
-
-    		
-    		
-    		
-    		
         } catch (Exception e) {
         	 e.printStackTrace();
             System.out.println("导入失败");
         }
     }
+    //生成分组统计表
     public static void writeexcelBygroup(List<GroupClass> gl,int type,String path) {
     	try {
     		 //第一步，创建一个workbook对应一个excel文件
@@ -137,7 +138,7 @@ public class ExcelWriter {
             //第二部，在workbook中创建一个sheet对应excel中的sheet
             Sheet sheet = workbook.createSheet("用户表一");
             //第三部，在sheet表中添加表头第0行，老版本的poi对sheet的行列有限制
-            
+            //type=1，按学院进行统计
             if(type==1)
             { 
             	//第四步，创建单元格，设置表头
@@ -163,6 +164,7 @@ public class ExcelWriter {
 	            fos.close();
             }
             else
+            	//type=2，按年级进行统计
             	if(type==2)
                 { 
             		Row row = sheet.createRow(0);
@@ -187,6 +189,7 @@ public class ExcelWriter {
     	            fos.close();
                 }
             	else
+            		//type=3，按身份进行统计
             		if(type==3)
                     { 
                 		Row row = sheet.createRow(0);

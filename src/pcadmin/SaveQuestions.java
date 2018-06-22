@@ -18,6 +18,7 @@ import net.sf.json.JSONObject;
 
 /**
  * Servlet implementation class SaveQuestions
+ * 用于响应管理员后台中保存题目的请求
  */
 @WebServlet("/pc/SaveQuestions")
 public class SaveQuestions extends HttpServlet {
@@ -43,7 +44,7 @@ public class SaveQuestions extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取题目列表
 		String questions=request.getParameter("questions");
 		JSONArray jsonarray=JSONArray.fromObject(questions);
 		try {
@@ -61,10 +62,12 @@ public class SaveQuestions extends HttpServlet {
 					String choices=job.get("choices").toString();
 					String answer=job.get("answer").toString();
 					String knowledgeid=job.get("knowledgeid").toString();
+					//题目id为-1，代表新题目，执行insert
 					if(Integer.parseInt(id)<0)
 					{
 						sql="INSERT INTO questions(text,type,choices,answer,knowledgeid) VALUES('"+text+"','"+type+"','"+choices+"','"+answer+"','"+knowledgeid+"')";
 					}
+					//执行update
 					else
 					{
 						sql="UPDATE questions SET text='"+text+"',type='"+type+"',choices='"+choices+"',answer='"+answer+"',knowledgeid='"+knowledgeid+"' WHERE ID="+id;

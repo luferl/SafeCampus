@@ -1,4 +1,4 @@
-// DO NOT REMOVE : GLOBAL FUNCTIONS!
+// 获取参数
 		var reg = new RegExp("(^|&)quizid=([^&]*)(&|$)", "i");  
 	    var r = window.location.search.substr(1).match(reg);
 	    var quizid=r[2];
@@ -10,6 +10,7 @@
 	    var etype=r[2];
 	    var questions;
 	    var curpages=0;
+	    //获取题目
 	    $.post("GetQuiz",
 	    			{
 	    				quizid:quizid,
@@ -21,6 +22,7 @@
 		    				loadquestions();
 					}
 			);
+	    //加载题目
 		function loadquestions()
 		{
 			$("#questionlist").empty();
@@ -81,6 +83,7 @@
 				field.appendChild(question);//插入到最左边
 			}
 		}
+		//上一页
 		function frontpage()
 		{
 			savecurpage();			
@@ -94,6 +97,7 @@
 					loadquestions();
 				}
 		}
+		//下一页
 		function nextpage()
 		{
 			savecurpage();	
@@ -110,6 +114,7 @@
 			else
 				alert("已是最后一页");
 		}
+		//保存当前页
 		function savecurpage()
 		{
 			var fieldlist=$("#questionlist").find("fieldset");
@@ -171,6 +176,7 @@
 					}
 			);
 		}
+		//提交
 		function submit()
 		{
 			var msg = "提交后将不能继续作答，确认要提交吗？"; 

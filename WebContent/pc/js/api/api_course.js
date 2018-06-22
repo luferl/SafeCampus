@@ -1,6 +1,6 @@
 $(document).ready(function() {
 				pageSetUp();
-				// PAGE RELATED SCRIPTS
+				//生成列表树
 				$.get("GetDirectories",
 							function(data){
 								$('#tree').treeview({
@@ -14,6 +14,7 @@ $(document).ready(function() {
 			});
 		var id=0;
 		var addid=-1;
+		//改变所选目录时触发
 		function changedirect(node)
 		{
 			console.log(node.id);
@@ -45,6 +46,7 @@ $(document).ready(function() {
 				loadquestions(node.id);
 			}
 		}
+		//获取目录列表
 		$.get("GetDirectlist",
 				function(data){
 					for(i=0;i<data.length;i++)
@@ -54,6 +56,7 @@ $(document).ready(function() {
 					}
 				}
 			);	
+		//改变类型时触发
 		function changedirecttype(x)
 		{
 			if($("#directtype").val()=="direct")
@@ -71,6 +74,7 @@ $(document).ready(function() {
 					$('#directtime').val(node.time);
 				}
 		}
+		//创建新目录或课程
 		function createnewdirect()
 		{
 			var name=$('#directname').val();
@@ -103,6 +107,7 @@ $(document).ready(function() {
 					}
 				);	
 		}
+		//保存现有目录或课程
 		function savedirect()
 		{
 			var name=$('#directname').val();
@@ -138,6 +143,7 @@ $(document).ready(function() {
 					}
 				);	
 		}
+		//删除目录或课程
 		function deletedirect()
 		{
 			var id=$('#dircetid').val();
@@ -158,6 +164,7 @@ $(document).ready(function() {
 					}
 				);	
 		}
+		//为所有的课后题种类选择框绑定触发器
 		function addtrigger()
 		{
 			$(".typeselect").change(function(){  
@@ -187,6 +194,7 @@ $(document).ready(function() {
 					}
 			});
 		}
+		//添加课后题
 		function addcoursequestion()
 		{
 			var question = document.createElement('fieldset'); //创建元素
@@ -255,6 +263,7 @@ $(document).ready(function() {
 			field.prepend(question);//插入到最前边
 			addtrigger();
 		}
+		//重载课后题
 		function loadquestions(courseid)
 		{
 			console.log(courseid);
@@ -336,6 +345,7 @@ $(document).ready(function() {
 				}
 			);
 		}
+		//保存课后题
 		function savecoursequestions()
 		{
 			var fieldlist=$("#questionlist").find("fieldset");

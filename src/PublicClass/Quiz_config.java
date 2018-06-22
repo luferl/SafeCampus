@@ -1,5 +1,7 @@
 package PublicClass;
-
+/*
+ * ÊÔ¾íÅäÖÃÏîÀà
+ */
 public class Quiz_config {
 	public int knowledgeid;
 	public String type;

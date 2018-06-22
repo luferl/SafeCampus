@@ -17,7 +17,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetDirectories
+ * Servlet implementation class GetAdviselist
+ * 用于响应微信端获取投诉建议列表的请求
  */
 @WebServlet("/wechat/GetAdviselist")
 public class GetAdviselist extends HttpServlet {
@@ -35,20 +36,21 @@ public class GetAdviselist extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
-		String type=request.getParameter("type");
 		String json="[";
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//从session中获取用户的id
 			HttpSession session=request.getSession();
+			//从数据库中查询所有已审核的或者是该用户提交的记录
 			String userid=session.getAttribute("Username").toString();
 			String sql="SELECT * from advises WHERE checked=1 OR userid="+userid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			int count=0;
+			//拼接json串
 			while(re.next()){ 
 				if(count>0)
 					json=json+",";

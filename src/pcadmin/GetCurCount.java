@@ -16,7 +16,8 @@ import javax.servlet.http.HttpServletResponse;
 import PublicClass.DBConnection;
 
 /**
- * Servlet implementation class GetQuizlist
+ * Servlet implementation class GetCurCount
+ * 用于响应管理员后台中获取答题人数的请求
  */
 @WebServlet("/pc/GetCurCount")
 public class GetCurCount extends HttpServlet {
@@ -34,12 +35,14 @@ public class GetCurCount extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取试卷ID
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String id=request.getParameter("id");
+		//获取当前时间
 		long epoch = System.currentTimeMillis()/1000;
 		try {
+			//根据试卷ID统计答题人数
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="select count(userid) as count from(SELECT * FROM quiz_grades where quizid="+id+" group by userid) as a";

@@ -18,7 +18,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * Servlet implementation class AddQuiz
+ * Servlet implementation class RevertQuiz
+ * 用于响应管理员后台从回收站恢复试卷的请求
  */
 @WebServlet("/pc/RevertQuiz")
 public class RevertQuiz extends HttpServlet {
@@ -36,7 +37,7 @@ public class RevertQuiz extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取试卷ID
 		response.setContentType("application/text;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		String quizid=request.getParameter("id");
@@ -44,6 +45,7 @@ public class RevertQuiz extends HttpServlet {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
+			//更新数据库，把状态设置为未删除
 			sql="UPDATE quizes SET isdeleted=0 where ID="+quizid;
 			System.out.println(sql);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);

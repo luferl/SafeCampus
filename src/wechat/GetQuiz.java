@@ -22,7 +22,8 @@ import javax.servlet.http.HttpSession;
 import PublicClass.DBConnection;
 import PublicClass.Questions;
 /**
- * Servlet implementation class GetQuestions
+ * Servlet implementation class GetQuiz
+ * 用于响应微信端获取试卷题目的请求
  */
 @WebServlet("/wechat/GetQuiz")
 public class GetQuiz extends HttpServlet {
@@ -47,11 +48,12 @@ public class GetQuiz extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//从session中获取用户ID
 		HttpSession session=request.getSession();
 		String userid=session.getAttribute("Username").toString();
 		response.setContentType("application/json;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
+		//获取试卷ID和作答记录ID
 		String quizid=request.getParameter("quizid");
 		String gid=request.getParameter("gid");
 		String json="";
@@ -59,20 +61,24 @@ public class GetQuiz extends HttpServlet {
 		try {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//作答记录ID为-1，代表开始新考试
 			if(gid.equals("-1"))
 			{
 				//创建新试卷
 				gid=Create(quizid,userid,connection);
 			}
-			//读取现有试卷
+			//根据答题记录id,获取题目详情
 			String sql="select * from questions_answer where quiz_gid="+gid;
 			json="[";
 			//System.out.print(json);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
+			//拼接json串
 			while(re.next()){ 
+				//获取题目详情
 				String id=re.getString("ID");
 				String text=re.getString("text");
+				//替换题目中的引号
 				text=text.replaceAll("\"", "\\\\\"");
 				String type=re.getString("type");
 				String choices=re.getString("choices");
@@ -103,11 +109,13 @@ public class GetQuiz extends HttpServlet {
 			//System.out.println("Get Course Questions Successfully");
 		}
 	}
+	//试卷创建函数
 	public String Create(String quizid,String userid,Connection connection)
 	{
 		String json="";
 		String gid="";
 		try {
+			//获取试卷时长
 			String sql="select time from quizes where ID="+quizid;
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
@@ -116,22 +124,25 @@ public class GetQuiz extends HttpServlet {
 			{
 				time=re.getString("time");
 			}
-			
+			//获取试卷配置项
 			sql="select * from quiz_config where quizid="+quizid;
 			preparedStatement = connection.prepareStatement(sql);
 			re = preparedStatement.executeQuery();
 			json="[";
 			ArrayList<Questions> qs=new ArrayList<Questions>();
 			while(re.next()){ 
+				//获取配置项的详情
 				String knowledgeid=re.getString("knowledgeid");
 				int count=Integer.parseInt(re.getString("count"));
 				String type=re.getString("type");
 				//System.out.println(type);
 				int score=Integer.parseInt(re.getString("score"));
+				//根据配置项详情获取所有题目
 				String sql2="select * from questions where knowledgeid="+knowledgeid+" AND type='"+type+"'";
 				preparedStatement = connection.prepareStatement(sql2);
 				ResultSet re2 = preparedStatement.executeQuery();
 				ArrayList<Questions> qst=new ArrayList<Questions>();
+				//把题目保存的list
 				while(re2.next())
 				{
 					Questions q=new Questions();
@@ -142,6 +153,7 @@ public class GetQuiz extends HttpServlet {
 					q.type=type;
 					qst.add(q);
 				}
+				//遍历list，从list中随机抽取题目
 				if(qst.size()>=count)
 				{
 					for(int i=0;i<count;i++)
@@ -154,10 +166,13 @@ public class GetQuiz extends HttpServlet {
 					}
 				}
 			}
+			//获取当前时间
 			Date d = new Date();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd号,HH:mm");
 			String starttime=sdf.format(d);
+			//计算考试结束时间
 			String endtime=sdf.format(d.getTime()+Integer.parseInt(time)*60000);
+			//生成答题记录
 			sql="Insert into quiz_grades(quizid,userid,starttime,endtime,issubmitted) value("+quizid+","+userid+",'"+starttime+"','"+endtime+"',0)";
 			preparedStatement = connection.prepareStatement(sql);
 			int rei = preparedStatement.executeUpdate();
@@ -168,6 +183,7 @@ public class GetQuiz extends HttpServlet {
 			{
 				gid=res.getString("lid");
 			}
+			//把生成的题目保存到答题详情表
 			for(int i=0;i<qs.size();i++)
 			{
 				Questions q=qs.get(i);

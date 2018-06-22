@@ -18,6 +18,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class Changepssword
+ * 用于响应管理员后台中更改密码的请求
  */
 @WebServlet("/pc/Changepassword")
 public class Changepassword extends HttpServlet {
@@ -44,25 +45,26 @@ public class Changepassword extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		//获取参数
 		String oldpwd=request.getParameter("oldpwd");
 		String newpwd=request.getParameter("newpwd");
-		
+		//从session中获取用户名
 		HttpSession session=request.getSession();
 		String username=(String) session.getAttribute("Username");
-		System.out.println("Username:"+username);
-		System.out.println("oldpwd:"+oldpwd);
-		System.out.println("newpwd:"+newpwd);
-		//System.out.println("Login!");
 		try {
+			//从连接池获取连接
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
+			//获取旧密码
 			String sql="SELECT password FROM admin_account where username='"+username+"'";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			ResultSet re = preparedStatement.executeQuery();
 			if(re.next()){ 
 				String oldpassword=re.getString("password");
+				//密码验证正确
 				if(oldpassword.equals(oldpwd))
 				{
+					//更新密码到数据库
 					String changepwdsql="UPDATE admin_account SET password='"+newpwd+"' where username='"+username+"'";
 					PreparedStatement preparedStatement2 = connection.prepareStatement(changepwdsql);
 					int result = preparedStatement2.executeUpdate();
@@ -76,6 +78,7 @@ public class Changepassword extends HttpServlet {
 						System.out.println(changepwdsql);
 					}
 				}
+				//密码验证失败
 				else
 				{
 					response.getWriter().print("pwderror");

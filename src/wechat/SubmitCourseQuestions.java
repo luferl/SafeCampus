@@ -19,7 +19,8 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
 /**
- * Servlet implementation class SaveQuestions
+ * Servlet implementation class SubmitCourseQuestions
+ * 用于响应微信端用户提交课后题的请求
  */
 @WebServlet("/wechat/SubmitCourseQuestions")
 public class SubmitCourseQuestions extends HttpServlet {
@@ -45,11 +46,11 @@ public class SubmitCourseQuestions extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取课程id和用户答案
 		String answers=request.getParameter("answers");
 		String courseid=request.getParameter("courseid");
 		JSONArray jsonarray=JSONArray.fromObject(answers);
-
+		//从session中获取用户id
 		HttpServletRequest httpRequest=(HttpServletRequest)request;
 	    HttpServletResponse httpResponse=(HttpServletResponse)response;
 	    HttpSession session=httpRequest.getSession();
@@ -65,11 +66,14 @@ public class SubmitCourseQuestions extends HttpServlet {
 				for(int i=0;i<jsonarray.size();i++)
 				{
 					JSONObject job = jsonarray.getJSONObject(i);  // 遍历 jsonarray 数组，把每一个对象转成 json 对象
+					//获取课后题ID和用户的答案
 					String id=job.get("id").toString();
 					String answer=job.get("answer").toString();
+					//查看是否正确
 					sql="SELECT * FROM coursequestions WHERE ID="+id+" AND answer='"+answer+"'";
 					PreparedStatement preparedStatement = connection.prepareStatement(sql);
 					ResultSet re=preparedStatement.executeQuery();
+					//有任何题目回答错误则返回错误
 					if(!re.next()){ 
 						response.getWriter().print("wrong");
 						connection.close();
@@ -77,6 +81,7 @@ public class SubmitCourseQuestions extends HttpServlet {
 					 }
 				}
 			}
+			//没有错误则更新学习记录表，保存用户进度
 			sql="INSERT INTO study_progress(courseid,userid) VALUE("+courseid+",'"+userid+"')";
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re=preparedStatement.executeUpdate();

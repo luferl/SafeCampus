@@ -1,8 +1,10 @@
+//显示处理结果界面
 function showmodal(id)
 		{
 			$('#id').val(id);
 			$('#myModal').modal('show');
 		}
+//进行处理
 		function reply()
 		{
 			var result=$('#result').val();
@@ -25,8 +27,10 @@ function showmodal(id)
 						
 					 });
 		}
+		//加载列表
 		function load()
 		{
+			//获取选择的查询条件
 			var status=$("#status option:selected").val();
 			$.post("GetAdviselist",
 					 {

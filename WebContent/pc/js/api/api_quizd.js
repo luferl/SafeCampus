@@ -1,6 +1,7 @@
 var id=0;
 			var knowledgelist;
 			$(document).ready(function() {
+				//初始化时间选择空间
 				$('#starttime').editable({
 				       placement: 'right',
 				       combodate: {
@@ -14,6 +15,7 @@ var id=0;
 			        }
 			    });
 			})
+			//获取已删除试卷列表
 			$.get("GetQuizlist_D",
 				function(data){
 					$('#tree').treeview({
@@ -24,6 +26,7 @@ var id=0;
 					});
 				}
 			);
+			//选择不同试卷时触发
 			function changechoices(node)
 			{
 				console.log(node.id);
@@ -46,6 +49,7 @@ var id=0;
 				}
 				loadconfig(node.id);
 			}
+			//恢复试卷
 			function revertquiz(){
 				$.get("RevertQuiz",
 						{id: $('#quizid').val()},
@@ -63,6 +67,7 @@ var id=0;
 						}
 					);
 			}
+			//彻底删除试卷
 			function deletequiz(){
 				$.get("DeleteQuiz_D",
 						{id: $('#quizid').val()},

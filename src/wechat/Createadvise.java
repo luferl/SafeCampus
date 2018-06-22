@@ -28,7 +28,8 @@ import PublicClass.ExcelReader;
 
 
 /**
- * Servlet implementation class AddQuiz
+ * Servlet implementation class Createadvise
+ * 用于响应微信端新建投诉建议的请求
  */
 @WebServlet("/wechat/Createadvise")
 public class Createadvise extends HttpServlet {
@@ -54,7 +55,6 @@ public class Createadvise extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		response.setContentType("text/html;charset=utf-8");
 		response.setCharacterEncoding("utf-8");
 		
@@ -65,16 +65,12 @@ public class Createadvise extends HttpServlet {
         upload.setFileSizeMax(30*1024*1024);//30M
         //【二、设置总文件大小：50M】
         upload.setSizeMax(50*1024*1024); //50M
-        
         String date="";
         String contact="";
         String details="";
         String imgpath="";
         String position="";
         String title="";
-        //判断，当前表单是否为文件上传表单
-       // if (upload.isMultipartContent(request)){
-
             try {
                 //3.把请求数据转换为FileItem对象的集合
                 List<FileItem> list = upload.parseRequest(request);
@@ -84,6 +80,7 @@ public class Createadvise extends HttpServlet {
                     if (item.isFormField()){
                         //普通表单x
                         String fieldName = item.getFieldName();//获取元素名称
+                        //按不同元素名称，读取到不同的变量中
                         if(fieldName.equals("date"))
                         {
                         	date=item.getString("UTF-8");
@@ -105,10 +102,12 @@ public class Createadvise extends HttpServlet {
                         	details=item.getString("UTF-8");
 	                    }
                     }else {
-                        //文件上传表单
+                        //文件上传表单，获取图片
                         String name = item.getName(); //上传的文件名称
+                        //不包含图片，选择默认图片
                         if(name.equals(""))
                         	imgpath="nopic.jpg";
+                        //包含图片，转储+重命名，返回存储路径
                         else
                         	{
                         		String id = UUID.randomUUID().toString();
@@ -123,10 +122,12 @@ public class Createadvise extends HttpServlet {
                        
                     }
                 }
+                //从session中获取用户ID
                 HttpSession session=request.getSession();
                 String userid=session.getAttribute("Username").toString();
                 DBConnection dbc=new DBConnection();
     			Connection connection = dbc.getConnection();
+    			//写入数据库
     			String sql="Insert into advises(title,time,position,contact,details,checked,pic,userid) VALUE('"+title+"','"+date+"','"+position+"','"+contact+"','"+details+"',0,'"+imgpath+"','"+userid+"')";
     			System.out.println(sql);
     			PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -141,10 +142,6 @@ public class Createadvise extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-       // }else {
-       //     System.out.println("不处理！");
-       // }
-
 	}
 
 }

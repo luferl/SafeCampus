@@ -16,6 +16,7 @@ import PublicClass.DBConnection;
 
 /**
  * Servlet implementation class SaveDirect
+ * 用于响应管理员后台中保存目录的请求
  */
 @WebServlet("/pc/SaveDirect")
 public class SaveDirect extends HttpServlet {
@@ -41,7 +42,7 @@ public class SaveDirect extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		//获取课程相关信息
 		String id=request.getParameter("id");
 		String name=request.getParameter("text");
 		String topid=request.getParameter("topid");
@@ -52,8 +53,9 @@ public class SaveDirect extends HttpServlet {
 			DBConnection dbc=new DBConnection();
 			Connection connection = dbc.getConnection();
 			String sql="";
+			//根据课程ID更新信息
 			sql="UPDATE  directories SET text='"+name+"',iscourse="+iscourse+",topid="+topid+",url='"+vurl+"',time='"+time+"' WHERE id="+id;
-			System.out.println(sql);
+			//System.out.println(sql);
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);
 			int re = preparedStatement.executeUpdate();
 			if(re>0)

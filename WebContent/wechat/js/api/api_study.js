@@ -1,4 +1,5 @@
-		var courseid=0;
+//获取参数
+var courseid=0;
 		var reg = new RegExp("(^|&)courseid=([^&]*)(&|$)", "i");  
 	    var r = window.location.search.substr(1).match(reg);  
 	    if (r != null) 
@@ -18,23 +19,7 @@
 		    				courseid=r[2];
 					}
 			);
-		function changedirecttype(x)
-		{
-			if($("#directtype").val()=="direct")
-			{
-				$('#directurl').val("");
-				$('#directtime').val("");
-				$('#directurl').attr("disabled","disabled");
-				$('#directtime').attr("disabled","disabled");
-			}
-			else
-				{
-					$('#directurl').removeAttr("disabled");
-					$('#directtime').removeAttr("disabled");
-					$('#directurl').val(node.url);
-					$('#directtime').val(node.time);
-				}
-		}
+	    //加载课后题
 		function loadquestions(courseid)
 		{
 			console.log(courseid);
@@ -95,6 +80,7 @@
 				}
 			);
 		}
+		//提交
 		function submit()
 		{
 			var fieldlist=$("#questionlist").find("fieldset");

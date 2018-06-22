@@ -1,8 +1,10 @@
+//显示处理意见表
 function showmodal(id)
 		{
 			$('#id').val(id);
 			$('#myModal').modal('show');
 		}
+//进行回复
 		function reply()
 		{
 			var result=$('#result').val();
@@ -25,6 +27,7 @@ function showmodal(id)
 						
 					 });
 		}
+		//重载页面
 		function load()
 		{
 			var status=$("#status option:selected").val();
