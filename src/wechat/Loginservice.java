@@ -36,10 +36,10 @@ public class Loginservice extends HttpServlet {
 		// TODO Auto-generated method stub
 		//String openid=request.getParameter("openid");
 		//For test only
-		//HttpSession session=request.getSession();
-		//session.setAttribute("Username", 1);
-		//response.sendRedirect(request.getContextPath()+"/wechat/index.html");
-		
+		HttpSession session=request.getSession();
+		session.setAttribute("Username", 1);
+		response.sendRedirect(request.getContextPath()+"/wechat/index.html");
+		/*
 		//LoginService
 		String backUrl="http://"+request.getServerName()+"/SafeCampus/wechat/CallBack";
 		DBConnection dbc=new DBConnection();
@@ -74,6 +74,7 @@ public class Loginservice extends HttpServlet {
 		}finally{
 			//System.out.println("µÇÂ¼³É¹¦");
 		}
+		*/
 	}
 
 	/**

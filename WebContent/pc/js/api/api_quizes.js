@@ -194,14 +194,46 @@
 				var endtime=$("#endtime")[0].innerHTML; 
 				var timelast=$("#timelast").val();
 				var totalscore=$("#totalscore").val();
+				var passscore=$("#passscore").val();
+				var timelimits=$("#timelimits").val();
+				console.log(starttime);
+				console.log(endtime);
+				console.log(timelast);
 				if(totalscore=='')
 				{
-					console.log(totalscore);
 					alert("总分不能为空，请检查配置项是否添加");
 					return;
 				}
-				var passscore=$("#passscore").val();
-				var timelimits=$("#timelimits").val();
+				if(name=='')
+				{
+					alert("试卷名称不能为空");
+					return;
+				}
+				if(starttime=='请选择时间')
+				{
+					alert("试卷开始时间不能为空");
+					return;
+				}
+				if(endtime=='请选择时间')
+				{
+					alert("试卷结束不能为空");
+					return;
+				}
+				if(timelast=='')
+				{
+					alert("考试时长不能为空");
+					return;
+				}
+				if(passscore=='')
+				{
+					alert("及格分数不能为空");
+					return;
+				}
+				if(timelimits=='')
+				{
+					alert("考试次数限制不能为空");
+					return;
+				}
 				var type=$("#quiztype").val();
 				if(type=="formal")
 					{
@@ -262,13 +294,43 @@
 				var endtime=$("#endtime")[0].innerHTML; 
 				var timelast=$("#timelast").val();
 				var totalscore=$("#totalscore").val();
-				if(totalscore='');
+				var passscore=$("#passscore").val();
+				var timelimits=$("#timelimits").val();
+				if(totalscore=='')
 				{
 					alert("总分不能为空，请检查配置项是否添加");
 					return;
 				}
-				var passscore=$("#passscore").val();
-				var timelimits=$("#timelimits").val();
+				if(name=='')
+				{
+					alert("试卷名称不能为空");
+					return;
+				}
+				if(starttime=='')
+				{
+					alert("试卷开始时间不能为空");
+					return;
+				}
+				if(endtime=='')
+				{
+					alert("试卷结束不能为空");
+					return;
+				}
+				if(timelast=='')
+				{
+					alert("考试时长不能为空");
+					return;
+				}
+				if(passscore=='')
+				{
+					alert("及格分数不能为空");
+					return;
+				}
+				if(timelimits=='')
+				{
+					alert("考试次数限制不能为空");
+					return;
+				}
 				var type=$("#quiztype").val();
 				if(type=="formal")
 					{
